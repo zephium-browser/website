@@ -1,0 +1,72 @@
+/* Where to follow along: one quiet row per place. */
+.follow {
+  display: grid;
+  gap: 10px;
+  max-width: 42rem;
+  margin: 24px auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .follow {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  background: #111113;
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.09);
+  transition: background-color 200ms var(--ease-out);
+}
+
+.link:hover {
+  background: #161619;
+}
+
+.link svg:first-child {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.link span {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.link b {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.link small {
+  overflow: hidden;
+  color: var(--color-faint);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arrow {
+  flex: none;
+  color: var(--color-faint);
+  transition:
+    color 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+
+.link:hover .arrow {
+  color: var(--color-text);
+  transform: translate(1px, -1px);
+}

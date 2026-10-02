@@ -1,0 +1,10 @@
+.git
+.github
+.next
+out
+node_modules
+media
+scripts
+*.md
+!README.md
+.env*

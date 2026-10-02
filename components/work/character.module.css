@@ -1,0 +1,481 @@
+/* Ported from the product (frame/src/shared/ui/presence/Character.svelte).
+   The product tokens it reads are inlined here with their dark-theme values,
+   scoped to the character, so it does not depend on the site's globals. */
+.character {
+  --color-agent-browser: #8db9f2;
+  --color-agent-research: #e6cb80;
+  --color-agent-computer: #88d0b3;
+  --color-agent-connection: #b7a6f0;
+  --color-agent-light: #fff;
+  --color-agent-deep: #17162b;
+  --color-agent-ground: rgb(0 0 0 / 0.5);
+  --color-lead-orb: #8e9bff;
+  --color-lead-orb-to: #c98bff;
+  --color-lead-drop: #62c8ff;
+  --color-lead-drop-to: #5b7dff;
+  --color-lead-prism: #ff8f6b;
+  --color-lead-prism-to: #ffc76b;
+  --color-lead-gem: #4fdcaa;
+  --color-lead-gem-to: #59b8ff;
+  --color-lead-egg: #ff8fbd;
+  --color-lead-egg-to: #a88cff;
+  --color-lead-pearl: #eef0ff;
+  --color-lead-pearl-to: #a9bcff;
+  --color-visor: #10111b;
+  --color-visor-rim: rgb(255 255 255 / 0.22);
+  --color-eye-lit: #f4fbff;
+  --color-eye-lead: #fff3dc;
+  --radius-capsule: 999px;
+  --motion-fast: 120ms;
+  --motion-slow: 300ms;
+  --motion-page: 400ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: linear(
+    0,
+    0.0232,
+    0.0821,
+    0.1636,
+    0.2572,
+    0.3552,
+    0.452,
+    0.5438,
+    0.628,
+    0.7032,
+    0.7689,
+    0.825,
+    0.8719,
+    0.9103,
+    0.9412,
+    0.9653,
+    0.9838,
+    0.9974,
+    1.007,
+    1.0135,
+    1.0174,
+    1.0194,
+    1.0199,
+    1.0194,
+    1.0182,
+    1.0166,
+    1.0147,
+    1.0128,
+    1.0109,
+    1.009,
+    1.0074,
+    1.0059,
+    1.0046,
+    1.0035,
+    1.0025,
+    1.0018,
+    1.0012,
+    1.0007,
+    1.0003,
+    1
+  );
+
+  --hue: var(--color-agent-browser);
+  --hue-to: var(--hue);
+  --visor-w: 0.56em;
+  --visor-h: 0.25em;
+  --visor-y: 47%;
+  --eye-w: 0.078em;
+  --eye-h: 0.128em;
+  --eye-gap: 0.11em;
+  --blink-delay: 1.2s;
+
+  position: relative;
+  display: block;
+  flex: none;
+  inline-size: var(--size);
+  block-size: var(--size);
+  font-size: var(--size);
+  line-height: 0;
+  contain: layout style;
+}
+
+.browser {
+  --blink-delay: 2.3s;
+}
+
+.research {
+  --hue: var(--color-agent-research);
+  --blink-delay: 0.4s;
+  --visor-w: 0.56em;
+}
+
+.computer {
+  --hue: var(--color-agent-computer);
+  --blink-delay: 3.1s;
+  --visor-w: 0.66em;
+  --visor-y: 49%;
+}
+
+.connection {
+  --hue: var(--color-agent-connection);
+  --blink-delay: 1.7s;
+  --visor-w: 0.5em;
+  --visor-y: 49%;
+}
+
+/* The lead: a two-tone figure from its family, its eyes a shade warmer: the
+   one in charge, told apart by its colour and its gaze, not by an ornament. */
+.lead {
+  --hue: var(--color-lead-pearl);
+  --hue-to: var(--color-lead-pearl-to);
+  --visor-w: 0.62em;
+  --visor-y: 48%;
+}
+
+.character[data-look="orb"] {
+  --hue: var(--color-lead-orb);
+  --hue-to: var(--color-lead-orb-to);
+}
+
+.character[data-look="drop"] {
+  --hue: var(--color-lead-drop);
+  --hue-to: var(--color-lead-drop-to);
+  --visor-w: 0.56em;
+  --visor-y: 62%;
+}
+
+.character[data-look="prism"] {
+  --hue: var(--color-lead-prism);
+  --hue-to: var(--color-lead-prism-to);
+  --visor-w: 0.5em;
+  --visor-y: 64%;
+}
+
+.character[data-look="gem"] {
+  --hue: var(--color-lead-gem);
+  --hue-to: var(--color-lead-gem-to);
+  --visor-w: 0.54em;
+  --visor-y: 50%;
+}
+
+.character[data-look="egg"] {
+  --hue: var(--color-lead-egg);
+  --hue-to: var(--color-lead-egg-to);
+  --visor-y: 55%;
+}
+
+.pose,
+.figure,
+.body {
+  position: absolute;
+  inset: 0;
+}
+
+.pose {
+  transition: transform var(--motion-slow) var(--ease-spring);
+}
+
+/* Lit like a soft glossy stone from the upper left: a crisp specular glint
+   inside a broad soft highlight, the hue running into its second tone, a
+   shade gathering under the chin, and the ground's light along the lower rim. */
+.body {
+  background:
+    radial-gradient(
+      9% 6% at 30% 19%,
+      color-mix(in oklab, var(--color-agent-light) 95%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      42% 30% at 36% 24%,
+      color-mix(in oklab, var(--color-agent-light) 55%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      70% 26% at 52% 100%,
+      color-mix(
+        in oklab,
+        color-mix(in oklab, var(--hue-to) 45%, var(--color-agent-light)) 75%,
+        transparent
+      ),
+      transparent
+    ),
+    radial-gradient(
+      80% 60% at 50% 88%,
+      color-mix(in oklab, var(--color-agent-deep) 22%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(
+      155deg,
+      color-mix(in oklab, var(--hue) 58%, var(--color-agent-light)) 0%,
+      var(--hue) 36%,
+      var(--hue-to) 74%,
+      color-mix(in oklab, var(--hue-to) 60%, var(--color-agent-deep)) 100%
+    );
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* Dark glass across the face, a line of light along its top, the eyes lit inside it. */
+.visor {
+  position: absolute;
+  inset-block-start: var(--visor-y);
+  inset-inline-start: 50%;
+  inline-size: var(--visor-w);
+  block-size: var(--visor-h);
+  overflow: hidden;
+  border: max(0.5px, 0.018em) solid var(--color-visor-rim);
+  border-radius: var(--radius-capsule);
+  background:
+    linear-gradient(
+      112deg,
+      transparent 18%,
+      color-mix(in oklab, var(--color-agent-light) 20%, transparent) 26%,
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-agent-light) 18%, transparent) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      70% 90% at 50% 60%,
+      color-mix(in oklab, var(--hue) 34%, var(--color-visor)),
+      var(--color-visor)
+    );
+  translate: -50% -50%;
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+}
+
+.eyes {
+  position: absolute;
+  inset-block-start: 52%;
+  inset-inline-start: 50%;
+  display: flex;
+  gap: var(--eye-gap);
+  translate: -50% -50%;
+}
+
+.turned .eyes {
+  animation: eyes-open var(--motion-fast) var(--ease-out);
+}
+
+.eye {
+  display: block;
+  inline-size: var(--eye-w);
+  block-size: var(--eye-h);
+  border-radius: var(--radius-capsule);
+  background: var(--color-eye-lit);
+}
+
+.lead .eye {
+  background: var(--color-eye-lead);
+}
+
+.computer .eye {
+  border-radius: 0.02em;
+}
+
+/* Past a small size the eyes carry a halo of their own hue. */
+.fine .eye {
+  background: radial-gradient(
+    closest-side,
+    var(--color-eye-lit) 62%,
+    color-mix(in oklab, var(--hue) 70%, var(--color-eye-lit))
+  );
+}
+
+/* Waiting on you: eyes a little wider, on you, the head tilted. */
+.waiting .pose {
+  transform: rotate(-9deg);
+}
+
+.waiting .eye {
+  block-size: calc(var(--eye-h) * 1.2);
+  inline-size: calc(var(--eye-w) * 1.15);
+}
+
+/* Working: narrowed, focused. */
+.working .eye {
+  block-size: calc(var(--eye-h) * 0.62);
+}
+
+/* Done: content, eyes closed in two small lit arcs. */
+.done .eye {
+  inline-size: calc(var(--eye-w) * 1.9);
+  block-size: calc(var(--eye-w) * 1.05);
+  border: max(0.6px, 0.024em) solid var(--color-eye-lit);
+  border-block-end: 0;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: transparent;
+}
+
+/* Stopped: eyes at rest in two short dim lines, the head lowered, the colour gone quiet. */
+.stopped .pose {
+  transform: translateY(0.03em) rotate(7deg);
+}
+
+.stopped .eye {
+  inline-size: calc(var(--eye-w) * 1.6);
+  block-size: max(0.6px, 0.022em);
+  opacity: 0.55;
+}
+
+.stopped .body {
+  filter: saturate(0.25);
+  opacity: 0.75;
+}
+
+.ground {
+  position: absolute;
+  inset-inline: 14%;
+  inset-block-end: -10%;
+  block-size: 18%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--color-agent-ground), transparent);
+}
+
+/* Only a live character moves: a slow float, a glance, a blink. Waiting asks
+   twice, then keeps still until the person answers. */
+.live {
+  --beat: 3.4s;
+  --beats: infinite;
+}
+
+.waiting {
+  --beat: 1.6s;
+  --beats: 2;
+}
+
+.live .figure {
+  animation: float var(--beat) var(--ease-in-out) var(--beats);
+}
+
+.live .ground {
+  animation: ground var(--beat) var(--ease-in-out) var(--beats);
+}
+
+.live .eyes {
+  animation: blink 4.8s linear var(--blink-delay) var(--beats);
+}
+
+.live.turned .eyes {
+  animation:
+    eyes-open var(--motion-fast) var(--ease-out),
+    blink 4.8s linear var(--blink-delay) var(--beats);
+}
+
+.thinking .face {
+  animation: ponder 6.4s var(--ease-in-out) infinite;
+}
+
+.reading .face {
+  animation: read 1.9s var(--ease-in-out) infinite;
+}
+
+.searching .face {
+  animation: search 3.6s var(--ease-out) infinite;
+}
+
+.cheer .figure {
+  animation: hop var(--motion-page) var(--ease-spring);
+}
+
+/* Still while off screen, while the page is hidden, or while motion is
+   reduced (set from the component, as the product's watchStill does). */
+.character[data-still] .figure,
+.character[data-still] .face,
+.character[data-still] .eyes,
+.character[data-still] .ground {
+  animation-play-state: paused;
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-0.045em);
+  }
+}
+
+@keyframes ground {
+  50% {
+    transform: scale(0.84);
+    opacity: 0.7;
+  }
+}
+
+@keyframes blink {
+  0%,
+  93%,
+  100% {
+    transform: scaleY(1);
+  }
+
+  96% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes eyes-open {
+  from {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes ponder {
+  0%,
+  100% {
+    transform: translate(0.05em, -0.02em);
+  }
+
+  34%,
+  46% {
+    transform: translate(-0.05em, -0.02em);
+  }
+
+  62%,
+  84% {
+    transform: translate(0.05em, -0.02em);
+  }
+}
+
+@keyframes read {
+  0% {
+    transform: translate(-0.07em, 0.01em);
+  }
+
+  82% {
+    transform: translate(0.07em, 0.01em);
+  }
+
+  100% {
+    transform: translate(-0.07em, 0.01em);
+  }
+}
+
+@keyframes search {
+  0%,
+  20% {
+    transform: translate(-0.08em, 0);
+  }
+
+  26%,
+  48% {
+    transform: translate(0.08em, 0);
+  }
+
+  54%,
+  70% {
+    transform: translate(0.01em, -0.02em);
+  }
+
+  76%,
+  100% {
+    transform: translate(-0.08em, 0);
+  }
+}
+
+@keyframes hop {
+  40% {
+    transform: translateY(-0.12em);
+  }
+}

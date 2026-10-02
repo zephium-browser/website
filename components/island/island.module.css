@@ -1,0 +1,520 @@
+/* Ported from the product (frame/src/features/work/components/AgentLine.svelte
+   and the .island placement in WorkEnvironmentWorkspace.svelte). The product
+   tokens it reads are inlined with their dark-theme values, scoped to the
+   island; every length is in design pixels (--u). */
+.island {
+  --u-: var(--u, 1px);
+  --color-text: #f4f4f6;
+  --color-muted: rgb(244 244 246 / 0.68);
+  --color-faint: rgb(244 244 246 / 0.44);
+  --color-border: rgb(255 255 255 / 0.07);
+  --color-control: rgb(255 255 255 / 0.09);
+  --color-control-hover: rgb(255 255 255 / 0.13);
+  --color-lit: #ededf0;
+  --color-lit-hover: #f7f7fa;
+  --color-on-lit: #161619;
+  --color-field: rgb(255 255 255 / 0.09);
+  --color-ring: rgb(255 255 255 / 0.5);
+  --row-hover: rgb(255 255 255 / 0.04);
+  --row-pressed: rgb(255 255 255 / 0.1);
+  --text-label: calc(var(--u-) * 12);
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 300ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: linear(
+    0,
+    0.0232,
+    0.0821,
+    0.1636,
+    0.2572,
+    0.3552,
+    0.452,
+    0.5438,
+    0.628,
+    0.7032,
+    0.7689,
+    0.825,
+    0.8719,
+    0.9103,
+    0.9412,
+    0.9653,
+    0.9838,
+    0.9974,
+    1.007,
+    1.0135,
+    1.0174,
+    1.0194,
+    1.0199,
+    1.0194,
+    1.0182,
+    1.0166,
+    1.0147,
+    1.0128,
+    1.0109,
+    1.009,
+    1.0074,
+    1.0059,
+    1.0046,
+    1.0035,
+    1.0025,
+    1.0018,
+    1.0012,
+    1.0007,
+    1.0003,
+    1
+  );
+
+  display: flex;
+  flex-direction: column;
+  inline-size: max-content;
+  min-inline-size: calc(var(--u-) * 240);
+  max-inline-size: calc(var(--u-) * 520);
+  color: var(--color-text);
+  font-size: var(--text-label);
+  line-height: normal;
+  animation: island-in var(--motion-slow) var(--ease-spring) backwards;
+}
+
+@keyframes island-in {
+  from {
+    opacity: 0;
+    scale: 0.9;
+  }
+}
+
+/* The island: a pill while it is one line (the panel radius clamps to half
+   its height), a sheet once it holds rows. Its line stays on top and what it
+   opens grows down from it. It is solid: a glass would blur the canvas again
+   every frame a helper moves. */
+.capsule {
+  display: flex;
+  flex-direction: column-reverse;
+  min-inline-size: 0;
+  border-radius: calc(var(--u-) * 22);
+  background: color-mix(in srgb, #3d3d44 62%, #1a1a1d);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.08),
+    0 calc(var(--u-) * 14) calc(var(--u-) * 44) calc(var(--u-) * -10) rgb(0 0 0 / 0.34);
+}
+
+/* Grows on the arrival curve, folds on the exit curve; the rows fade with it. */
+.expand {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--motion-base) var(--ease-exit);
+}
+
+.expand.shown {
+  grid-template-rows: 1fr;
+  transition-timing-function: var(--ease-emphasized);
+}
+
+.expandInner {
+  min-block-size: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--ease-exit);
+}
+
+.shown .expandInner {
+  opacity: 1;
+  transition: opacity var(--motion-base) var(--ease-out);
+}
+
+.line {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u-) * 10);
+  box-sizing: border-box;
+  min-block-size: calc(var(--u-) * 36);
+  padding: 0 calc(var(--u-) * 6) 0 calc(var(--u-) * 7);
+}
+
+.capsule.open .line {
+  border-block-end: 1px solid var(--color-border);
+}
+
+.island button {
+  font: inherit;
+  cursor: default;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: calc(var(--u-) * 24);
+  block-size: calc(var(--u-) * 24);
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  transition: scale var(--motion-base) var(--ease-spring);
+}
+
+.avatar:active {
+  scale: 0.94;
+}
+
+/* The character is drawn in pixels; it is scaled to the window like the rest. */
+.figure {
+  display: grid;
+  place-items: center;
+  scale: var(--k, 1);
+}
+
+.state {
+  display: flex;
+  align-items: baseline;
+  gap: calc(var(--u-) * 8);
+  flex: 1;
+  min-inline-size: 0;
+  font-size: var(--text-label);
+}
+
+.words {
+  display: flex;
+  align-items: baseline;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  animation: line-in var(--motion-base) var(--ease-out);
+}
+
+.text {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+button.more {
+  align-items: center;
+  gap: calc(var(--u-) * 4);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: var(--text-label);
+}
+
+button.more svg,
+.disclosure svg {
+  flex: none;
+  transition: rotate var(--motion-base) var(--ease-emphasized);
+}
+
+button.more svg {
+  color: var(--color-muted);
+}
+
+button.more[aria-expanded="true"] svg {
+  rotate: 180deg;
+}
+
+/* Opened in place: the words wrap and the island grows to hold them. */
+button.more.whole {
+  align-items: flex-start;
+  padding-block: calc(var(--u-) * 8);
+  text-align: start;
+}
+
+button.more.whole .text {
+  overflow: visible;
+  white-space: normal;
+  line-height: calc(var(--u-) * 16);
+}
+
+.turn {
+  display: grid;
+  flex: none;
+  block-size: calc(var(--u-) * 16);
+  place-items: center;
+}
+
+.settled .words {
+  color: var(--color-muted);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u-) * 4);
+  flex: none;
+  margin-inline-start: calc(var(--u-) * 10);
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u-) * 4);
+  block-size: calc(var(--u-) * 26);
+  padding: 0 calc(var(--u-) * 12);
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-lit);
+  color: var(--color-on-lit);
+  font-size: var(--text-label);
+  font-weight: 550;
+  transition: background-color var(--motion-fast) var(--ease-out);
+}
+
+.action:hover {
+  background: var(--color-lit-hover);
+}
+
+/* Next opens the capsule: its chevron points where the rows will be. */
+.action.disclosure {
+  padding-inline-end: calc(var(--u-) * 10);
+  background: var(--color-control);
+  color: var(--color-text);
+}
+
+.action.disclosure:hover {
+  background: var(--color-control-hover);
+}
+
+.disclosure svg {
+  rotate: 180deg;
+}
+
+.disclosure[aria-expanded="true"] svg {
+  rotate: 0deg;
+}
+
+.quiet {
+  display: grid;
+  place-items: center;
+  inline-size: calc(var(--u-) * 26);
+  block-size: calc(var(--u-) * 26);
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-muted);
+  transition:
+    background-color var(--motion-fast) var(--ease-out),
+    color var(--motion-fast) var(--ease-out);
+}
+
+.quiet:hover {
+  background: var(--color-control-hover);
+  color: var(--color-text);
+}
+
+.island button:focus-visible,
+.island input:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.icon12 {
+  inline-size: calc(var(--u-) * 12);
+  block-size: calc(var(--u-) * 12);
+}
+
+.icon13 {
+  inline-size: calc(var(--u-) * 13);
+  block-size: calc(var(--u-) * 13);
+}
+
+.icon14 {
+  inline-size: calc(var(--u-) * 14);
+  block-size: calc(var(--u-) * 14);
+}
+
+.icon15 {
+  inline-size: calc(var(--u-) * 15);
+  block-size: calc(var(--u-) * 15);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u-) * 2);
+  max-block-size: calc(var(--u-) * 220);
+  margin: 0;
+  padding: calc(var(--u-) * 6);
+  overflow: auto;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--u-) * 10);
+  inline-size: 100%;
+  box-sizing: border-box;
+  min-block-size: calc(var(--u-) * 32);
+  padding: calc(var(--u-) * 6) calc(var(--u-) * 10);
+  border: 0;
+  border-radius: calc(var(--u-) * 12);
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--text-label);
+  text-align: start;
+  transition: background-color var(--motion-fast) var(--ease-out);
+}
+
+.row > svg {
+  flex: none;
+  color: var(--color-muted);
+}
+
+.row:hover {
+  background: var(--row-hover);
+}
+
+.row:active {
+  background: var(--row-pressed);
+}
+
+.rule {
+  block-size: 1px;
+  margin: calc(var(--u-) * 3) calc(var(--u-) * 10);
+  background: var(--color-border);
+}
+
+/* An action of the browser's own, not words for the agent: its glyph leads. */
+.writeup {
+  justify-content: flex-start;
+}
+
+.writeup span {
+  flex: 1;
+  text-align: start;
+}
+
+/* A helper at work, the way a colleague is listed: who, then what it is doing, whole. */
+.said {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1px;
+  min-inline-size: 0;
+}
+
+.who {
+  font-weight: 550;
+}
+
+.rowMark {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: calc(var(--u-) * 24);
+  block-size: calc(var(--u-) * 24);
+}
+
+.doing {
+  color: var(--color-muted);
+  line-height: calc(var(--u-) * 16);
+}
+
+.none {
+  padding: calc(var(--u-) * 6) calc(var(--u-) * 10);
+  overflow: hidden;
+  color: var(--color-muted);
+  font-size: var(--text-label);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u-) * 8);
+  margin: 0;
+  padding: calc(var(--u-) * 12) calc(var(--u-) * 14);
+}
+
+.form label {
+  font-size: var(--text-label);
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--u-) * 6);
+  min-inline-size: 0;
+}
+
+.chip {
+  max-inline-size: 100%;
+  block-size: calc(var(--u-) * 26);
+  padding: 0 calc(var(--u-) * 12);
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-control);
+  color: var(--color-text);
+  font-size: var(--text-label);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background-color var(--motion-fast) var(--ease-out);
+}
+
+.chip:hover,
+.chip[data-on] {
+  background: var(--color-control-hover);
+}
+
+.answer {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u-) * 6);
+}
+
+.answer input {
+  flex: 1;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  block-size: calc(var(--u-) * 30);
+  padding: 0 calc(var(--u-) * 10);
+  border: 0;
+  border-radius: calc(var(--u-) * 14);
+  background: var(--color-field);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--text-label);
+  outline: none;
+}
+
+.answer input::placeholder {
+  color: var(--color-faint);
+}
+
+.send {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: calc(var(--u-) * 28);
+  block-size: calc(var(--u-) * 28);
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-lit);
+  color: var(--color-on-lit);
+}
+
+.send:disabled {
+  background: var(--color-control);
+  color: var(--color-faint);
+}
+
+@keyframes line-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .island,
+  .words {
+    animation: none;
+  }
+}

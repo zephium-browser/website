@@ -1,0 +1,79 @@
+.grid {
+  display: grid;
+  gap: 1px;
+  margin: clamp(48px, 6vw, 72px) 0 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: var(--radius-card);
+  background: rgb(255 255 255 / 0.08);
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1040px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.topic {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  height: 100%;
+  min-height: 150px;
+  padding: 28px;
+  background: var(--color-ground);
+  transition: background-color 200ms var(--ease-out);
+}
+
+.topic[data-live]:hover {
+  background: #0f0f12;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.name small {
+  color: var(--color-faint);
+  font-size: 13px;
+  font-weight: 450;
+  letter-spacing: 0;
+}
+
+.name svg {
+  color: var(--color-faint);
+  transition:
+    color 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+
+.topic[data-live]:hover .name svg {
+  color: var(--color-text);
+  transform: translate(1px, -1px);
+}
+
+.body {
+  color: var(--color-muted);
+  font-size: 15px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* Seven topics: the last one spans the row so the grid closes evenly. */
+.grid li:last-child {
+  grid-column: 1 / -1;
+}

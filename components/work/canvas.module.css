@@ -1,0 +1,604 @@
+/*
+ * The canvas world, in world pixels. Type is set for a camera at about 70%,
+ * so it reads at the size the product's own canvas does. Surfaces follow the
+ * product: cards on the surface rung, rows on hairlines, colour only where
+ * something is chosen or done.
+ */
+.world {
+  --text: #f4f4f6;
+  --label: #d8d8db;
+  --muted: rgb(244 244 246 / 0.62);
+  --faint: rgb(244 244 246 / 0.4);
+  --card: #232327;
+  --card-raised: #29292e;
+  --hair: rgb(255 255 255 / 0.07);
+  --sky: #8db9f2;
+  --mint: #88d0b3;
+  --lemon: #e6cb80;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3100px;
+  height: 1200px;
+  color: var(--text);
+  font-family: var(--font-system);
+  font-size: 17px;
+  line-height: 1.4;
+  letter-spacing: -0.006em;
+}
+
+/*
+ * Scrubbed by the film's clock: --p comes from the scene, --from and --to from
+ * each piece. --t runs 0 to 1 across that span; only opacity and transform
+ * change, so every frame stays on the compositor.
+ */
+.piece,
+.answer,
+.stay {
+  --t: clamp(0, (var(--p, 0) - var(--from)) / (var(--to) - var(--from)), 1);
+  --e: calc(var(--t) * var(--t) * (3 - 2 * var(--t)));
+  opacity: var(--e);
+  transform: translateY(calc((1 - var(--e)) * 18px)) scale(calc(0.985 + 0.015 * var(--e)));
+}
+
+.piece {
+  position: absolute;
+}
+
+/* Lines leave from what asked for the work and arrive where it lands. */
+.lines {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.lines path {
+  --t: clamp(0, (var(--p, 0) - var(--from)) / (var(--to) - var(--from)), 1);
+  fill: none;
+  stroke: rgb(255 255 255 / 0.22);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--t));
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* Context */
+
+.context {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  text-align: right;
+}
+
+.context span {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.context b {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.context small {
+  color: var(--faint);
+  font-size: 13px;
+}
+
+.context i {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: var(--card-raised);
+  color: var(--muted);
+}
+
+/* Request and questions */
+
+.request small {
+  color: var(--faint);
+  font-size: 14px;
+}
+
+.request p {
+  margin-top: 6px;
+  font-size: 23px;
+  font-weight: 500;
+  line-height: 1.32;
+  letter-spacing: -0.015em;
+}
+
+.question {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 8px 12px;
+}
+
+.asker {
+  padding-top: 1px;
+}
+
+.question p {
+  color: var(--label);
+  font-size: 17px;
+}
+
+.answer {
+  grid-column: 2;
+  justify-self: start;
+  padding: 7px 14px;
+  border-radius: 12px;
+  background: var(--card-raised);
+  box-shadow: inset 0 0 0 1px var(--hair);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Helpers and their pages */
+
+.helperHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.helperHead b {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.status {
+  display: block;
+  margin-top: 6px;
+  padding-left: 36px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.live {
+  border-radius: 14px;
+}
+
+.badge {
+  position: absolute;
+  top: -30px;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.badge[data-done] {
+  color: var(--mint);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sky);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* While the helpers work, their pages scroll and their pointers move. */
+.world[data-working] .live [data-scroll] {
+  animation: read 5.5s var(--ease-in-out) infinite alternate;
+}
+
+.world[data-working] .live [data-cursor] {
+  animation: visit 5.5s var(--ease-in-out) infinite;
+}
+
+@keyframes read {
+  0%,
+  12% {
+    transform: translateY(0);
+  }
+  88%,
+  100% {
+    transform: translateY(-46%);
+  }
+}
+
+@keyframes visit {
+  0% {
+    opacity: 0;
+    transform: translate(120px, 150px);
+  }
+  10% {
+    opacity: 1;
+  }
+  35% {
+    transform: translate(220px, 120px);
+  }
+  60% {
+    transform: translate(140px, 230px);
+  }
+  85% {
+    opacity: 1;
+    transform: translate(360px, 170px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(360px, 170px);
+  }
+}
+
+/* Findings */
+
+.findings h3,
+.plan h3 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.stays {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.stay {
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--hair);
+}
+
+.stay[data-pick] {
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.2),
+    0 12px 40px -16px rgb(0 0 0 / 0.7);
+}
+
+.photo {
+  display: block;
+  aspect-ratio: 4 / 3;
+  background-color: #3a3530;
+  background-position: center;
+  background-size: cover;
+}
+
+.stayBody {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 14px 16px 16px;
+}
+
+.stayBody > b {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.stayBody > .muted {
+  font-size: 14px;
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.stayBody dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  margin: 10px 0 0;
+  font-size: 13.5px;
+}
+
+.stayBody dt {
+  color: var(--faint);
+}
+
+.stayBody dd {
+  margin: 0;
+  color: var(--label);
+  text-align: right;
+}
+
+.price {
+  margin-top: 12px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.price small {
+  color: var(--faint);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.flights {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.flight {
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--hair);
+}
+
+.flight[data-pick] {
+  background: var(--card-raised);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.2);
+}
+
+.flight header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+}
+
+.flight header b {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.flight em {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(230 203 128 / 0.14);
+  color: var(--lemon);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.legs {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.legs > span:not(.track) {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.legs > span:last-child {
+  text-align: right;
+}
+
+.legs b {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.legs small {
+  color: var(--faint);
+  font-size: 13px;
+}
+
+.track {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+}
+
+.track i {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  background: rgb(255 255 255 / 0.2);
+}
+
+.track i::before,
+.track i::after {
+  position: absolute;
+  top: -2.5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.45);
+  content: "";
+}
+
+.track i::before {
+  left: 0;
+}
+
+.track i::after {
+  right: 0;
+}
+
+.why {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* The plan */
+
+.plan {
+  padding: 24px 26px;
+  border-radius: 22px;
+  background: rgb(255 255 255 / 0.025);
+  box-shadow: inset 0 0 0 1px var(--hair);
+}
+
+.planLead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.planLead small {
+  color: var(--faint);
+  font-size: 14px;
+}
+
+.plan h3 {
+  font-size: 28px;
+}
+
+.plan > p {
+  margin-top: 10px;
+  color: var(--label);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.figures {
+  display: flex;
+  gap: 36px;
+  margin-top: 18px;
+}
+
+.figures span {
+  display: flex;
+  flex-direction: column;
+}
+
+.figures b {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.figures small {
+  color: var(--faint);
+  font-size: 13px;
+}
+
+.timeline {
+  position: relative;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 112px 14px 1fr auto;
+  gap: 12px;
+  padding-bottom: 18px;
+}
+
+.timeline li > small:first-child {
+  padding-top: 2px;
+  color: var(--faint);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.timeline li > i {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  margin-top: 6px;
+  border: 1.5px solid rgb(255 255 255 / 0.4);
+  border-radius: 50%;
+}
+
+.timeline li:not(:last-child) > i::after {
+  position: absolute;
+  top: 12px;
+  left: 3px;
+  width: 1px;
+  height: 52px;
+  background: rgb(255 255 255 / 0.12);
+  content: "";
+}
+
+.timeline li > span {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline li > span b {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.timeline li > span span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.cost {
+  color: var(--label);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.planFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.makeTasks {
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: #ededf0;
+  color: #161619;
+  font-size: 15px;
+  font-weight: 600;
+  transition:
+    transform 200ms var(--ease-out),
+    background-color 200ms var(--ease-out);
+}
+
+.makeTasks[data-pressed] {
+  background: #b9b9be;
+  transform: scale(0.96);
+}
+
+.sources {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--faint);
+  font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .world[data-working] .live [data-scroll],
+  .world[data-working] .live [data-cursor] {
+    animation: none;
+  }
+}

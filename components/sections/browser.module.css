@@ -1,0 +1,180 @@
+.section {
+  padding-block: clamp(120px, 14vw, 200px) clamp(80px, 10vw, 140px);
+}
+
+.later {
+  padding-top: clamp(80px, 10vw, 140px);
+}
+
+/* Section heads: one large line, one quiet line under it. */
+.head h2 {
+  font-size: var(--text-headline);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.head p {
+  max-width: 34rem;
+  margin-top: 14px;
+  color: var(--color-muted);
+  font-size: var(--text-lede);
+  line-height: 1.45;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  margin-top: clamp(48px, 6vw, 72px);
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+
+  .seven {
+    grid-column: span 7;
+  }
+
+  .five {
+    grid-column: span 5;
+  }
+
+  .wide {
+    grid-column: span 12;
+  }
+
+  .four {
+    grid-column: span 4;
+  }
+}
+
+/* A card: one plate, one hairline, the product on it and a line below. */
+.card {
+  display: flex;
+  flex-direction: column;
+  min-height: 460px;
+  overflow: hidden;
+  border-radius: 28px;
+  background: #111113;
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.09);
+}
+
+.visual {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 40px) 8px;
+}
+
+/* The desk: a piece of the sky, inset in the card like a screen. */
+.visual[data-desk] {
+  margin: 8px 8px 0;
+  padding: clamp(28px, 3.4vw, 48px) clamp(16px, 3vw, 40px);
+  border-radius: 21px;
+  background:
+    linear-gradient(rgb(14 30 58 / 0.12), rgb(14 30 58 / 0.12)),
+    image-set(url("/shots/sky-800.webp") 1x, url("/shots/sky-1600.webp") 2x) var(--at, 50% 50%) / 220% auto;
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px clamp(24px, 3vw, 36px) clamp(26px, 3vw, 34px);
+}
+
+.line {
+  color: var(--color-muted);
+  font-size: 17px;
+  line-height: 1.45;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+}
+
+.line b {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* The launcher's row: the words and the shortcut, then the launcher itself. */
+.split {
+  display: grid;
+  min-height: 0;
+}
+
+.splitText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: clamp(28px, 4vw, 56px);
+}
+
+.splitText h3 {
+  font-size: clamp(1.5rem, 1.2rem + 0.9vw, 2rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.splitText p {
+  max-width: 24rem;
+  color: var(--color-muted);
+  font-size: 17px;
+  line-height: 1.5;
+  letter-spacing: -0.012em;
+}
+
+.launcher {
+  order: -1;
+  margin: 8px 8px 0;
+}
+
+.launcher img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 21px;
+}
+
+@media (min-width: 900px) {
+  .split {
+    grid-template-columns: 5fr 8fr;
+    align-items: center;
+  }
+
+  .launcher {
+    order: 0;
+    margin: 8px;
+  }
+}
+
+.keys {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.keys kbd {
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  padding-inline: 10px;
+  border-radius: 9px;
+  background: #1c1c20;
+  box-shadow:
+    inset 0 0.5px 0 rgb(255 255 255 / 0.18),
+    0 0 0 0.5px rgb(255 255 255 / 0.1);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+}

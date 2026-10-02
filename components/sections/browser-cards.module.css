@@ -1,0 +1,602 @@
+/*
+ * Small, sharp pieces of the product for the feature cards: the shield, the
+ * extensions, tasks, notes and activity. They float over a desktop in the
+ * product's own material, vibrancy: what is behind, blurred and tinted dark.
+ * Motion only where something happens, and every control works.
+ */
+
+.panel {
+  width: 100%;
+  max-width: 340px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgb(26 30 40 / 0.58);
+  box-shadow:
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.16),
+    0 18px 50px rgb(8 20 40 / 0.22);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6);
+  backdrop-filter: blur(28px) saturate(1.6);
+  color: #fff;
+  font-size: 13.5px;
+}
+
+.panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 24px;
+  font-size: 15px;
+}
+
+.panel header b {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.panel header small {
+  color: rgb(255 255 255 / 0.5);
+  font-size: 12px;
+}
+
+/* A switch, as the product draws it. */
+.switch {
+  position: relative;
+  flex: none;
+  width: 32px;
+  height: 19px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.16);
+  cursor: pointer;
+  transition: background-color 260ms var(--ease-out);
+}
+
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #f4f4f6;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+  transition:
+    transform 420ms var(--ease-emphasized),
+    background-color 260ms var(--ease-out);
+}
+
+.switch[data-on] {
+  background: #f4f4f6;
+}
+
+.switch[data-on]::after {
+  background: #1c2230;
+  transform: translateX(13px);
+}
+
+.switch:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.7);
+  outline-offset: 2px;
+}
+
+/* Blocker */
+
+.blocker {
+  max-width: 400px;
+}
+
+.shieldHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.shieldIcon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgb(255 255 255 / 0.1);
+}
+
+.site {
+  display: grid;
+  flex: 1;
+  line-height: 1.25;
+}
+
+.site b {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.site small {
+  color: rgb(255 255 255 / 0.55);
+  font-size: 12px;
+}
+
+.count {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 20px;
+  transition: opacity 300ms var(--ease-out);
+}
+
+.count b {
+  font-size: 56px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+.count span {
+  color: rgb(255 255 255 / 0.65);
+  font-size: 14px;
+}
+
+.blocker[data-off] .count {
+  opacity: 0.4;
+}
+
+.hosts {
+  display: grid;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hosts li {
+  padding: 7px 0;
+  border-top: 0.5px solid rgb(255 255 255 / 0.1);
+  color: rgb(255 255 255 / 0.55);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.hosts span {
+  position: relative;
+}
+
+/* Each request is struck through as the shield turns it away; the newest
+   slides in at the top. */
+.hosts span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 55%;
+  height: 1px;
+  background: rgb(255 255 255 / 0.6);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: opacity 300ms var(--ease-out);
+}
+
+.blocker[data-seen] .hosts span::after {
+  animation: strike 700ms var(--ease-out) calc(500ms + var(--n) * 160ms) both;
+}
+
+.blocker[data-seen] .hosts li:first-child {
+  animation: arrive 600ms var(--ease-emphasized) both;
+}
+
+.blocker[data-off] .hosts span::after {
+  opacity: 0;
+}
+
+@keyframes strike {
+  to {
+    transform: none;
+  }
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* Extensions */
+
+.extensions {
+  max-width: 380px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+}
+
+.extensions li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 10px;
+}
+
+.extensions li + li {
+  box-shadow: inset 0 0.5px 0 rgb(255 255 255 / 0.08);
+}
+
+.extIcon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 0.5px rgb(0 0 0 / 0.15);
+}
+
+.extIcon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.extIcon img {
+  width: 100%;
+  height: 100%;
+}
+
+.extName {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Tasks */
+
+.compose {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 40px;
+  margin-top: 14px;
+  padding: 0 8px 0 12px;
+  border-radius: 12px;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.placeholder {
+  color: rgb(255 255 255 / 0.4);
+}
+
+.typing {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: type 1.6s steps(25, end) backwards;
+}
+
+@keyframes type {
+  from {
+    max-width: 0;
+  }
+  to {
+    max-width: 100%;
+  }
+}
+
+.parsed {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.14);
+  font-size: 12px;
+  opacity: 0;
+  transform: scale(0.9);
+  transition:
+    opacity 300ms var(--ease-out),
+    transform 400ms var(--ease-emphasized);
+}
+
+.parsed[data-on] {
+  opacity: 1;
+  transform: none;
+}
+
+.tasks ul {
+  display: grid;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tasks li {
+  display: flex;
+  gap: 10px;
+  padding: 9px 2px;
+}
+
+.tasks li + li {
+  box-shadow: inset 0 0.5px 0 rgb(255 255 255 / 0.08);
+}
+
+.tasks li[data-new] {
+  animation: land 700ms var(--ease-emphasized) both;
+}
+
+@keyframes land {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.tasks li button {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin: -3px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+
+.tasks li i {
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid rgb(255 255 255 / 0.45);
+  border-radius: 50%;
+  transition:
+    background-color 250ms var(--ease-out),
+    border-color 250ms var(--ease-out),
+    transform 250ms var(--ease-emphasized);
+}
+
+.tasks li button:hover i {
+  border-color: rgb(255 255 255 / 0.8);
+}
+
+.tasks li button:active i {
+  transform: scale(0.85);
+}
+
+.tasks li > span {
+  display: grid;
+  gap: 1px;
+  transition: color 250ms var(--ease-out);
+}
+
+.tasks li small {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: rgb(255 255 255 / 0.5);
+  font-size: 12px;
+}
+
+.tasks li[data-done] i {
+  border-color: #f4f4f6;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.5l2.2 2.2 4.8-5' fill='none' stroke='%231c2230' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+      center / 100% no-repeat,
+    #f4f4f6;
+}
+
+.tasks li[data-done] > span {
+  color: rgb(255 255 255 / 0.45);
+  text-decoration: line-through;
+}
+
+/* Notes */
+
+.noteTools {
+  display: flex;
+  gap: 10px;
+  color: rgb(255 255 255 / 0.55);
+}
+
+.notes p {
+  margin-top: 10px;
+  color: rgb(255 255 255 / 0.75);
+  line-height: 1.5;
+}
+
+.notes pre {
+  margin-top: 12px;
+  padding: 12px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgb(0 0 0 / 0.28);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.08);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.kw {
+  color: #c4a7f5;
+}
+
+.fn {
+  color: #8cc4f0;
+}
+
+.ty {
+  color: #f0a8b8;
+}
+
+.notes ul {
+  display: grid;
+  gap: 4px;
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: rgb(255 255 255 / 0.75);
+}
+
+.notes li code {
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: rgb(255 255 255 / 0.1);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+/* Activity */
+
+.range {
+  display: flex;
+  padding: 2px;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.range button {
+  padding: 2px 9px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: rgb(255 255 255 / 0.55);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+}
+
+.range button[aria-pressed="true"] {
+  background: rgb(255 255 255 / 0.16);
+  color: #fff;
+}
+
+.total {
+  margin-top: 14px;
+}
+
+.total b {
+  display: block;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.total span {
+  color: rgb(255 255 255 / 0.5);
+  font-size: 12.5px;
+}
+
+.hours {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 56px;
+  margin-top: 14px;
+}
+
+.hours i {
+  flex: 1;
+  height: calc(var(--h) * 100%);
+  border-radius: 3px;
+  background: rgb(255 255 255 / 0.3);
+  transform: scaleY(0);
+  transform-origin: bottom;
+}
+
+.hours i[data-focus] {
+  background: #f4f4f6;
+}
+
+.activity[data-seen] .hours i {
+  animation: grow 800ms var(--ease-emphasized) calc(300ms + var(--n) * 50ms) both;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.focus {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.focus small {
+  display: block;
+  color: rgb(255 255 255 / 0.5);
+  font-size: 12px;
+}
+
+.sites {
+  display: grid;
+  gap: 12px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sites li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sites li > span {
+  display: grid;
+  flex: 1;
+  gap: 6px;
+}
+
+.sites li > span > span {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sites b {
+  font-weight: 500;
+}
+
+.sites small {
+  color: rgb(255 255 255 / 0.5);
+  font-size: 12px;
+}
+
+.sites i {
+  width: calc(var(--w) * 100%);
+  height: 3px;
+  border-radius: 2px;
+  background: rgb(255 255 255 / 0.55);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: width 600ms var(--ease-emphasized);
+}
+
+.activity[data-seen] .sites i {
+  animation: fill 900ms var(--ease-emphasized) 600ms both;
+}
+
+@keyframes fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: none;
+  }
+}

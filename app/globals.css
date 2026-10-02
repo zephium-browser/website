@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+/*
+ * Site tokens. The site is dark by design, like the product's base theme:
+ * graphite neutrals, no accent hue in the interface, and light reserved for
+ * the one thing that should glow (the hero). Tailwind's radius and colour
+ * scales are replaced so markup can only reach for names the site defines.
+ */
+@theme {
+  --color-*: initial;
+  --color-ink: #050506;
+  --color-ground: #09090b;
+  --color-plate: #111113;
+  --color-surface: #18181b;
+  --color-raised: #212125;
+  --color-line: rgb(255 255 255 / 0.07);
+  --color-line-strong: rgb(255 255 255 / 0.12);
+  --color-text: #f4f4f6;
+  --color-muted: rgb(244 244 246 / 0.64);
+  --color-faint: rgb(244 244 246 / 0.42);
+  --color-lit: #ededf0;
+  --color-on-lit: #111113;
+  --color-sheen: #c9d6ff;
+  --color-lilac: #b7a6f0;
+  --color-sky: #8db9f2;
+  --color-mint: #88d0b3;
+  --color-lemon: #e6cb80;
+  --color-peach: #efaa89;
+  --color-rose: #ee9aae;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --radius-*: initial;
+  --radius-inset: 8px;
+  --radius-row: 12px;
+  --radius-control: 14px;
+  --radius-card: 20px;
+  --radius-panel: 28px;
+  --radius-capsule: 999px;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text",
+    "Segoe UI", system-ui, sans-serif;
+
+  --text-display: clamp(2.5rem, 1.1rem + 3.6vw, 4.5rem);
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.045em;
+  --text-headline: clamp(2rem, 1.2rem + 2.6vw, 3.5rem);
+  --text-headline--line-height: 1.04;
+  --text-headline--letter-spacing: -0.035em;
+  --text-lede: clamp(1.0625rem, 0.95rem + 0.35vw, 1.25rem);
+  --text-lede--line-height: 1.5;
+  --text-lede--letter-spacing: -0.011em;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+:root {
+  color-scheme: dark;
+  --gutter: clamp(20px, 4vw, 40px);
+  --content: 1200px;
+  --nav-height: 64px;
+}
+
+html {
+  background: var(--color-ground);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100svh;
+  background: var(--color-ground);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
+}
+
+::selection {
+  background: rgb(201 214 255 / 0.28);
+  color: var(--color-text);
+}
+
+:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.6);
+  outline-offset: 3px;
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: calc(var(--content) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Two-tone headlines: the second clause steps back a rung. */
+@utility text-quiet {
+  color: rgb(244 244 246 / 0.5);
+}
+
+/* Film grain shared by every lit surface, so the hero's grain and a card's
+   grain read as one material. */
+@utility grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/*
+ * Vibrancy, the way the system draws it: a blurred, slightly brightened view
+ * of what is behind, a faint tint and a hairline edge. No glow, no shadow.
+ */
+@utility vibrant {
+  background: rgb(255 255 255 / 0.14);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.3);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+}
+
+/*
+ * Entrances. Things marked data-reveal rise into place the first time they
+ * come into view (components/reveals.tsx marks them). Until that script runs
+ * the page is fully visible, so nothing depends on it.
+ */
+:root[data-reveals] [data-reveal]:not([data-shown]) {
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(10px);
+}
+
+:root[data-reveals] [data-reveal="fade"]:not([data-shown]) {
+  transform: translateY(40px) scale(0.98);
+  filter: none;
+}
+
+[data-reveal] {
+  transition:
+    opacity 1s var(--ease-out) var(--delay, 0s),
+    transform 1.3s var(--ease-emphasized) var(--delay, 0s),
+    filter 1s var(--ease-out) var(--delay, 0s);
+}
+
+/* Section anchors land below the floating navigation. */
+[id] {
+  scroll-margin-top: calc(var(--nav-height) + 24px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

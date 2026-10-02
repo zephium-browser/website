@@ -1,0 +1,9 @@
+# Sent with every response. nginx drops inherited add_header lines inside a
+# location that adds its own, so each location includes this file again.
+add_header X-Content-Type-Options "nosniff" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+add_header X-Frame-Options "DENY" always;
+add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()" always;
+# The site loads nothing from anyone else, except Umami when UMAMI_ORIGIN is
+# set. Next.js inlines its bootstrap scripts, hence 'unsafe-inline'.
+add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' ${UMAMI_ORIGIN}; connect-src 'self' ${UMAMI_ORIGIN}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" always;

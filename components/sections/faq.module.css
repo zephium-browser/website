@@ -1,0 +1,76 @@
+.section {
+  display: grid;
+  gap: 40px 64px;
+  padding-block: clamp(80px, 10vw, 140px);
+}
+
+@media (min-width: 1000px) {
+  .section {
+    grid-template-columns: 0.8fr 1.2fr;
+    align-items: start;
+  }
+}
+
+.section h2 {
+  font-size: var(--text-headline);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.list {
+  border-top: 0.5px solid rgb(255 255 255 / 0.12);
+}
+
+.list details {
+  border-bottom: 0.5px solid rgb(255 255 255 / 0.12);
+  interpolate-size: allow-keywords;
+}
+
+.list summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-block: 22px;
+  font-size: 18px;
+  font-weight: 550;
+  letter-spacing: -0.015em;
+  list-style: none;
+  cursor: pointer;
+}
+
+.list summary::-webkit-details-marker {
+  display: none;
+}
+
+.list summary svg {
+  flex: none;
+  color: var(--color-muted);
+  transition: transform 300ms var(--ease-emphasized);
+}
+
+.list details[open] summary svg {
+  transform: rotate(45deg);
+}
+
+/* The answer opens smoothly where the browser can animate to auto height. */
+.list details::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 400ms var(--ease-emphasized),
+    content-visibility 400ms allow-discrete;
+}
+
+.list details[open]::details-content {
+  block-size: auto;
+}
+
+.list p {
+  max-width: 40rem;
+  padding-bottom: 24px;
+  color: var(--color-muted);
+  font-size: 16px;
+  line-height: 1.6;
+}

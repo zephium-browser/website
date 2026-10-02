@@ -1,0 +1,159 @@
+.section {
+  padding-block: clamp(110px, 13vw, 190px);
+  text-align: center;
+}
+
+.head h2 {
+  font-size: var(--text-headline);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.head p {
+  max-width: 30rem;
+  margin: 16px auto 0;
+  color: var(--color-muted);
+  font-size: var(--text-lede);
+  line-height: 1.5;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+/* One number, set very large, the way a spec sheet would set it. */
+.figure {
+  margin: clamp(56px, 7vw, 96px) 0 0;
+}
+
+.zero {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  font-size: clamp(9rem, 4rem + 16vw, 17rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  padding-inline: 0.04em;
+  font-variant-numeric: tabular-nums;
+  -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+}
+
+/* The digits stand in a column; seen, the column rolls to its last, zero. */
+.reel {
+  display: flex;
+  flex-direction: column;
+  transition: transform 2.2s cubic-bezier(0.2, 0.9, 0.1, 1) 0.25s;
+}
+
+.reel span {
+  display: block;
+  height: 1em;
+}
+
+.zero[data-seen] .reel {
+  transform: translateY(-90%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reel {
+    transform: translateY(-90%);
+    transition: none;
+  }
+}
+
+.figure figcaption {
+  margin-top: 6px;
+  color: var(--color-text);
+  font-size: clamp(1.1rem, 1rem + 0.4vw, 1.35rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+.figure figcaption span {
+  display: block;
+  margin-top: 6px;
+  color: var(--color-faint);
+  font-weight: 400;
+}
+
+/* Three promises in a row, divided by hairlines, nothing around them. */
+.points {
+  display: grid;
+  max-width: 1080px;
+  margin: clamp(72px, 9vw, 120px) auto 0;
+  padding: 0;
+  border-top: 0.5px solid rgb(255 255 255 / 0.12);
+  list-style: none;
+  text-align: left;
+}
+
+.points li {
+  padding: 28px 0 0;
+}
+
+.points li + li {
+  margin-top: 28px;
+  border-top: 0.5px solid rgb(255 255 255 / 0.12);
+}
+
+@media (min-width: 860px) {
+  .points {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .points li {
+    padding: 32px 36px 0;
+  }
+
+  .points li:first-child {
+    padding-left: 0;
+  }
+
+  .points li + li {
+    margin-top: 0;
+    border-top: 0;
+    border-left: 0.5px solid rgb(255 255 255 / 0.12);
+  }
+}
+
+.points b {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.points p {
+  margin-top: 8px;
+  color: var(--color-muted);
+  font-size: 15.5px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.source {
+  margin-top: clamp(56px, 7vw, 88px);
+  color: var(--color-faint);
+  font-size: 15px;
+}
+
+.source a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-text);
+  font-weight: 500;
+  transition: opacity 160ms var(--ease-out);
+}
+
+.source a:hover {
+  opacity: 0.75;
+}
+
+.source a svg {
+  transition: transform 200ms var(--ease-out);
+}
+
+.source a:hover svg {
+  transform: translateX(2px);
+}

@@ -1,0 +1,21 @@
+/* Ported from the product (frame/src/shared/ui/presence/Orb.svelte). */
+.orb {
+  position: relative;
+  display: block;
+  flex: none;
+  inline-size: calc(var(--u, 1px) * var(--orb-size));
+  block-size: calc(var(--u, 1px) * var(--orb-size));
+  overflow: hidden;
+  contain: strict;
+}
+
+.film {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  background: var(--orb-tone, #f4f4f6);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+}
