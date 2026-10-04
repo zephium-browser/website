@@ -163,15 +163,16 @@
 }
 
 /* The attach menu, a popover of its own over the board's corner, opened
-   from the + beneath it. */
+   from the + beneath it. It hangs a little past the board's edge, so it
+   covers the cards beside it as little as it can. */
 .attach {
   position: absolute;
-  right: clamp(28px, 5vw, 72px);
+  right: clamp(4px, 1vw, 12px);
   bottom: clamp(12px, 2vw, 24px);
   display: grid;
   justify-items: end;
   gap: 10px;
-  width: 27%;
+  width: 24%;
 }
 
 .popover {
@@ -240,11 +241,12 @@
   font-weight: 600;
 }
 
-/* On a phone the menu takes more of the board's width. */
+/* On a phone the menu takes more of the board's width, but stays short
+   enough to fit the board's height with the + beneath it. */
 @media (max-width: 720px) {
   .attach {
-    right: 20px;
-    bottom: 8px;
-    width: 42%;
+    right: 6px;
+    bottom: 6px;
+    width: 36%;
   }
 }
