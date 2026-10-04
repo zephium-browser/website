@@ -38,8 +38,8 @@ export default function AboutPage() {
         <p>
           {site.name} is not a fork of Chromium or Firefox. The browser is written from scratch in
           Rust, and pages render in the engine your system already ships and keeps up to date:
-          WKWebView on macOS and WebView2 on Windows. That is why the download is{" "}
-          {site.downloadSize}, and why it starts in an instant.
+          WKWebView on macOS and WebView2 on Windows. That is why the app is{" "}
+          {site.appSize}, and why it starts in an instant.
         </p>
 
         <h2>Open source</h2>

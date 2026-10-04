@@ -15,8 +15,8 @@ export const site = {
   /** This website's own source; it is open source too. */
   websiteRepo: "https://github.com/zephium-browser/website",
   license: "MPL-2.0",
-  /** Approximate size of the download, as the site states it. */
-  downloadSize: "about 20 MB",
+  /** Approximate size of the installed app (macOS is the larger), as the site states it. */
+  appSize: "about 40 MB",
   /** The person who makes Zephium. */
   author: { name: "Crynta", url: "https://github.com/crynta" },
   /** Community links. An empty one is left out of the footer until it exists. */
