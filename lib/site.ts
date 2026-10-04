@@ -16,7 +16,7 @@ export const site = {
   websiteRepo: "https://github.com/zephium-browser/website",
   license: "MPL-2.0",
   /** Approximate size of the download, as the site states it. */
-  downloadSize: "about 30 MB",
+  downloadSize: "about 20 MB",
   /** The person who makes Zephium. */
   author: { name: "Crynta", url: "https://github.com/crynta" },
   /** Community links. An empty one is left out of the footer until it exists. */

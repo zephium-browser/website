@@ -19,6 +19,22 @@ export type Release = {
 
 export const RELEASES: Release[] = [
   {
+    version: "1.0.0-beta.2",
+    date: "2026-10-04",
+    title: "Steadier updates",
+    summary:
+      "A small update that makes the next ones more dependable, and Zephium a little lighter to download.",
+    sections: [
+      {
+        title: "Fixes",
+        items: [
+          "An update check or download that stops responding now gives up and tries again later, instead of holding back updates until you restart.",
+          "About 1 MB smaller to download on both macOS and Windows.",
+        ],
+      },
+    ],
+  },
+  {
     version: "1.0.0-beta.1",
     date: "2026-10-04",
     title: "The first beta",
@@ -61,7 +77,7 @@ export const RELEASES: Release[] = [
       {
         title: "Platforms",
         items: [
-          "Apple silicon Macs and Windows, about 30 MB to download.",
+          "Apple silicon Macs and Windows, about 20 MB to download.",
           "Built in Rust on the system's own engine, WKWebView on macOS and WebView2 on Windows. Not a fork of Chromium or Firefox.",
           "Intel Macs, Linux, iOS and Android are on the way.",
         ],
