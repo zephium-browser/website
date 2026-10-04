@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { AppleIcon, ArrowRight01Icon, GithubIcon, WindowsNewIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Fragment, useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
-import { detectPlatform } from "@/components/preferred-platform";
+import { DownloadLink } from "@/components/download-link";
+import { useDesktop } from "@/components/preferred-platform";
 import { site } from "@/lib/site";
 import { Clouds } from "./clouds";
 import {
@@ -51,20 +51,6 @@ function useCompact() {
     },
     () => window.matchMedia(COMPACT).matches,
     () => false,
-  );
-}
-
-const noSubscription = () => () => {};
-
-/** The visitor's desktop platform, once the page is in a browser. */
-function useDesktop() {
-  return useSyncExternalStore(
-    noSubscription,
-    () => {
-      const platform = detectPlatform();
-      return platform === "macos" || platform === "windows" ? platform : null;
-    },
-    () => null,
   );
 }
 
@@ -194,10 +180,10 @@ export function Scene() {
         <Clouds className={styles.sky} />
 
         <div className={styles.copy}>
-          <Link href="/download" className={styles.chip}>
+          <DownloadLink className={styles.chip}>
             Available now for Mac and Windows
             <HugeiconsIcon icon={ArrowRight01Icon} size={13} strokeWidth={2} aria-hidden />
-          </Link>
+          </DownloadLink>
           <h1 id="hero-title" className={styles.title} aria-label={TITLE}>
             {TITLE.split(" ").map((word, index) => (
               <Fragment key={`${word}-${index}`}>
@@ -218,7 +204,7 @@ export function Scene() {
             One switch away, a canvas where your agents work in plain sight.
           </p>
           <div className={styles.actions}>
-            <Link href="/download" className={styles.primary}>
+            <DownloadLink className={styles.primary}>
               {desktop ? (
                 <HugeiconsIcon
                   icon={desktop === "macos" ? AppleIcon : WindowsNewIcon}
@@ -228,7 +214,7 @@ export function Scene() {
                 />
               ) : null}
               {desktop === "macos" ? "Download for Mac" : desktop === "windows" ? "Download for Windows" : "Download"}
-            </Link>
+            </DownloadLink>
             <a href={site.repo} className={styles.secondary}>
               <HugeiconsIcon icon={GithubIcon} size={17} strokeWidth={1.7} aria-hidden />
               Star on GitHub

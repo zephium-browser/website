@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useSyncExternalStore, type ReactNode } from "react";
 import type { PlatformId } from "@/lib/site";
 
 /** The visitor's platform, as far as the browser will say. */
@@ -13,6 +13,20 @@ export function detectPlatform(): PlatformId | null {
   if (/win/.test(source)) return "windows";
   if (/linux|x11/.test(source)) return "linux";
   return null;
+}
+
+const noSubscription = () => () => {};
+
+/** The visitor's desktop platform, once the page is in a browser. */
+export function useDesktop(): "macos" | "windows" | null {
+  return useSyncExternalStore(
+    noSubscription,
+    () => {
+      const platform = detectPlatform();
+      return platform === "macos" || platform === "windows" ? platform : null;
+    },
+    () => null,
+  );
 }
 
 /**

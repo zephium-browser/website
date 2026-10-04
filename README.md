@@ -32,7 +32,7 @@ and run the script.
 ## Layout
 
 ```
-app/                  pages: home, workflows, changelog, about, download, docs, privacy, terms
+app/                  pages: home, workflows, changelog, about, docs, privacy, terms
 components/scene/     the opening: sky, headline, and the Zephium window that plays the film
 components/sections/  the home page sections after it
 components/work/      the Work canvas the film runs on

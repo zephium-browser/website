@@ -5,6 +5,7 @@ import { Cancel01Icon, Menu01Icon, StarIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useEffect, useRef, useState } from "react";
 import { ZephiumLockup } from "@/components/brand";
+import { DownloadLink } from "@/components/download-link";
 import { formatStars } from "@/lib/github";
 import { site } from "@/lib/site";
 import styles from "./site-nav.module.css";
@@ -53,9 +54,7 @@ export function SiteNav({ stars = 0 }: { stars?: number }) {
             <HugeiconsIcon icon={StarIcon} size={15} strokeWidth={1.8} aria-hidden />
             <span className={styles.count}>{formatStars(stars)}</span>
           </a>
-          <Link href="/download" className={styles.download}>
-            Download
-          </Link>
+          <DownloadLink className={styles.download}>Download</DownloadLink>
           <button
             type="button"
             className={styles.menu}
@@ -70,11 +69,12 @@ export function SiteNav({ stars = 0 }: { stars?: number }) {
       </div>
 
       <nav id="site-menu" aria-label="Menu" className={styles.sheet} inert={!open}>
-        {[...links, { href: "/download", label: "Download" }].map((link) => (
+        {links.map((link) => (
           <Link key={link.href} href={link.href} onClick={() => setOpen(false)}>
             {link.label}
           </Link>
         ))}
+        <DownloadLink onClick={() => setOpen(false)}>Download</DownloadLink>
         <a href={site.repo} onClick={() => setOpen(false)}>
           GitHub
         </a>

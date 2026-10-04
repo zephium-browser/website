@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { CSSProperties } from "react";
+import { DownloadLink } from "@/components/download-link";
 import { PageShell } from "@/components/prose";
 import { RELEASES, releaseAnchor } from "@/lib/changelog";
 import { site } from "@/lib/site";
@@ -59,9 +59,7 @@ export default function ChangelogPage() {
 
               <div className={styles.links}>
                 {index === 0 ? (
-                  <Link href="/download" className={styles.primary}>
-                    Download {release.version}
-                  </Link>
+                  <DownloadLink className={styles.primary}>Download {release.version}</DownloadLink>
                 ) : null}
                 <a href={`${site.releases}/tag/v${release.version}`} className={styles.secondary}>
                   Release on GitHub

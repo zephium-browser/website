@@ -23,6 +23,11 @@ server {
     try_files $uri $uri.html $uri/index.html =404;
   }
 
+  # The download page is gone: every Download button downloads directly.
+  location = /download {
+    return 301 /;
+  }
+
   # Hashed build files never change under the same name.
   location /_next/static/ {
     include /etc/nginx/snippets/headers.conf;
