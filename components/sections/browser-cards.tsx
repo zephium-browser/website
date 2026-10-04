@@ -345,7 +345,7 @@ const DAYS = {
 };
 
 /** Where the day went, or the week, and the focus that is keeping it on track. */
-export function Activity() {
+export function TimeAndFocus() {
   const ref = useRef<HTMLDivElement>(null);
   const seen = useInView(ref, WELL_IN);
   const [range, setRange] = useState<keyof typeof DAYS>("today");
@@ -353,7 +353,7 @@ export function Activity() {
   return (
     <div ref={ref} className={`${styles.panel} ${styles.activity}`} data-seen={seen || undefined}>
       <header>
-        <b>Activity</b>
+        <b>Time &amp; Focus</b>
         <span className={styles.range} role="group" aria-label="Range">
           {(["today", "week"] as const).map((key) => (
             <button key={key} type="button" aria-pressed={range === key} onClick={() => setRange(key)}>

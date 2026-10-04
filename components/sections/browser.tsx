@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { Activity, Blocker, Extensions, Notes, Tasks } from "./browser-cards";
+import { Blocker, Extensions, Notes, Tasks, TimeAndFocus } from "./browser-cards";
 import styles from "./browser.module.css";
 
 /**
@@ -120,7 +120,7 @@ export function Everyday() {
           Markdown files you own, with code that stays code.
         </Card>
 
-        <Card className={styles.four} title="See where the day went." visual={<Activity />} desk="100% 100%" delay={0.16}>
+        <Card className={styles.four} title="See where the day went." visual={<TimeAndFocus />} desk="100% 100%" delay={0.16}>
           Time by site, and focus that keeps distractions shut.
         </Card>
       </div>

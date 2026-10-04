@@ -55,7 +55,7 @@ const ISSUES = [
       { id: "ZEP-417", title: "Canvas: snap notes to the grid while dragging", label: "Work", dot: "#8b7cf6" },
       { id: "ZEP-409", title: "Mica material on Windows 11 sidebars", label: "Windows", dot: "#4cb782" },
       { id: "ZEP-401", title: "Import bookmarks and passwords on first run", label: "Browse", dot: "#4ea7fc" },
-      { id: "ZEP-386", title: "Focus: weekly summary of time per site", label: "Activity", dot: "#f2994a" },
+      { id: "ZEP-386", title: "Focus: weekly summary of time per site", label: "Time & Focus", dot: "#f2994a" },
     ],
   },
   {

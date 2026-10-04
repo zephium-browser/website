@@ -49,7 +49,7 @@ export const RELEASES: Release[] = [
           "The launcher, on ⌘ ⇧ Space, reaches tabs, tasks, notes, history and downloads from anywhere on your desktop.",
           "Tasks you write the way you would say them, landing on the right day.",
           "Notes beside the page, as Markdown files you own, with code that stays code.",
-          "Activity shows where the day went, and Focus keeps distractions shut.",
+          "Time & Focus shows where the day went, and keeps distractions shut.",
           "A welcome that imports what you already have and sets up the essentials.",
           "Profiles keep each one's site data apart.",
         ],
