@@ -52,7 +52,7 @@ const TABS: Tab[] = [
   { id: "studio", mark: "elevenlabs", title: "Starship: The Launch · ElevenLabs", host: "elevenlabs.io", page: () => <StudioPage /> },
   { id: "linear", mark: "linear", title: "Active issues · Linear", host: "linear.app", page: () => <LinearPage /> },
   { id: "notion", mark: "notion", title: "Shot list | Notion", host: "notion.so", page: () => <NotionPage /> },
-  { id: "github", mark: "github", title: "zephium-browser/zephium · GitHub", host: "github.com", page: () => <GitHubPage /> },
+  { id: "github", mark: "github", title: "zephium-browser/Zephium · GitHub", host: "github.com", page: () => <GitHubPage /> },
   { id: "stays", mark: "staybook", title: "Stays in SoMa · Staybook", host: trip.stays.site, page: () => <StaybookPage /> },
   { id: "flights", mark: "flightfinder", title: "London to San Francisco · FlightFinder", host: trip.flights.site, page: () => <FlightFinderPage /> },
 ];

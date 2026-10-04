@@ -1,6 +1,6 @@
 # zephium.app
 
-The website for [Zephium](https://github.com/zephium-browser/zephium), the
+The website for [Zephium](https://github.com/zephium-browser/Zephium), the
 browser-native work environment. It is a fully static Next.js site: every page
 is rendered at build time and served as plain files. Like the browser, it is
 open source under the MPL-2.0.

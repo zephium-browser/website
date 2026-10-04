@@ -30,8 +30,8 @@ export const QUESTIONS = [
     a: `Yes. Zephium is free and open source under the ${site.license === "MPL-2.0" ? "Mozilla Public License 2.0" : site.license}. With your own keys, you pay only your model provider.`,
   },
   {
-    q: "When are Linux, iOS and Android coming?",
-    a: "Linux is next, and the mobile apps follow. Star the repository on GitHub to hear when they land.",
+    q: "When are Intel Macs, Linux, iOS and Android coming?",
+    a: "Intel Macs and Linux are next, and the mobile apps follow. Star the repository on GitHub to hear when they land.",
   },
 ];
 

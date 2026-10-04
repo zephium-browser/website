@@ -10,8 +10,8 @@ export const site = {
   tagline: "A browser-native work environment, rebuilt for you and your agents.",
   description:
     "Zephium is a fast, private, open-source browser built in Rust, with Work: a canvas where you and your agents browse, compare and plan in the open, and keep the results.",
-  repo: "https://github.com/zephium-browser/zephium",
-  releases: "https://github.com/zephium-browser/zephium/releases",
+  repo: "https://github.com/zephium-browser/Zephium",
+  releases: "https://github.com/zephium-browser/Zephium/releases",
   /** This website's own source; it is open source too. */
   websiteRepo: "https://github.com/zephium-browser/website",
   license: "MPL-2.0",
@@ -49,8 +49,8 @@ export const platforms: readonly Platform[] = [
     id: "macos",
     name: "macOS",
     status: "available",
-    asset: "Zephium-macOS-universal.dmg",
-    requirement: "macOS Sonoma or later",
+    asset: "Zephium-macOS-arm64.dmg",
+    requirement: "macOS Sonoma or later, Apple silicon",
   },
   {
     id: "windows",

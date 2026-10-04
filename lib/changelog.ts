@@ -19,11 +19,11 @@ export type Release = {
 
 export const RELEASES: Release[] = [
   {
-    version: "0.1.0",
-    date: "2026-10-02",
-    title: "The first release",
+    version: "1.0.0-beta.1",
+    date: "2026-10-04",
+    title: "The first beta",
     summary:
-      "Zephium's first public release, for macOS and Windows. A fast, private browser with a canvas for your agents one switch away, free and open source under the Mozilla Public License.",
+      "Zephium's first public beta, for Apple silicon Macs and Windows. A fast, private browser with a canvas for your agents one switch away, free and open source under the Mozilla Public License.",
     sections: [
       {
         title: "Browse",
@@ -61,14 +61,14 @@ export const RELEASES: Release[] = [
       {
         title: "Platforms",
         items: [
-          "macOS and Windows, about 30 MB to download.",
+          "Apple silicon Macs and Windows, about 30 MB to download.",
           "Built in Rust on the system's own engine, WKWebView on macOS and WebView2 on Windows. Not a fork of Chromium or Firefox.",
-          "Linux, iOS and Android are on the way.",
+          "Intel Macs, Linux, iOS and Android are on the way.",
         ],
       },
     ],
   },
 ];
 
-/** The anchor for a release, e.g. "v0-1-0". */
+/** The anchor for a release, e.g. "v1-0-0-beta-1". */
 export const releaseAnchor = (version: string) => `v${version.replace(/\./g, "-")}`;
