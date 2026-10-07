@@ -4,7 +4,7 @@ import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy",
-  description: `How ${site.name} and ${new URL(site.url).host} handle your data: no telemetry, your data on your device, and models you choose.`,
+  description: `How ${site.name} and ${new URL(site.url).host} handle your data: no telemetry, your data on your device, an optional account, and models you choose.`,
   alternates: { canonical: "/privacy" },
 };
 
@@ -13,9 +13,9 @@ export default function PrivacyPage() {
   return (
     <PageShell
       title="Privacy"
-      lede={`The short version: the browser collects nothing about how you browse, your data stays on your device, and this website counts page views without knowing who you are.`}
+      lede={`The short version: the browser collects nothing about how you browse, your data stays on your device, an account is optional, and this website counts page views without knowing who you are.`}
     >
-      <Prose updated="October 2, 2026">
+      <Prose updated="October 7, 2026">
         <p>
           This policy covers the {site.name} browser and the website at {host}. {site.name} is open
           source, so every statement about the browser below can be checked against{" "}
@@ -26,7 +26,8 @@ export default function PrivacyPage() {
         <p>
           {site.name} has no telemetry, no usage analytics and no crash reporting that sends data on
           its own. We do not receive your browsing history, your searches or anything you do in the
-          browser. You never need an account to browse.
+          browser. You never need an account to browse, to use your own API key or to run a model
+          on your computer.
         </p>
 
         <h2>Your data stays on your device</h2>
@@ -38,20 +39,64 @@ export default function PrivacyPage() {
 
         <h2>Models and keys</h2>
         <p>
-          Work features use a model you choose. With your own API key for OpenAI, Anthropic or
-          Gemini, requests go directly from your device to that provider and your key is kept in
-          your system keychain. With a model running locally, nothing leaves your device.
-        </p>
-        <p>
-          If you choose {site.name}&apos;s own AI service, the requests you send to it, and the
-          pages and notes they include, pass through our servers to be answered. Using it may need
-          an account. This section will describe exactly what is kept, and for how long, when the
-          service opens.
+          Work features use a model you choose. With your own API key for a provider such as
+          OpenAI, Anthropic, Google, xAI, Mistral or DeepSeek, requests go directly from your device
+          to that provider and your key is kept in your system keychain. With a model running
+          locally, nothing leaves your device.
         </p>
         <p>
           Before anything is sent to a model, {site.name} shows you which pages and notes are
           included and why. What the provider does with that data is governed by your agreement
           with them, so review their terms for the provider you use.
+        </p>
+
+        <h2>Your account</h2>
+        <p>
+          An account is optional and is only needed for Zephium AI, our hosted models. Until you
+          sign in, the browser does not contact our servers at all.
+        </p>
+        <p>If you create an account, we keep:</p>
+        <ul>
+          <li>your email address, to send you sign-in codes. There is no password;</li>
+          <li>
+            the devices signed in to it, each named only by the app version and operating system,
+            such as &ldquo;{site.name} 1.0 &middot; macOS&rdquo;, so you can see them and sign them
+            out;
+          </li>
+          <li>your plan, and how much of its allowance you have used.</li>
+        </ul>
+        <p>
+          The sign-in token stays in your system keychain on your device. You can sign out any
+          device, and delete your account, from Settings &rarr; Account.
+        </p>
+
+        <h2>Zephium AI</h2>
+        <p>
+          When you use Zephium AI, your requests, and the pages, notes and files they include,
+          pass through our servers to the provider whose model answers them, such as OpenAI or
+          Anthropic, and the answer comes back the same way. The provider processes the request
+          under its API terms.
+        </p>
+        <p>
+          Our servers do not store prompts, answers, browsing history, screenshots or tool data.
+          For each request they record what billing needs: which model answered, how many tokens it
+          used and what it cost. This section will say how long those records are kept when the
+          service opens.
+        </p>
+
+        <h2>Payments</h2>
+        <p>
+          Paid plans are sold by <a href="https://polar.sh">Polar</a>, which acts as the merchant
+          of record: it runs checkout, holds your payment details, and issues invoices and receipts
+          under its own privacy policy. We never see or store your card. Polar tells us which plan
+          you bought and whether it is active.
+        </p>
+
+        <h2>Who helps us run it</h2>
+        <p>
+          Sign-in codes are emailed through <a href="https://resend.com">Resend</a>, which receives
+          only your email address and the code. Our servers run on{" "}
+          <a href="https://www.hetzner.com">Hetzner</a>.
         </p>
 
         <h2>Blocking ads and trackers</h2>
@@ -89,8 +134,8 @@ export default function PrivacyPage() {
 
         <h2>Children</h2>
         <p>
-          {site.name} is not directed at children, and because we collect no personal data, we hold
-          none about anyone, children included.
+          {site.name} is not directed at children. The browser collects no personal data, and an
+          account holds only what is listed above.
         </p>
 
         <h2>Changes</h2>
