@@ -27,7 +27,7 @@ export const site = {
     youtube: "https://www.youtube.com/@crynta",
   },
   /** Contact for privacy and legal questions. */
-  contact: "hello@zephium.app",
+  contact: "info@zephium.app",
 } as const;
 
 export type PlatformId = "macos" | "windows" | "linux" | "ios" | "android";
