@@ -28,6 +28,23 @@ server {
     return 301 /;
   }
 
+  # Where checkout and the billing portal send people back to. It loads no
+  # analytics, so it gets its own headers instead of headers.conf: the same CSP
+  # without the Umami origin, no referrer, no indexing and no caching. A
+  # trailing slash is redirected once, keeping the query as it came.
+  location = /billing/return {
+    include /etc/nginx/snippets/headers-base.conf;
+    add_header Referrer-Policy "no-referrer" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" always;
+    add_header X-Robots-Tag "noindex, nofollow" always;
+    add_header Cache-Control "no-store" always;
+    try_files /billing/return.html =404;
+  }
+
+  location = /billing/return/ {
+    return 301 /billing/return$is_args$args;
+  }
+
   # Hashed build files never change under the same name.
   location /_next/static/ {
     include /etc/nginx/snippets/headers.conf;

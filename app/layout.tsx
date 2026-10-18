@@ -1,10 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
-import { SiteFooter } from "@/components/site-footer";
-import { Reveals } from "@/components/reveals";
-import { SiteNav } from "@/components/site-nav";
-import { getStars } from "@/lib/github";
 import { platforms, site } from "@/lib/site";
 import "./globals.css";
 
@@ -62,17 +58,7 @@ const jsonLd = {
   codeRepository: site.repo,
 };
 
-/**
- * Page views, counted by our own Umami: cookieless, on our own server, and
- * only on zephium.app. Off unless both values are set when the site is built.
- */
-const analytics = {
-  src: process.env.NEXT_PUBLIC_UMAMI_SRC,
-  id: process.env.NEXT_PUBLIC_UMAMI_ID,
-};
-
-export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const stars = await getStars();
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body>
@@ -82,19 +68,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <SiteNav stars={stars} />
-        <main id="main">{children}</main>
-        <SiteFooter />
-        <Reveals />
-        {analytics.src && analytics.id ? (
-          <script
-            defer
-            src={analytics.src}
-            data-website-id={analytics.id}
-            data-domains={new URL(site.url).host}
-            data-do-not-track="true"
-          />
-        ) : null}
+        {children}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

@@ -22,7 +22,13 @@ const file = (path) => {
 };
 
 createServer((request, response) => {
-  const path = normalize(decodeURIComponent(new URL(request.url, "http://x").pathname));
+  const url = new URL(request.url, "http://x");
+  // The billing return page answers once at its slash-less address, as nginx does.
+  if (url.pathname === "/billing/return/") {
+    response.writeHead(301, { location: `/billing/return${url.search}` }).end();
+    return;
+  }
+  const path = normalize(decodeURIComponent(url.pathname));
   const base = join(root, path);
   const found =
     file(base) ?? file(`${base}.html`) ?? file(join(base, "index.html"));
