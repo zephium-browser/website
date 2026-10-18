@@ -32,7 +32,8 @@ and run the script.
 ## Layout
 
 ```
-app/                  pages: home, workflows, changelog, about, docs, privacy, terms
+app/(site)/           pages with the nav, footer and page-view counting: home, workflows, changelog, about, docs, privacy, terms
+app/billing/return/   where checkout and the billing portal send people back to; no analytics
 components/scene/     the opening: sky, headline, and the Zephium window that plays the film
 components/sections/  the home page sections after it
 components/work/      the Work canvas the film runs on
@@ -63,6 +64,9 @@ deploy/, Dockerfile   the production container
   other sites shown in it are simplified likenesses with made-up content.
 - **No tracking.** No cookies and no third-party scripts. Page views are
   counted by a self-hosted, cookieless Umami, only when it is configured.
+  Query strings are never recorded, and `/billing/return` loads no analytics at
+  all: its HTML has no script for it, and nginx sends it a CSP without the
+  Umami origin.
 
 ## Releases and downloads
 
