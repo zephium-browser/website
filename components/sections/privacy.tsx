@@ -50,7 +50,7 @@ export function Privacy() {
       </ul>
 
       <p className={styles.source} data-reveal>
-        Open source under the Mozilla Public License.{" "}
+        The browser is open source under the Mozilla Public License.{" "}
         <a href={site.repo}>
           Read the source
           <HugeiconsIcon icon={ArrowRight01Icon} size={14} strokeWidth={2} aria-hidden />

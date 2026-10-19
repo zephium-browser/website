@@ -1,10 +1,18 @@
 import { Add01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
 import type { CSSProperties } from "react";
-import { site } from "@/lib/site";
 import styles from "./faq.module.css";
 
-export const QUESTIONS = [
+export type Question = {
+  q: string;
+  /** Plain text, which is also what search engines read. */
+  a: string;
+  /** A page that says more, shown after the answer. */
+  more?: { href: string; label: string };
+};
+
+export const QUESTIONS: Question[] = [
   {
     q: "Is Zephium built on Chromium?",
     a: "No. Zephium is written in Rust and draws pages with the engine your system already has: WKWebView on macOS and WebView2 on Windows. The interface, the blocker, the agents and the storage are all its own.",
@@ -27,13 +35,39 @@ export const QUESTIONS = [
   },
   {
     q: "Is it free?",
-    a: `Yes. Zephium is free and open source under the ${site.license === "MPL-2.0" ? "Mozilla Public License 2.0" : site.license}. With your own keys, you pay only your model provider.`,
+    a: "The browser is free and open source, under the Mozilla Public License 2.0. Zephium AI has a free one-time allowance, with optional Pro and Max plans for more. With your own keys or a local model, you pay only your provider, or nothing at all.",
+    more: { href: "/pricing", label: "See pricing" },
   },
   {
     q: "When are Intel Macs, Linux, iOS and Android coming?",
     a: "Intel Macs and Linux are next, and the mobile apps follow. Star the repository on GitHub to hear when they land.",
   },
 ];
+
+/** A list of questions that open to their answers. */
+export function FaqList({ items }: { items: readonly Question[] }) {
+  return (
+    <div className={styles.list}>
+      {items.map((item, index) => (
+        <details key={item.q} data-reveal style={{ "--delay": `${index * 0.04}s` } as CSSProperties}>
+          <summary>
+            {item.q}
+            <HugeiconsIcon icon={Add01Icon} size={18} strokeWidth={1.7} aria-hidden />
+          </summary>
+          <p>
+            {item.a}
+            {item.more ? (
+              <>
+                {" "}
+                <Link href={item.more.href}>{item.more.label}</Link>.
+              </>
+            ) : null}
+          </p>
+        </details>
+      ))}
+    </div>
+  );
+}
 
 /** Short answers to the questions people ask first. */
 export function Faq() {
@@ -42,17 +76,7 @@ export function Faq() {
       <h2 id="faq-title" data-reveal>
         Questions, answered.
       </h2>
-      <div className={styles.list}>
-        {QUESTIONS.map((item, index) => (
-          <details key={item.q} data-reveal style={{ "--delay": `${index * 0.04}s` } as CSSProperties}>
-            <summary>
-              {item.q}
-              <HugeiconsIcon icon={Add01Icon} size={18} strokeWidth={1.7} aria-hidden />
-            </summary>
-            <p>{item.a}</p>
-          </details>
-        ))}
-      </div>
+      <FaqList items={QUESTIONS} />
     </section>
   );
 }

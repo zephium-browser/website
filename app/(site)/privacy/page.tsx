@@ -15,7 +15,7 @@ export default function PrivacyPage() {
       title="Privacy"
       lede={`The short version: the browser collects nothing about how you browse, your data stays on your device, an account is optional, and this website counts page views without knowing who you are.`}
     >
-      <Prose updated="October 7, 2026">
+      <Prose updated="October 19, 2026">
         <p>
           This policy covers the {site.name} browser and the website at {host}. {site.name} is open
           source, so every statement about the browser below can be checked against{" "}
@@ -27,7 +27,8 @@ export default function PrivacyPage() {
           {site.name} has no telemetry, no usage analytics and no crash reporting that sends data on
           its own. We do not receive your browsing history, your searches or anything you do in the
           browser. You never need an account to browse, to use your own API key or to run a model
-          on your computer.
+          on your computer, and until you sign in, the browser does not contact {site.name}&apos;s
+          servers at all.
         </p>
 
         <h2>Your data stays on your device</h2>
@@ -59,11 +60,19 @@ export default function PrivacyPage() {
         <ul>
           <li>your email address, to send you sign-in codes. There is no password;</li>
           <li>
-            the devices signed in to it, each named only by the app version and operating system,
-            such as &ldquo;{site.name} 1.0 &middot; macOS&rdquo;, so you can see them and sign them
-            out;
+            the devices and sessions signed in to your account, each named only by the app version
+            and operating system, such as &ldquo;{site.name} 1.0 &middot; macOS&rdquo;, so you can
+            see them and sign them out;
           </li>
-          <li>your plan, and how much of its allowance you have used.</li>
+          <li>your plan and billing status, as Polar reports it;</li>
+          <li>
+            usage records, without any content: which model was used, how many tokens, what it
+            cost and when;
+          </li>
+          <li>
+            the security and abuse-prevention records needed to run the service, such as rate
+            limits.
+          </li>
         </ul>
         <p>
           The sign-in token stays in your system keychain on your device. You can sign out any
@@ -72,16 +81,39 @@ export default function PrivacyPage() {
 
         <h2>Zephium AI</h2>
         <p>
-          When you use Zephium AI, your requests, and the pages, notes and files they include,
-          pass through our servers to the provider whose model answers them, such as OpenAI or
-          Anthropic, and the answer comes back the same way. The provider processes the request
-          under its API terms.
+          When you use Zephium AI, your prompts and the pages, files and audio they include, such
+          as voice input for transcription, pass through our servers to the model provider that
+          answers them, such as OpenAI or Anthropic, and the answer comes back the same way.
         </p>
         <p>
-          Our servers do not store prompts, answers, browsing history, screenshots or tool data.
-          For each request they record what billing needs: which model answered, how many tokens it
-          used and what it cost. This section will say how long those records are kept when the
-          service opens.
+          Our servers do not store prompts, answers, page content, images or audio. How long the
+          model provider keeps what it receives depends on that provider&apos;s settings and its
+          agreements with us, and is governed by its own terms and privacy policy.
+        </p>
+        <p>
+          We do not yet state fixed retention periods for the account and usage records above.
+          When we set them, this page will say how long each is kept.
+        </p>
+
+        <h2>Deleting your account</h2>
+        <p>
+          You can delete your account in Settings &rarr; Account. Deleting it signs out your
+          devices and removes your account data. Some records are kept, and these are the ones:
+        </p>
+        <ul>
+          <li>
+            To stop repeated sign-up allowances, we keep a keyed (hashed) record derived from your
+            email address. It is not your email address, and it contains no browsing content.
+          </li>
+          <li>
+            Billing and tax records are kept for as long as Polar and the law require.
+          </li>
+          <li>Aggregate cost records, which contain no content, are kept.</li>
+        </ul>
+        <p>
+          Deletion finishes in the background, and some records may take time to clear from
+          systems and backups. If you have a question about your data, write to{" "}
+          <a href={`mailto:${site.contact.support}`}>{site.contact.support}</a>.
         </p>
 
         <h2>Payments</h2>
@@ -93,11 +125,28 @@ export default function PrivacyPage() {
         </p>
 
         <h2>Who helps us run it</h2>
-        <p>
-          Sign-in codes are emailed through <a href="https://resend.com">Resend</a>, which receives
-          only your email address and the code. Our servers run on{" "}
-          <a href="https://www.hetzner.com">Hetzner</a>.
-        </p>
+        <p>These companies process data for us:</p>
+        <ul>
+          <li>
+            <a href="https://polar.sh">Polar</a>, the merchant of record, for payments;
+          </li>
+          <li>
+            <a href="https://resend.com">Resend</a>, for sign-in emails. It receives only your
+            email address and the code;
+          </li>
+          <li>
+            <a href="https://www.hetzner.com">Hetzner</a>, where our servers run;
+          </li>
+          <li>
+            <a href="https://www.cloudflare.com">Cloudflare</a>, for DNS on our domains. The
+            website is served through Cloudflare&apos;s proxy, which processes visitors&apos; IP
+            addresses and request details. Zephium AI traffic is not routed through Cloudflare&apos;s
+            proxy today;
+          </li>
+          <li>
+            the model providers that answer Zephium AI requests, such as OpenAI and Anthropic.
+          </li>
+        </ul>
 
         <h2>Blocking ads and trackers</h2>
         <p>
@@ -122,20 +171,25 @@ export default function PrivacyPage() {
         <h2>This website</h2>
         <p>
           {host} is a static website. It sets no cookies and uses no third-party trackers or
-          advertising. We measure aggregate page views with a self-hosted, cookieless instance of
-          Umami: it counts visits, pages and referrers without storing personal data and without
-          following you across other sites.
+          advertising. We count page views with a self-hosted, cookieless instance of Umami: it
+          counts visits, pages and referrers without storing personal data and without following
+          you across other sites. It does not record query strings. The page that checkout and the
+          billing portal return to loads no analytics at all.
         </p>
         <p>
-          The site runs on our own server. Like any web server, it keeps short-lived access logs,
-          including IP addresses, for security and to keep the service running. These logs are
-          deleted after a short period and are never sold or shared.
+          This is separate from the browser, which has no telemetry. Visiting this website tells
+          us nothing about how you use {site.name}.
+        </p>
+        <p>
+          Like any web server, ours keeps short-lived access logs, including IP addresses, for
+          security and to keep the service running. These logs are deleted after a short period
+          and are never sold or shared.
         </p>
 
         <h2>Children</h2>
         <p>
-          {site.name} is not directed at children. The browser collects no personal data, and an
-          account holds only what is listed above.
+          {site.name} is not directed at children, and an account is for people aged 16 and over.
+          The browser collects no personal data, and an account holds only what is listed above.
         </p>
 
         <h2>Changes</h2>
@@ -144,9 +198,16 @@ export default function PrivacyPage() {
           browser is open source, any change to what it does is also visible in its public history.
         </p>
 
+        <h2>Who runs {site.name}</h2>
+        <p>
+          {site.name} is currently operated by {site.operator.name}, an individual based in{" "}
+          {site.operator.location}.
+        </p>
+
         <h2>Contact</h2>
         <p>
-          Questions about privacy go to <a href={`mailto:${site.contact}`}>{site.contact}</a>.
+          Questions about privacy go to{" "}
+          <a href={`mailto:${site.contact.support}`}>{site.contact.support}</a>.
         </p>
       </Prose>
     </PageShell>

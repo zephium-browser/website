@@ -42,12 +42,19 @@ export default function AboutPage() {
           {site.appSize}, and why it starts in an instant.
         </p>
 
-        <h2>Open source</h2>
+        <h2>Open source, all the way down</h2>
         <p>
-          The browser is open source under the Mozilla Public License, and so is this website.
-          Read the code, file an issue or send a change: the browser lives at{" "}
+          The browser and this website are open source under the Mozilla Public License 2.0. The
+          backend behind Zephium AI is open source too, under the AGPL-3.0-only, and you can run
+          it yourself. Read the code, file an issue or send a change: the browser lives at{" "}
           <a href={site.repo}>{new URL(site.repo).pathname.slice(1)}</a>, the website at{" "}
-          <a href={site.websiteRepo}>{new URL(site.websiteRepo).pathname.slice(1)}</a>.
+          <a href={site.websiteRepo}>{new URL(site.websiteRepo).pathname.slice(1)}</a>, the backend
+          at <a href={site.backendRepo}>{new URL(site.backendRepo).pathname.slice(1)}</a>.
+        </p>
+        <p>
+          The backend has a <a href={site.backendSelfHosting}>guide to self-hosting</a>. If you
+          need other terms than the AGPL, see{" "}
+          <a href={site.commercialLicensing}>commercial licensing</a>.
         </p>
 
         <h2>Follow along</h2>

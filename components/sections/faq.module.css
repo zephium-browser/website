@@ -74,3 +74,15 @@
   font-size: 16px;
   line-height: 1.6;
 }
+
+.list p a {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.25);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 160ms var(--ease-out);
+}
+
+.list p a:hover {
+  text-decoration-color: currentColor;
+}
