@@ -152,7 +152,8 @@ export function DownloadView({ start, plan }: { start: string | null; plan: stri
           ))}
         </ul>
         <p className={styles.soon}>
-          {soon.map((platform) => platform.name).join(", ")} are on the way.
+          {soon.slice(0, -1).map((platform) => platform.name).join(", ")} and {soon.at(-1)?.name} are on the
+          way.
         </p>
       </section>
 

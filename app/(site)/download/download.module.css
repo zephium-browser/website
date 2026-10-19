@@ -171,6 +171,7 @@
   gap: 8px;
   margin: 0;
   padding-left: 1.4em;
+  list-style: decimal;
   color: var(--color-muted);
   font-size: 15px;
   line-height: 1.5;

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
  */
 export default function DownloadPage() {
   return (
-    <PageShell title="Download" lede={`Free and open source. ${site.appSize} installed.`}>
+    <PageShell title="Download" lede={`Free and open source, ${site.appSize} installed.`}>
       <Suspense fallback={<DownloadView start={null} plan={null} />}>
         <DownloadExperience />
       </Suspense>
