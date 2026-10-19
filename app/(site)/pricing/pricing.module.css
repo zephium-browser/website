@@ -1,0 +1,312 @@
+/* Pricing: a switch, three plain cards, then the small print said kindly. */
+.page {
+  display: grid;
+  gap: clamp(64px, 8vw, 104px);
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+.toggle {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto 32px;
+  padding: 3px;
+  border-radius: var(--radius-capsule);
+  background: rgb(255 255 255 / 0.05);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.14);
+}
+
+.toggle:not([data-ready]) {
+  visibility: hidden;
+}
+
+.toggle button {
+  height: 34px;
+  padding-inline: 18px;
+  border-radius: var(--radius-capsule);
+  color: var(--color-muted);
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition:
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+}
+
+.toggle button:hover {
+  color: var(--color-text);
+}
+
+.toggle button[aria-pressed="true"] {
+  background: rgb(255 255 255 / 0.14);
+  color: var(--color-text);
+}
+
+.plans {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 900px) {
+  .plans {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+  }
+}
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+  border-radius: var(--radius-card);
+  background: var(--color-plate);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.09);
+}
+
+/* The suggested plan is a shade lighter, with a firmer edge. Nothing else. */
+.plan[data-recommended] {
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.26);
+}
+
+.plan h3 {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.blurb {
+  margin-top: 6px;
+  color: var(--color-muted);
+  font-size: 15px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 28px;
+}
+
+.amount {
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+}
+
+.per {
+  color: var(--color-muted);
+  font-size: 16px;
+}
+
+.alt {
+  min-height: 1.5em;
+  margin-top: 8px;
+  color: var(--color-faint);
+  font-size: 14px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px;
+  margin-top: 24px;
+  border-radius: var(--radius-capsule);
+  font-size: 15.5px;
+  font-weight: 550;
+  letter-spacing: -0.012em;
+  transition:
+    background-color 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+
+.primary {
+  background: #fff;
+  color: #0b1f36;
+}
+
+.primary:hover {
+  background: #eef4fb;
+}
+
+.secondary {
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.16);
+}
+
+.secondary:hover {
+  background: rgb(255 255 255 / 0.13);
+}
+
+.primary:active,
+.secondary:active {
+  transform: scale(0.98);
+}
+
+.features {
+  display: grid;
+  gap: 12px;
+  margin: 28px 0 0;
+  padding: 24px 0 0;
+  border-top: 0.5px solid rgb(255 255 255 / 0.1);
+  list-style: none;
+}
+
+.features li {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 10px;
+  color: var(--color-muted);
+  font-size: 15px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.features svg {
+  margin-top: 3px;
+  color: var(--color-text);
+}
+
+.note {
+  max-width: 40rem;
+  margin: 24px auto 0;
+  color: var(--color-faint);
+  font-size: 14px;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.block h2,
+.band h2 {
+  font-size: var(--text-headline);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.usage {
+  display: grid;
+  gap: 32px 48px;
+  margin: 36px 0 0;
+}
+
+@media (min-width: 720px) {
+  .usage {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .usage {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.usage dt {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.usage dd {
+  margin: 8px 0 0;
+  color: var(--color-muted);
+  font-size: 15.5px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.block > div:last-of-type {
+  margin-top: 36px;
+}
+
+/* Run it yourself: one plate, the words left, the links right. */
+.band {
+  display: grid;
+  gap: 32px 64px;
+  padding: clamp(28px, 4vw, 48px);
+  border-radius: var(--radius-panel);
+  background: var(--color-plate);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.1);
+}
+
+@media (min-width: 900px) {
+  .band {
+    grid-template-columns: 1.4fr 1fr;
+    align-items: center;
+  }
+}
+
+.band h2 {
+  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+}
+
+.band p {
+  max-width: 34rem;
+  margin-top: 14px;
+  color: var(--color-muted);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.band ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.band li + li {
+  border-top: 0.5px solid rgb(255 255 255 / 0.1);
+}
+
+.band li a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 14px;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.band li svg {
+  flex: none;
+  color: var(--color-faint);
+  transition:
+    color 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+
+.band li a:hover svg {
+  color: var(--color-text);
+  transform: translate(1px, -1px);
+}
+
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 28px;
+  color: var(--color-muted);
+  font-size: 14.5px;
+}
+
+.legal a {
+  transition: color 160ms var(--ease-out);
+}
+
+.legal a:hover {
+  color: var(--color-text);
+}
