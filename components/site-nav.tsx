@@ -13,6 +13,7 @@ import styles from "./site-nav.module.css";
 const links = [
   { href: "/docs", label: "Docs" },
   { href: "/workflows", label: "Workflows" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/changelog", label: "Changelog" },
   { href: "/about", label: "About" },
 ];

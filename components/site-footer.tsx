@@ -6,7 +6,7 @@ import { siDiscord, siGithub, siX, siYoutube } from "simple-icons";
 import { ZephiumLockup } from "@/components/brand";
 import { FooterMark } from "@/components/footer-mark";
 import { PreferredPlatform } from "@/components/preferred-platform";
-import { downloadUrl, platforms, site, type PlatformId } from "@/lib/site";
+import { downloadPath, platforms, site, type PlatformId } from "@/lib/site";
 import styles from "./site-footer.module.css";
 
 const columns = [
@@ -14,6 +14,8 @@ const columns = [
     title: "Product",
     links: [
       { href: "/workflows", label: "Workflows" },
+      { href: "/pricing", label: "Pricing" },
+      { href: downloadPath(), label: "Download" },
       { href: "/changelog", label: "Changelog" },
       { href: "/#faq", label: "FAQ" },
     ],
@@ -23,7 +25,9 @@ const columns = [
     links: [
       { href: "/docs", label: "Docs" },
       { href: "/about", label: "About" },
+      { href: "/support", label: "Support" },
       { href: site.repo, label: "Source code" },
+      { href: site.backendRepo, label: "Backend source" },
       { href: site.websiteRepo, label: "Website source" },
       { href: `${site.repo}/issues`, label: "Report an issue" },
     ],
@@ -33,7 +37,8 @@ const columns = [
     links: [
       { href: "/privacy", label: "Privacy" },
       { href: "/terms", label: "Terms" },
-      { href: `${site.repo}/blob/main/LICENSE`, label: "License" },
+      { href: site.commercialLicensing, label: "Commercial licensing" },
+      { href: `${site.repo}/blob/main/LICENSE`, label: "Browser license" },
     ],
   },
 ];
@@ -74,10 +79,10 @@ export function SiteFooter() {
             {available.map((platform) => {
               const icon = ICONS[platform.id];
               return (
-                <a key={platform.id} href={downloadUrl(platform)} data-platform={platform.id}>
+                <Link key={platform.id} href={downloadPath({ platform: platform.id })} data-platform={platform.id}>
                   {icon ? <HugeiconsIcon icon={icon} size={17} strokeWidth={1.8} aria-hidden /> : null}
                   {LABELS[platform.id] ?? `Download for ${platform.name}`}
-                </a>
+                </Link>
               );
             })}
           </PreferredPlatform>
@@ -128,7 +133,8 @@ export function SiteFooter() {
 
       <div className={`container-page ${styles.base}`}>
         <p>
-          © {new Date().getFullYear()} {site.name}. Open source under {site.license}.
+          © {new Date().getFullYear()} {site.name}. Browser and website under {site.license}, backend
+          under {site.backendLicense}.
         </p>
         <p>
           Made by <a href={site.author.url}>{site.author.name}</a>

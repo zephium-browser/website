@@ -3,7 +3,8 @@
 The website for [Zephium](https://github.com/zephium-browser/Zephium), the
 browser-native work environment. It is a fully static Next.js site: every page
 is rendered at build time and served as plain files. Like the browser, it is
-open source under the MPL-2.0.
+open source under the MPL-2.0. The backend behind Zephium AI is a separate
+repository under the AGPL-3.0-only.
 
 ## Develop
 
@@ -32,13 +33,15 @@ and run the script.
 ## Layout
 
 ```
-app/(site)/           pages with the nav, footer and page-view counting: home, workflows, changelog, about, docs, privacy, terms
+app/(site)/           pages with the nav, footer and page-view counting: home, pricing, download, support, workflows, changelog, about, docs, privacy, terms
 app/billing/return/   where checkout and the billing portal send people back to; no analytics
+public/.well-known/   security.txt (RFC 9116), served as text/plain by nginx
 components/scene/     the opening: sky, headline, and the Zephium window that plays the film
 components/sections/  the home page sections after it
 components/work/      the Work canvas the film runs on
 components/island/    the island, the run's one line of status
-lib/site.ts           facts more than one page states: links, platforms, size, license
+lib/site.ts           facts more than one page states: links, contacts, platforms, size, licenses
+lib/pricing.ts        the plans and their prices; the website sells nothing, purchases happen in the app
 lib/changelog.ts      release notes, newest first
 deploy/, Dockerfile   the production container
 ```
@@ -70,9 +73,17 @@ deploy/, Dockerfile   the production container
 
 ## Releases and downloads
 
-Download buttons link to `releases/latest/download/<asset>` on GitHub. The asset
-names in `lib/site.ts` must match the release workflow's artifact names exactly,
-and stay stable across releases.
+Every Download button goes to `/download?start=1`. The page starts the
+download for the visitor's desktop (or the platform named, as in
+`?start=windows`), then removes the flag from the address, so a reload, a shared
+link or a crawler never starts one. Without the flag, or without JavaScript, it
+lists a direct link for each build. The downloads are
+`releases/latest/download/<asset>` on GitHub; the asset names in `lib/site.ts`
+must match the release workflow's artifact names exactly, and stay stable across
+releases.
+
+The pricing page links to the same page with `plan=` to tailor one line of next
+steps. Nothing on the website sells anything, links to Polar or calls an API.
 
 ## Deploy
 
@@ -111,5 +122,7 @@ opening one; CI runs both.
 
 ## License
 
-[MPL-2.0](LICENSE), the same license as the browser. The Zephium name and mark
-identify the project; please don't use them to imply endorsement.
+[MPL-2.0](LICENSE), the same license as the browser. The backend behind Zephium
+AI is a separate repository under the
+[AGPL-3.0-only](https://github.com/zephium-browser/backend). The Zephium name and
+mark identify the project; please don't use them to imply endorsement.
