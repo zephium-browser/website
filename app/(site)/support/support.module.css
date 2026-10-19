@@ -1,0 +1,73 @@
+/* Where to go for what: six quiet cells on one hairline grid. */
+.grid {
+  display: grid;
+  gap: 1px;
+  margin: clamp(48px, 6vw, 72px) 0 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: var(--radius-card);
+  background: rgb(255 255 255 / 0.08);
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1040px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.topic {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  min-height: 180px;
+  padding: 28px;
+  background: var(--color-ground);
+}
+
+.topic h2 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.topic p {
+  color: var(--color-muted);
+  font-size: 15px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.topic a {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.25);
+  text-underline-offset: 4px;
+  overflow-wrap: anywhere;
+  transition: text-decoration-color 160ms var(--ease-out);
+}
+
+.topic a:hover {
+  text-decoration-color: currentColor;
+}
+
+.topic svg {
+  display: inline-block;
+  margin-left: 3px;
+  vertical-align: -2px;
+  color: var(--color-faint);
+}
+
+/* The way in sits at the bottom of every cell. */
+.links {
+  margin-top: auto;
+  padding-top: 8px;
+}

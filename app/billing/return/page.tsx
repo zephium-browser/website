@@ -52,6 +52,9 @@ export default function BillingReturn() {
         <Link href="/terms" className="transition-colors hover:text-text">
           Terms
         </Link>
+        <Link href="/support" className="transition-colors hover:text-text">
+          Support
+        </Link>
       </nav>
     </main>
   );
