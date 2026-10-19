@@ -1,0 +1,266 @@
+/* The download page: one status panel, two install cards, what to do next. */
+.page {
+  display: grid;
+  gap: clamp(48px, 6vw, 72px);
+  max-width: 56rem;
+  margin: clamp(40px, 5vw, 64px) auto 0;
+}
+
+/* What happened, or what to press. */
+.status {
+  padding: clamp(28px, 4vw, 44px) 24px;
+  border-radius: var(--radius-panel);
+  background: var(--color-plate);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.1);
+  text-align: center;
+}
+
+.status > div {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+}
+
+.status h2 {
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.status p {
+  max-width: 30rem;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+.check {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 4px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.06);
+}
+
+.again,
+.more {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.25);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 160ms var(--ease-out);
+}
+
+.again:hover,
+.more:hover {
+  text-decoration-color: currentColor;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 48px;
+  margin-top: 8px;
+  padding-inline: 22px;
+  border-radius: var(--radius-capsule);
+  font-size: 15.5px;
+  font-weight: 550;
+  letter-spacing: -0.012em;
+  transition:
+    background-color 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+
+.buttons .primary,
+.buttons .secondary {
+  margin-top: 0;
+}
+
+.primary {
+  background: #fff;
+  color: #0b1f36;
+}
+
+.primary:hover {
+  background: #eef4fb;
+}
+
+.secondary {
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.16);
+}
+
+.secondary:hover {
+  background: rgb(255 255 255 / 0.13);
+}
+
+.primary:active,
+.secondary:active {
+  transform: scale(0.98);
+}
+
+.block h2 {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.platforms {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .platforms {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.platform {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 24px;
+  border-radius: var(--radius-card);
+  background: var(--color-plate);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.09);
+}
+
+/* Your own platform: the same card, with a firmer edge. */
+.platform[data-preferred] {
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.3);
+}
+
+.platform header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.platform h3 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.requirement {
+  margin-top: -6px;
+  color: var(--color-faint);
+  font-size: 14px;
+}
+
+.platform ol {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--color-muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.platform li::marker {
+  color: var(--color-faint);
+}
+
+.file {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: start;
+  max-width: 100%;
+  margin-top: 4px;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  transition: color 160ms var(--ease-out);
+}
+
+.file svg {
+  flex: none;
+}
+
+.file:hover {
+  color: var(--color-text);
+}
+
+.soon {
+  margin-top: 16px;
+  color: var(--color-faint);
+  font-size: 14.5px;
+}
+
+.next {
+  display: grid;
+  gap: 32px 48px;
+  margin-top: 20px;
+}
+
+@media (min-width: 720px) {
+  .next {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.next h3 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.next p {
+  margin-top: 8px;
+  color: var(--color-muted);
+  font-size: 15.5px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.next .more {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 15.5px;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 28px;
+  margin: 0;
+  padding: 24px 0 0;
+  border-top: 0.5px solid rgb(255 255 255 / 0.1);
+  color: var(--color-faint);
+  font-size: 14px;
+  list-style: none;
+}
+
+.links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-muted);
+  transition: color 160ms var(--ease-out);
+}
+
+.links a:hover {
+  color: var(--color-text);
+}

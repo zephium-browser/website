@@ -17,16 +17,15 @@ export function detectPlatform(): PlatformId | null {
 
 const noSubscription = () => () => {};
 
+/** The visitor's platform, once the page is in a browser. */
+export function usePlatform(): PlatformId | null {
+  return useSyncExternalStore(noSubscription, detectPlatform, () => null);
+}
+
 /** The visitor's desktop platform, once the page is in a browser. */
 export function useDesktop(): "macos" | "windows" | null {
-  return useSyncExternalStore(
-    noSubscription,
-    () => {
-      const platform = detectPlatform();
-      return platform === "macos" || platform === "windows" ? platform : null;
-    },
-    () => null,
-  );
+  const platform = usePlatform();
+  return platform === "macos" || platform === "windows" ? platform : null;
 }
 
 /**

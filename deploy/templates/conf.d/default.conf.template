@@ -23,9 +23,12 @@ server {
     try_files $uri $uri.html $uri/index.html =404;
   }
 
-  # The download page is gone: every Download button downloads directly.
-  location = /download {
-    return 301 /;
+  # The security contact file (RFC 9116) is plain text and short-lived in caches.
+  location = /.well-known/security.txt {
+    include /etc/nginx/snippets/headers.conf;
+    add_header Cache-Control "public, max-age=3600" always;
+    default_type text/plain;
+    try_files $uri =404;
   }
 
   # Where checkout and the billing portal send people back to. It loads no

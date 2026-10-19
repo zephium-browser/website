@@ -1,28 +1,29 @@
-"use client";
-
+import Link from "next/link";
 import type { ReactNode } from "react";
-import { useDesktop } from "@/components/preferred-platform";
-import { downloadUrl, platforms, site } from "@/lib/site";
+import { downloadPath, type PlatformId } from "@/lib/site";
 
 /**
- * Downloads the build for the visitor's desktop straight away. Elsewhere, and
- * before the page is in a browser, it opens the latest release on GitHub,
- * which lists every build.
+ * Takes the visitor to the download page, which starts the download for their
+ * desktop as it opens. Without JavaScript the link still reaches the page,
+ * which offers a direct link to each build. Pass `platform` to start a
+ * specific build, and `plan` to carry the chosen plan onto the page.
  */
 export function DownloadLink({
   className,
   children,
   onClick,
+  platform,
+  plan,
 }: {
   className?: string;
   children: ReactNode;
   onClick?: () => void;
+  platform?: PlatformId;
+  plan?: string;
 }) {
-  const desktop = useDesktop();
-  const platform = platforms.find((item) => item.id === desktop);
   return (
-    <a href={platform ? downloadUrl(platform) : `${site.releases}/latest`} className={className} onClick={onClick}>
+    <Link href={downloadPath({ platform, plan })} className={className} onClick={onClick}>
       {children}
-    </a>
+    </Link>
   );
 }
