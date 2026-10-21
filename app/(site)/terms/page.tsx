@@ -54,9 +54,14 @@ export default function TermsPage() {
 
         <h2>Zephium AI and paid plans</h2>
         <p>
+          {site.name} is currently operated by {site.operator.name}, an individual based in{" "}
+          {site.operator.location}.
+        </p>
+        <p>
           <strong>Account.</strong> An account is optional and is only needed for Zephium AI. You
-          are responsible for your account and for what happens in it. You must be old enough to
-          form a binding contract where you live, and at least 16.
+          are responsible for your account and for what happens in it. You must be at least 13 to
+          create an account; if you are under the age of majority where you live, a parent or
+          guardian must agree to these terms and any purchase.
         </p>
         <p>
           <strong>Plans.</strong> Free includes a limited one-time Zephium AI allowance. Pro and
@@ -135,12 +140,6 @@ export default function TermsPage() {
           We may update these terms. When we do, we will change this page and its effective date.
           Continuing to use the website, Zephium AI or a new release after a change means you
           accept the updated terms.
-        </p>
-
-        <h2>Who runs {site.name}</h2>
-        <p>
-          {site.name} is currently operated by {site.operator.name}, an individual based in{" "}
-          {site.operator.location}.
         </p>
 
         <h2>Contact</h2>

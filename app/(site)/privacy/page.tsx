@@ -125,6 +125,10 @@ export default function PrivacyPage() {
         </p>
 
         <h2>Who helps us run it</h2>
+        <p>
+          {site.name} is currently operated by {site.operator.name}, an individual based in{" "}
+          {site.operator.location}.
+        </p>
         <p>These companies process data for us:</p>
         <ul>
           <li>
@@ -188,20 +192,14 @@ export default function PrivacyPage() {
 
         <h2>Children</h2>
         <p>
-          {site.name} is not directed at children, and an account is for people aged 16 and over.
-          The browser collects no personal data, and an account holds only what is listed above.
+          {site.name} is not directed at young children. You must be at least 13 to create an
+          account. The browser collects no personal data, and an account holds only what is listed above.
         </p>
 
         <h2>Changes</h2>
         <p>
           If this policy changes, we will update this page and its effective date. Because the
           browser is open source, any change to what it does is also visible in its public history.
-        </p>
-
-        <h2>Who runs {site.name}</h2>
-        <p>
-          {site.name} is currently operated by {site.operator.name}, an individual based in{" "}
-          {site.operator.location}.
         </p>
 
         <h2>Contact</h2>
