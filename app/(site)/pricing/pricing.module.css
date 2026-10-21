@@ -5,8 +5,16 @@
   margin-top: clamp(40px, 5vw, 64px);
 }
 
+/*
+ * The switch: a pill under the chosen side that slides across with a little
+ * overshoot, as a spring would. Both sides are one width, so the pill only
+ * ever travels its own length.
+ */
 .toggle {
-  display: flex;
+  --spring: cubic-bezier(0.34, 1.36, 0.64, 1);
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   width: fit-content;
   margin: 0 auto 32px;
   padding: 3px;
@@ -19,27 +27,54 @@
   visibility: hidden;
 }
 
+.pill {
+  position: absolute;
+  inset: 3px auto 3px 3px;
+  width: calc((100% - 6px) / 2);
+  border-radius: var(--radius-capsule);
+  background: rgb(255 255 255 / 0.14);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.12);
+  transition: transform 520ms var(--spring);
+}
+
+.toggle[data-billing="yearly"] .pill {
+  transform: translateX(100%);
+}
+
 .toggle button {
-  height: 34px;
-  padding-inline: 18px;
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  gap: 7px;
+  height: 36px;
+  padding-inline: 14px;
   border-radius: var(--radius-capsule);
   color: var(--color-muted);
   font-size: 14.5px;
   font-weight: 500;
   letter-spacing: -0.01em;
+  white-space: nowrap;
   cursor: pointer;
-  transition:
-    background-color 200ms var(--ease-out),
-    color 200ms var(--ease-out);
+  align-items: center;
+  transition: color 250ms var(--ease-out);
 }
 
-.toggle button:hover {
-  color: var(--color-text);
-}
-
+.toggle button:hover,
 .toggle button[aria-pressed="true"] {
-  background: rgb(255 255 255 / 0.14);
   color: var(--color-text);
+}
+
+/* The saving, said quietly beside the word it belongs to. */
+.toggle small {
+  color: var(--color-faint);
+  font-size: 12.5px;
+  font-weight: 450;
+  letter-spacing: 0;
+  transition: color 250ms var(--ease-out);
+}
+
+.toggle button[aria-pressed="true"] small {
+  color: var(--color-muted);
 }
 
 .plans {
@@ -50,26 +85,58 @@
   list-style: none;
 }
 
+/*
+ * On wide screens the cards share their rows (name, line, price, button,
+ * list), so the buttons and the lists start on one line however long a
+ * description runs.
+ */
 @media (min-width: 900px) {
   .plans {
     grid-template-columns: repeat(3, 1fr);
-    align-items: stretch;
+    gap: 0 14px;
+  }
+
+  .plan {
+    display: grid;
+    grid-row: span 5;
+    grid-template-rows: subgrid;
   }
 }
 
 .plan {
-  display: flex;
-  flex-direction: column;
+  position: relative;
   padding: 28px;
   border-radius: var(--radius-card);
   background: var(--color-plate);
+}
+
+/* The hairline is its own layer, so it can brighten on hover without
+   touching the entrance transition on the card itself. */
+.plan::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
   box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.09);
+  pointer-events: none;
+  transition: box-shadow 250ms var(--ease-out);
+}
+
+.plan:hover::after {
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.2);
 }
 
 /* The suggested plan is a shade lighter, with a firmer edge. Nothing else. */
 .plan[data-recommended] {
   background: var(--color-surface);
+}
+
+.plan[data-recommended]::after {
   box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.26);
+}
+
+.plan[data-recommended]:hover::after {
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.38);
 }
 
 .plan h3 {
@@ -86,14 +153,18 @@
   text-wrap: pretty;
 }
 
+.pricing {
+  margin-top: 28px;
+}
+
 .price {
   display: flex;
   align-items: baseline;
   gap: 6px;
-  margin-top: 28px;
 }
 
-.amount {
+.figure,
+.swap[data-roll] {
   font-size: 48px;
   font-weight: 600;
   line-height: 1;
@@ -101,23 +172,64 @@
   font-variant-numeric: tabular-nums;
 }
 
-.per {
+.price .per,
+.price .swap:not([data-roll]) {
   color: var(--color-muted);
   font-size: 16px;
 }
 
-.alt {
-  min-height: 1.5em;
-  margin-top: 8px;
+.billed {
+  margin-top: 10px;
   color: var(--color-faint);
   font-size: 14px;
+  line-height: 1.4;
+}
+
+/*
+ * Swapping. Both versions share one grid cell, so the cell is as wide and
+ * tall as the larger one and the page never reflows. The version not chosen
+ * waits above or below; a figure rolls, anything else only fades.
+ */
+.swap {
+  display: inline-grid;
+}
+
+.swap[data-roll] {
+  overflow: hidden;
+  padding-block: 0.08em;
+  margin-block: -0.08em;
+}
+
+.item {
+  grid-area: 1 / 1;
+  transition:
+    opacity 300ms var(--ease-out),
+    transform 560ms var(--ease-emphasized),
+    filter 300ms var(--ease-out);
+}
+
+.item[data-state="before"],
+.item[data-state="after"] {
+  opacity: 0;
+}
+
+.swap[data-roll] .item[data-state="before"] {
+  transform: translateY(-100%);
+  filter: blur(4px);
+}
+
+.swap[data-roll] .item[data-state="after"] {
+  transform: translateY(100%);
+  filter: blur(4px);
 }
 
 .primary,
 .secondary {
   display: inline-flex;
   align-items: center;
+  align-self: start;
   justify-content: center;
+  width: 100%;
   height: 46px;
   margin-top: 24px;
   border-radius: var(--radius-capsule);
@@ -154,6 +266,7 @@
 
 .features {
   display: grid;
+  align-content: start;
   gap: 12px;
   margin: 28px 0 0;
   padding: 24px 0 0;
