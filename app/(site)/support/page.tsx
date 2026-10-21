@@ -71,7 +71,7 @@ const TOPICS: { title: string; body: ReactNode; links?: ReactNode }[] = [
 export default function SupportPage() {
   return (
     <PageShell title="Support" lede="Help is a short message away. Start with the right place.">
-      <ul className={styles.grid}>
+      <ul className={styles.grid} data-reveal>
         {TOPICS.map((topic) => (
           <li key={topic.title}>
             <section className={styles.topic}>

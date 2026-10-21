@@ -10,7 +10,7 @@ import {
   WindowsNewIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { detectPlatform, usePlatform } from "@/components/preferred-platform";
 import { plans } from "@/lib/pricing";
 import { downloadUrl, platforms, site, type Platform, type PlatformId } from "@/lib/site";
@@ -76,7 +76,7 @@ export function DownloadView({ start, plan }: { start: string | null; plan: stri
 
   return (
     <div className={styles.page}>
-      <section className={styles.status} aria-labelledby="status-title">
+      <section className={styles.status} aria-labelledby="status-title" data-reveal>
         <div role="status">
           {startedPlatform ? (
             <>
@@ -129,11 +129,15 @@ export function DownloadView({ start, plan }: { start: string | null; plan: stri
         </div>
       </section>
 
-      <section aria-labelledby="install-title" className={styles.block}>
+      <section aria-labelledby="install-title" className={styles.block} data-reveal>
         <h2 id="install-title">Install</h2>
         <ul className={styles.platforms}>
           {ordered.map((platform) => (
-            <li key={platform.id} className={styles.platform} data-preferred={platform.id === own?.id || undefined}>
+            <li
+              key={platform.id}
+              className={styles.platform}
+              data-preferred={platform.id === own?.id || undefined}
+            >
               <header>
                 <HugeiconsIcon icon={ICONS[platform.id] ?? Download04Icon} size={20} strokeWidth={1.7} aria-hidden />
                 <h3>{platform.name}</h3>
@@ -157,8 +161,8 @@ export function DownloadView({ start, plan }: { start: string | null; plan: stri
         </p>
       </section>
 
-      <section aria-labelledby="next-title" className={styles.block}>
-        <h2 id="next-title">Then</h2>
+      <section aria-labelledby="next-title" className={styles.block} data-reveal style={{ "--delay": "0.06s" } as CSSProperties}>
+        <h2 id="next-title">Next</h2>
         <div className={styles.next}>
           <div>
             <h3>Use Zephium AI</h3>
