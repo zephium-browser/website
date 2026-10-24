@@ -56,17 +56,25 @@ server {
   }
 
   # Images and marks keep their names across deploys; a day, then revalidate.
-  location ~* ^/(shots|demo|marks|brand|extensions)/ {
+  location ~* ^/(shots|demo|marks|brand|extensions|sky|film)/ {
     include /etc/nginx/snippets/headers.conf;
     add_header Cache-Control "public, max-age=86400, stale-while-revalidate=604800" always;
     try_files $uri =404;
   }
 
-  # The social card is a PNG written without an extension.
-  location = /opengraph-image {
+  # The cards links share: a day, then revalidate.
+  location ~ ^/(opengraph|twitter)-image\.jpg$ {
     include /etc/nginx/snippets/headers.conf;
     add_header Cache-Control "public, max-age=86400" always;
-    default_type image/png;
+    try_files $uri =404;
+  }
+
+  # The star count, refreshed by the container (deploy/stars.sh) every few
+  # hours; browsers may keep it for ten minutes.
+  location = /stars.json {
+    include /etc/nginx/snippets/headers.conf;
+    add_header Cache-Control "public, max-age=600" always;
+    default_type application/json;
     try_files $uri =404;
   }
 

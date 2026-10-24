@@ -22,7 +22,27 @@ const links = [
  * The bar across the top. Over the sky it has no material at all; over the
  * page it becomes a thin layer of vibrancy with a hairline under it.
  */
+/**
+ * The star count: the one read when the site was built, then the one the
+ * server keeps fresh (/stars.json, deploy/stars.sh), from our own origin.
+ */
+function useStars(built: number) {
+  const [count, setCount] = useState(built);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/stars.json", { signal: controller.signal })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data: { stars?: number } | null) => {
+        if (data?.stars && data.stars > 0) setCount(data.stars);
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, []);
+  return count;
+}
+
 export function SiteNav({ stars = 0 }: { stars?: number }) {
+  const count = useStars(stars);
   const ref = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
 
@@ -54,10 +74,10 @@ export function SiteNav({ stars = 0 }: { stars?: number }) {
           <a
             href={site.repo}
             className={styles.star}
-            aria-label={stars ? `Star Zephium on GitHub, ${stars} stars` : "Star Zephium on GitHub"}
+            aria-label={count ? `Star Zephium on GitHub, ${count} stars` : "Star Zephium on GitHub"}
           >
             <HugeiconsIcon icon={StarIcon} size={15} strokeWidth={1.8} aria-hidden />
-            <span className={styles.count}>{stars ? formatStars(stars) : "Star"}</span>
+            <span className={styles.count}>{count ? formatStars(count) : "Star"}</span>
           </a>
           <DownloadLink className={styles.download}>Download</DownloadLink>
           <button

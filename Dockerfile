@@ -23,8 +23,10 @@ FROM nginx:1.27-alpine
 ENV NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx
 # Where Umami is served from, e.g. https://analytics.zephium.app, for the CSP.
 ENV UMAMI_ORIGIN=""
-RUN rm /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/conf.d/default.conf && apk add --no-cache curl
 COPY deploy/templates /etc/nginx/templates
 COPY --from=build /app/out /usr/share/nginx/html
+# The star count, kept fresh while the site runs (see the script).
+COPY --chmod=755 deploy/stars.sh /docker-entrypoint.d/40-stars.sh
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://127.0.0.1/healthz || exit 1
