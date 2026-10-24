@@ -20,41 +20,110 @@
   text-wrap: balance;
 }
 
-/* One sentence, set as large as a number on a spec sheet. Its words light
-   one after another, from the faint of the page to full white. */
+/* One number, set very large, the way a spec sheet would set it, lit from
+   above like the hero's title, with the faintest sky behind it. */
 .figure {
-  margin: clamp(56px, 7vw, 96px) auto 0;
-  max-width: 1080px;
+  position: relative;
+  margin: clamp(56px, 7vw, 96px) 0 0;
 }
 
-.statement {
-  font-size: clamp(2.6rem, 1rem + 5vw, 5.6rem);
+.figure::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(560px, 80vw);
+  aspect-ratio: 1.6;
+  background: radial-gradient(closest-side, rgb(141 185 242 / 0.12), transparent);
+  translate: -50% -12%;
+  pointer-events: none;
+}
+
+.zero {
+  position: relative;
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  font-size: clamp(9rem, 4rem + 16vw, 17rem);
   font-weight: 600;
   line-height: 1;
-  letter-spacing: -0.05em;
-  text-wrap: balance;
+  letter-spacing: -0.02em;
+  padding-inline: 0.04em;
+  font-variant-numeric: tabular-nums;
+  -webkit-mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
+  mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
 }
 
-.statement span {
-  color: rgb(244 244 246 / 0.16);
-  transition: color 900ms var(--ease-out) calc(0.15s + var(--i) * 0.09s);
+/* The digits stand in a column; seen, the column rolls to its last, zero,
+   blurring while it runs and settling with the smallest give. */
+.reel {
+  display: flex;
+  flex-direction: column;
 }
 
-.statement[data-seen] span {
-  color: var(--color-text);
+.reel span {
+  display: block;
+  height: 1em;
+  background: linear-gradient(180deg, #fff 18%, #dfe9fb 62%, #9fbde8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.zero[data-seen] .reel {
+  animation: roll 2.4s cubic-bezier(0.2, 0.9, 0.1, 1) 0.2s both;
+}
+
+@keyframes roll {
+  0% {
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  18% {
+    filter: blur(3px);
+  }
+  62% {
+    filter: blur(1.5px);
+  }
+  86% {
+    transform: translateY(-90.6%);
+    filter: blur(0);
+  }
+  100% {
+    transform: translateY(-90%);
+    filter: blur(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .statement span {
-    transition: none;
+  .reel,
+  .zero[data-seen] .reel {
+    transform: translateY(-90%);
+    animation: none;
   }
 }
 
 .figure figcaption {
-  margin-top: clamp(22px, 2.6vw, 34px);
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.figure figcaption b {
+  color: var(--color-text);
+  font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.figure figcaption span {
+  max-width: 34rem;
   color: var(--color-muted);
-  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
-  letter-spacing: -0.015em;
+  font-size: clamp(1.02rem, 0.95rem + 0.3vw, 1.18rem);
+  line-height: 1.5;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
 }
 
 /* Three promises in a row, divided by hairlines, nothing around them. */

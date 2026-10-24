@@ -2,7 +2,7 @@ import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { CSSProperties } from "react";
 import { site } from "@/lib/site";
-import { Statement } from "./statement";
+import { Zero } from "./zero";
 import styles from "./privacy.module.css";
 
 const POINTS = [
@@ -20,7 +20,7 @@ const POINTS = [
   },
 ];
 
-/** Privacy, said in one sentence and three plain promises. */
+/** Privacy, said with one number and three plain promises. */
 export function Privacy() {
   return (
     <section id="privacy" className={`container-page ${styles.section}`} aria-labelledby="privacy-title">
@@ -33,10 +33,14 @@ export function Privacy() {
         </p>
       </header>
 
-      <figure className={styles.figure}>
-        <Statement text="How you browse never leaves your device." />
-        <figcaption data-reveal>
-          Until you sign in, Zephium doesn&apos;t contact our servers at all.
+      <figure className={styles.figure} data-reveal="fade">
+        <Zero />
+        <figcaption>
+          <b>Zero telemetry.</b>
+          <span>
+            How you browse never leaves your device. Until you sign in, Zephium doesn&apos;t contact
+            our servers at all.
+          </span>
         </figcaption>
       </figure>
 
