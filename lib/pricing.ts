@@ -63,7 +63,7 @@ export const plans: readonly Plan[] = [
     price: { monthly: 100, yearly: 1000 },
     features: [
       "Everything in Pro",
-      "Five times the Zephium AI usage of Pro",
+      "5× the Zephium AI usage of Pro",
       "Fable (Anthropic) and Astra (OpenAI)",
       "Early access to new features and versions",
     ],
