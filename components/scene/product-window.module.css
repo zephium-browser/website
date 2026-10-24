@@ -70,10 +70,6 @@
   width: calc(var(--u) * 344);
 }
 
-.window[data-compact] .tools svg:nth-child(n + 3) {
-  display: none;
-}
-
 .window[data-compact] .taskList {
   width: calc(var(--u) * 230);
 }
@@ -172,6 +168,11 @@
   color: var(--text);
 }
 
+.tool[data-off] {
+  color: var(--faint);
+  pointer-events: none;
+}
+
 .tool:active {
   background: rgb(255 255 255 / 0.14);
 }
@@ -200,6 +201,7 @@
   right: auto;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: calc(var(--u) * 254);
   padding: 0 calc(var(--u) * 8) calc(var(--u) * 8);
 }
@@ -269,27 +271,83 @@
   color: var(--text);
 }
 
-/* The address: the site, as the product shows it. */
+/* What the stack covers steps back while it is open. */
+.under {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  transition: opacity 200ms var(--ease-out);
+}
+
+.window[data-stack] .under {
+  opacity: 0.18;
+}
+
+/* The address: the site, as the product shows it, and the tray at its end. */
 .address {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(var(--u) * 33);
+  height: calc(var(--u) * 34);
   margin-top: calc(var(--u) * 7);
-  padding-inline: calc(var(--u) * 12);
+  padding-inline: calc(var(--u) * 30);
   overflow: hidden;
-  border-radius: calc(var(--u) * 10);
+  border-radius: calc(var(--u) * 12);
   background: var(--band);
-  color: var(--muted);
-  font-weight: 500;
+  color: var(--label);
+  font-size: calc(var(--u) * 13.5);
+  font-weight: 450;
   white-space: nowrap;
+}
+
+.address[data-empty] {
+  color: var(--faint);
+}
+
+.tray {
+  position: absolute;
+  right: calc(var(--u) * 9);
+  width: calc(var(--u) * 16);
+  height: calc(var(--u) * 16);
+  color: var(--muted);
+}
+
+/* The space the tabs belong to, and a new tab beside it. */
+.space {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(var(--u) * 34);
+  margin-top: calc(var(--u) * 12);
+  padding-left: calc(var(--u) * 10);
+  padding-right: calc(var(--u) * 8);
+}
+
+.spaceName {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 6);
+  color: var(--text);
+  font-weight: 550;
+}
+
+.spaceName svg {
+  width: calc(var(--u) * 12);
+  height: calc(var(--u) * 12);
+  color: var(--faint);
+}
+
+.space .tool {
+  margin: 0;
 }
 
 .tabs {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--u) * 5);
-  margin: calc(var(--u) * 9) 0 0;
+  gap: calc(var(--u) * 4);
+  margin: calc(var(--u) * 4) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -299,94 +357,111 @@
   align-items: center;
   gap: calc(var(--u) * 10);
   width: 100%;
-  height: calc(var(--u) * 35);
-  padding-inline: calc(var(--u) * 8);
-  border-radius: calc(var(--u) * 10);
+  height: calc(var(--u) * 36);
+  padding-inline: calc(var(--u) * 10);
+  border-radius: calc(var(--u) * 12);
   color: var(--label);
-  font-weight: 500;
+  font-weight: 450;
   text-align: left;
-  transition:
-    background-color 150ms var(--ease-out),
-    box-shadow 150ms var(--ease-out);
+  transition: background-color 150ms var(--ease-out);
 }
 
 .window .row:hover {
-  background: rgb(255 255 255 / 0.06);
+  background: rgb(255 255 255 / 0.08);
 }
 
 .window .row:active {
-  background: rgb(255 255 255 / 0.09);
-}
-
-.window .quiet {
-  margin-top: calc(var(--u) * 10);
-  color: var(--muted);
+  background: rgb(255 255 255 / 0.22);
 }
 
 .window .row[data-current] {
-  background: rgb(255 255 255 / 0.12);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.16);
   color: var(--text);
-  font-weight: 600;
+  font-weight: 550;
 }
 
-.glyph {
+.globe {
+  flex: none;
   width: calc(var(--u) * 16);
   height: calc(var(--u) * 16);
-  flex: none;
   color: var(--muted);
 }
 
 .label {
+  flex: 1;
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
   mask-image: linear-gradient(to right, #000 calc(100% - var(--u) * 26), transparent);
 }
 
+/* The foot of the column: you, a hairline, and the sites you keep. */
 .dock {
   display: flex;
   align-items: center;
   gap: calc(var(--u) * 6);
-  height: calc(var(--u) * 42);
-  margin-top: auto;
+  height: calc(var(--u) * 44);
+  margin-top: calc(var(--u) * 8);
 }
 
-.shelf,
-.site {
+.profile {
+  position: relative;
+  flex: none;
+}
+
+.window .case {
   display: grid;
   place-items: center;
+  width: calc(var(--u) * 40);
+  height: calc(var(--u) * 40);
+  margin-left: calc(var(--u) * 2);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.1);
+  color: var(--label);
+  transition:
+    background-color 150ms var(--ease-out),
+    scale 150ms var(--ease-out);
+}
+
+.window .case:hover {
+  background: rgb(255 255 255 / 0.16);
+}
+
+.window .case:active {
+  scale: 0.94;
+}
+
+.window[data-stack] .case {
+  background: rgb(255 255 255 / 0.22);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2);
+}
+
+.case svg {
+  width: calc(var(--u) * 17);
+  height: calc(var(--u) * 17);
+}
+
+.rule {
+  flex: none;
+  width: 1px;
+  height: calc(var(--u) * 30);
+  margin-inline: calc(var(--u) * 4);
+  background: rgb(255 255 255 / 0.12);
+}
+
+.site {
+  display: grid;
+  flex: 1;
+  place-items: center;
   height: 100%;
-  border-radius: calc(var(--u) * 11);
-  background: var(--band);
-  color: var(--muted);
+  border-radius: calc(var(--u) * 18);
+  background: rgb(255 255 255 / 0.1);
   cursor: pointer;
   transition: background-color 150ms var(--ease-out);
 }
 
-.shelf:hover,
 .site:hover {
-  background: rgb(255 255 255 / 0.15);
-}
-
-.shelf {
-  width: calc(var(--u) * 42);
-}
-
-.shelf svg {
-  width: calc(var(--u) * 18);
-  height: calc(var(--u) * 18);
-}
-
-.site {
-  flex: 1;
-}
-
-.rule {
-  width: 1px;
-  height: calc(var(--u) * 22);
-  margin-inline: calc(var(--u) * 4);
-  background: rgb(255 255 255 / 0.14);
+  background: rgb(255 255 255 / 0.16);
 }
 
 /* Work rail */
@@ -501,6 +576,7 @@
 .railDock {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: calc(var(--u) * 6);
   margin-top: auto;
 }
@@ -508,27 +584,150 @@
 .railDock span {
   display: grid;
   place-items: center;
-  width: calc(var(--u) * 40);
-  height: calc(var(--u) * 38);
-  border-radius: calc(var(--u) * 11);
-  background: var(--band);
+  width: calc(var(--u) * 36);
+  height: calc(var(--u) * 36);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.1);
   cursor: pointer;
   transition: background-color 150ms var(--ease-out);
 }
 
 .railDock span:hover {
-  background: rgb(255 255 255 / 0.15);
+  background: rgb(255 255 255 / 0.16);
 }
 
-/* The page: a website in Browse, the canvas in Work. */
+.railDock i {
+  width: calc(var(--u) * 24);
+  height: 1px;
+  margin-block: calc(var(--u) * 4);
+  background: rgb(255 255 255 / 0.12);
+}
+
+.railDock .railCase {
+  color: var(--label);
+}
+
+.railCase svg {
+  width: calc(var(--u) * 16);
+  height: calc(var(--u) * 16);
+}
+
+/* The page: a website in Browse, the canvas in Work. Its edge is cut where
+   the window reaches into it: the new tab's notch along the top, and the
+   composer's hole along the foot, each grown in from its edge. */
+.main {
+  position: relative;
+  min-width: 0;
+}
 
 .page {
-  position: relative;
-  margin: calc(var(--u) * 8) calc(var(--u) * 8) calc(var(--u) * 8) 0;
+  position: absolute;
+  inset: calc(var(--u) * 8) calc(var(--u) * 8) calc(var(--u) * 8) 0;
   overflow: hidden;
   border-radius: calc(var(--u) * 13);
   background: #0d0d0f;
-  box-shadow: 0 0 0 0.5px rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.1);
+  --notch: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 668 50' preserveAspectRatio='none'%3E%3Cpath d='M0 0A14 14 0 0 1 14 14V32A18 18 0 0 0 32 50H636A18 18 0 0 0 654 32V14A14 14 0 0 1 668 0Z'/%3E%3C/svg%3E");
+  --hole: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 660 44' preserveAspectRatio='none'%3E%3Cpath d='M0 44C8.8 44 20 35.2 20 24V22A22 22 0 0 1 42 0H618A22 22 0 0 1 640 22V24C640 35.2 651.2 44 660 44Z'/%3E%3C/svg%3E");
+  -webkit-mask:
+    var(--notch) 50% 0 / calc(var(--u) * 668) 0 no-repeat,
+    var(--hole) 50% 100% / calc(var(--u) * 660) 0 no-repeat,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor, xor, source-over;
+  mask:
+    var(--notch) 50% 0 / calc(var(--u) * 668) 0 no-repeat exclude,
+    var(--hole) 50% 100% / calc(var(--u) * 660) 0 no-repeat exclude,
+    linear-gradient(#000 0 0);
+  transition:
+    mask-size 380ms var(--ease-emphasized),
+    -webkit-mask-size 380ms var(--ease-emphasized);
+}
+
+.page[data-notch] {
+  -webkit-mask-size:
+    calc(var(--u) * 668) calc(var(--u) * 50),
+    calc(var(--u) * 660) 0,
+    auto;
+  mask-size:
+    calc(var(--u) * 668) calc(var(--u) * 50),
+    calc(var(--u) * 660) 0,
+    auto;
+  transition-delay: 120ms;
+}
+
+.window[data-mode="work"] .page {
+  -webkit-mask-size:
+    calc(var(--u) * 668) 0,
+    calc(var(--u) * 660) calc(var(--u) * 44),
+    auto;
+  mask-size:
+    calc(var(--u) * 668) 0,
+    calc(var(--u) * 660) calc(var(--u) * 44),
+    auto;
+  transition-duration: 700ms;
+  transition-delay: 900ms;
+}
+
+.window[data-compact] .page {
+  --hole: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 44' preserveAspectRatio='none'%3E%3Cpath d='M0 44C8.8 44 20 35.2 20 24V22A22 22 0 0 1 42 0H342A22 22 0 0 1 364 22V24C364 35.2 375.2 44 384 44Z'/%3E%3C/svg%3E");
+}
+
+.window[data-compact][data-mode="work"] .page {
+  -webkit-mask-size:
+    0 0,
+    calc(var(--u) * 384) calc(var(--u) * 44),
+    auto;
+  mask-size:
+    0 0,
+    calc(var(--u) * 384) calc(var(--u) * 44),
+    auto;
+}
+
+.window[data-compact] .page[data-notch] {
+  -webkit-mask-size: 0 0, 0 0, auto;
+  mask-size: 0 0, 0 0, auto;
+}
+
+/* The field in the notch, on the window's glass. */
+.notch {
+  position: absolute;
+  top: calc(var(--u) * 8);
+  left: calc((100% - var(--u) * 8) / 2);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 11);
+  width: calc(var(--u) * 668);
+  height: calc(var(--u) * 50);
+  padding: calc(var(--u) * 3) calc(var(--u) * 32) 0;
+  color: rgb(255 255 255 / 0.6);
+  font-size: calc(var(--u) * 15);
+  opacity: 0;
+  pointer-events: none;
+  translate: -50% 0;
+  transition: opacity 200ms var(--ease-out);
+}
+
+.page[data-notch] + .notch {
+  opacity: 1;
+  transition: opacity 400ms var(--ease-out) 200ms;
+}
+
+.window[data-compact] .notch {
+  display: none;
+}
+
+.notch > svg:not(.lip) {
+  width: calc(var(--u) * 16);
+  height: calc(var(--u) * 16);
+}
+
+.lip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(var(--u) * 51);
+  overflow: visible;
 }
 
 .web,
@@ -675,59 +874,143 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Composer, docked to the canvas's lower edge. */
-
+/* The composer (bar/WorkBar.svelte): one sheet fused to the canvas's foot,
+   its walls flaring into the card, the window's glass showing through. It
+   rises with the hole cut for it. */
 .composer {
   position: absolute;
   bottom: 0;
-  left: 50%;
+  left: calc((100% - var(--u) * 8) / 2);
   display: flex;
   align-items: center;
-  gap: calc(var(--u) * 14);
   width: calc(var(--u) * 620);
-  height: calc(var(--u) * 54);
-  padding: 0 calc(var(--u) * 18);
-  border-radius: calc(var(--u) * 22) calc(var(--u) * 22) 0 0;
-  background: rgb(38 38 43 / 0.94);
-  box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.08),
-    0 -12px 40px -16px rgb(0 0 0 / 0.6);
-  transform: translateX(-50%);
+  height: calc(var(--u) * 52);
+  padding: calc(var(--u) * 8) calc(var(--u) * 8) calc(var(--u) * 10);
+  opacity: 0;
+  pointer-events: none;
+  translate: -50% calc(var(--u) * 14);
+  transition:
+    opacity 300ms var(--ease-out),
+    translate 500ms var(--ease-emphasized);
 }
 
-.composer[data-typing] {
-  box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.18),
-    0 -12px 40px -16px rgb(0 0 0 / 0.6);
+.window[data-mode="work"] .composer {
+  opacity: 1;
+  translate: -50% 0;
+  transition-delay: 1150ms;
 }
 
+.window[data-compact] .composer {
+  width: calc(var(--u) * 344);
+}
+
+.edge {
+  position: absolute;
+  top: 0;
+  left: calc(var(--u) * -20);
+  width: calc(var(--u) * 660);
+  height: calc(var(--u) * 44);
+  overflow: visible;
+}
+
+.window[data-compact] .edge {
+  width: calc(var(--u) * 384);
+}
+
+/* Tools fold away as the field takes focus. */
 .tools {
   display: flex;
-  gap: calc(var(--u) * 14);
-  padding-right: calc(var(--u) * 14);
-  border-right: 1px solid rgb(255 255 255 / 0.1);
-  color: var(--muted);
+  flex: none;
+  align-items: center;
+  max-width: calc(var(--u) * 190);
+  overflow: hidden;
+  transition:
+    max-width 420ms var(--ease-emphasized),
+    opacity 200ms var(--ease-out);
 }
 
-.tools svg,
-.mic {
-  width: calc(var(--u) * 18);
+.composer[data-typing] .tools {
+  max-width: 0;
+  opacity: 0;
+}
+
+.window[data-compact] .toolSlot:nth-child(n + 2) {
+  display: none;
+}
+
+.toolSlot {
+  display: flex;
+  align-items: center;
+}
+
+.barTool {
+  display: grid;
+  place-items: center;
+  width: calc(var(--u) * 34);
+  height: calc(var(--u) * 34);
+  border-radius: calc(var(--u) * 10);
+  color: rgb(255 255 255 / 0.76);
+}
+
+.barTool[data-on] {
+  background: rgb(255 255 255 / 0.1);
+  color: var(--text);
+}
+
+.barTool svg {
+  width: calc(var(--u) * 17);
+  height: calc(var(--u) * 17);
+}
+
+.barRule {
+  width: 1px;
   height: calc(var(--u) * 18);
+  margin: 0 calc(var(--u) * 4) 0 calc(var(--u) * 5);
+  background: rgb(255 255 255 / 0.12);
 }
 
-.mic {
-  color: var(--muted);
+/* With focus: a + to bring things in, the model, and send. */
+.plus {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 0;
+  height: calc(var(--u) * 32);
+  overflow: hidden;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.12);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1);
+  color: rgb(255 255 255 / 0.76);
+  opacity: 0;
+  transition:
+    width 420ms var(--ease-emphasized),
+    opacity 300ms var(--ease-out);
+}
+
+.composer[data-typing] .plus {
+  width: calc(var(--u) * 32);
+  opacity: 1;
+}
+
+.plus svg {
+  flex: none;
+  width: calc(var(--u) * 16);
+  height: calc(var(--u) * 16);
 }
 
 /* The field: its placeholder, and the request typed word by word over it,
-   both scrubbed by the film's clock. */
+   both scrubbed by the film's clock. A word takes room only once typed, so
+   a long request runs off the left the way a one-line field scrolls. */
 .input {
-  position: relative;
   display: grid;
   flex: 1;
   min-width: 0;
-  font-size: calc(var(--u) * 15);
-  line-height: 1.4;
+  height: calc(var(--u) * 34);
+  margin-left: calc(var(--u) * 8);
+  overflow: hidden;
+  font-size: calc(var(--u) * 14);
+  line-height: calc(var(--u) * 34);
+  white-space: nowrap;
 }
 
 .placeholder,
@@ -736,25 +1019,137 @@
 }
 
 .placeholder {
-  align-self: center;
   overflow: hidden;
   color: var(--faint);
-  white-space: nowrap;
+  text-overflow: ellipsis;
   opacity: calc(clamp(0, (0.44 - var(--p, 0)) * 30, 1) + clamp(0, (var(--p, 0) - 1.15) * 14, 1));
 }
 
 .typed {
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
   opacity: clamp(0, (1.15 - var(--p, 0)) * 14, 1);
 }
 
-.typed span {
-  opacity: clamp(0, (var(--p, 0) - var(--at)) * 60, 1);
+.line {
+  display: flex;
+  flex: none;
+  min-width: 100%;
 }
 
-.composer[data-typing] {
-  height: auto;
-  min-height: calc(var(--u) * 54);
-  padding-block: calc(var(--u) * 12);
+.line > span {
+  flex: none;
+  max-width: calc(clamp(0, (var(--p, 0) - var(--at)) * 60, 1) * var(--u) * 200);
+  overflow: hidden;
+  white-space: pre;
+}
+
+.caret {
+  flex: none;
+  width: 1.5px;
+  height: calc(var(--u) * 18);
+  align-self: center;
+  margin-left: 1px;
+  border-radius: 1px;
+  background: var(--text);
+  animation: caret 1.06s steps(1) infinite;
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.model {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: calc(var(--u) * 7);
+  max-width: 0;
+  height: calc(var(--u) * 32);
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08);
+  font-size: calc(var(--u) * 12);
+  font-weight: 550;
+  white-space: nowrap;
+  opacity: 0;
+  transition:
+    max-width 420ms var(--ease-emphasized),
+    padding 420ms var(--ease-emphasized),
+    opacity 300ms var(--ease-out) 120ms;
+}
+
+.composer[data-typing] .model {
+  max-width: calc(var(--u) * 180);
+  padding: 0 calc(var(--u) * 14) 0 calc(var(--u) * 12);
+  opacity: 1;
+}
+
+.window[data-compact] .model {
+  display: none;
+}
+
+.model span {
+  color: var(--faint);
+}
+
+.model small {
+  color: var(--muted);
+  font-size: inherit;
+  font-weight: 450;
+}
+
+.send {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: calc(var(--u) * 34);
+  height: calc(var(--u) * 34);
+  margin-left: calc(var(--u) * 2);
+}
+
+.send > * {
+  grid-area: 1 / 1;
+  transition:
+    opacity 200ms var(--ease-out),
+    scale 300ms var(--ease-emphasized);
+}
+
+.mic {
+  width: calc(var(--u) * 17);
+  height: calc(var(--u) * 17);
+  color: var(--muted);
+}
+
+.go {
+  display: grid;
+  place-items: center;
+  width: calc(var(--u) * 30);
+  height: calc(var(--u) * 30);
+  border-radius: 50%;
+  background: #ededf0;
+  color: #111113;
+  opacity: 0;
+  scale: 0.6;
+}
+
+.go svg {
+  width: calc(var(--u) * 16);
+  height: calc(var(--u) * 16);
+}
+
+.composer[data-typing] .mic {
+  opacity: 0;
+  scale: 0.6;
+}
+
+.composer[data-typing] .go {
+  opacity: 1;
+  scale: 1;
 }
 
 /* Tasks: the right edge's capsule, opening into the list. */

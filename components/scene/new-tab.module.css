@@ -1,0 +1,172 @@
+/*
+ * The new tab in design pixels (--u), in the page's own box: the horizon at
+ * 60% of its height, the picture covering the page with its horizon there,
+ * the name centred three quarters of the way down the open sky.
+ */
+.page {
+  --horizon: 60cqh;
+  --mw: clamp(calc(var(--u) * 260), 36cqw, calc(var(--u) * 480));
+  --mh: calc(var(--mw) * 0.1436);
+  --centre: calc(var(--u) * 50 + (var(--horizon) - var(--u) * 50) * 0.74);
+  --top: max(calc(var(--u) * 82), calc(var(--centre) - (var(--mh) + var(--u) * 36) / 2));
+  --sw: max(100cqw, 154.5cqh);
+
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  container-type: size;
+  background: #1a1d25;
+  color: #fff;
+  font-family: var(--font-system);
+}
+
+.sky img {
+  position: absolute;
+  top: calc(var(--horizon) - var(--sw) * 0.3883);
+  left: 50%;
+  width: var(--sw);
+  height: auto;
+  max-width: none;
+  translate: -50% 0;
+}
+
+.mark {
+  position: absolute;
+  top: var(--top);
+  left: 50%;
+  width: var(--mw);
+  height: var(--mh);
+  overflow: visible;
+  fill: rgb(255 255 255 / 0.92);
+  translate: -50% 0;
+}
+
+.when {
+  position: absolute;
+  top: calc(var(--top) + var(--mh) + var(--u) * 16);
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: calc(var(--u) * 8);
+  height: calc(var(--u) * 20);
+  font-size: calc(var(--u) * 16);
+  line-height: calc(var(--u) * 20);
+  text-shadow: 0 1px calc(var(--u) * 18) rgb(2 8 24 / 0.4);
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out);
+}
+
+.when[data-on] {
+  opacity: 1;
+}
+
+.when b {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.when small {
+  font-size: calc(var(--u) * 11);
+  letter-spacing: 0.08em;
+  opacity: 0.86;
+}
+
+.when i {
+  align-self: center;
+  width: calc(var(--u) * 3);
+  height: calc(var(--u) * 3);
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.52;
+}
+
+.settings {
+  position: absolute;
+  top: calc(var(--u) * 9);
+  right: calc(var(--u) * 14);
+  display: grid;
+  place-items: center;
+  width: calc(var(--u) * 32);
+  height: calc(var(--u) * 32);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.1);
+  box-shadow:
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.18),
+    inset 0 1px 0 rgb(255 255 255 / 0.18);
+}
+
+.settings svg {
+  width: calc(var(--u) * 16);
+  height: calc(var(--u) * 16);
+}
+
+.figures {
+  position: absolute;
+  bottom: calc(var(--u) * 24);
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: calc(var(--u) * 8);
+}
+
+.figure {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 7);
+  height: calc(var(--u) * 34);
+  padding: 0 calc(var(--u) * 14) 0 calc(var(--u) * 12);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.05);
+  color: rgb(255 255 255 / 0.64);
+  font-size: calc(var(--u) * 12.5);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.figure svg {
+  width: calc(var(--u) * 14);
+  height: calc(var(--u) * 14);
+  color: rgb(255 255 255 / 0.44);
+}
+
+.figure b {
+  color: rgb(255 255 255 / 0.92);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.quiet {
+  color: rgb(255 255 255 / 0.44);
+}
+
+/* Focus against the day's aim: three fifths of the way. */
+.meter {
+  position: relative;
+  width: calc(var(--u) * 28);
+  height: calc(var(--u) * 3);
+  margin-left: calc(var(--u) * 2);
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.18);
+}
+
+.meter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgb(255 255 255 / 0.92);
+  transform: scaleX(0.6);
+  transform-origin: left;
+}
+
+/* Narrow pages keep the name and the time; the figures would crowd. */
+@container (max-width: 640px) {
+  .figures {
+    display: none;
+  }
+}

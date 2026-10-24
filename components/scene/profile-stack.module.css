@@ -1,0 +1,186 @@
+/* The stack, in design pixels (--u), over the foot of the sidebar: dark
+   material at the raised wash, rows 32 high, hairlines between groups. */
+.stack {
+  position: absolute;
+  bottom: calc(100% + var(--u) * 8);
+  left: 0;
+  z-index: 4;
+  width: calc(var(--u) * 232);
+  padding: calc(var(--u) * 6);
+  border-radius: calc(var(--u) * 22);
+  background: rgb(36 38 46 / 0.72);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.08),
+    inset 0 1px 0 rgb(255 255 255 / 0.1),
+    0 calc(var(--u) * 18) calc(var(--u) * 50) calc(var(--u) * -12) rgb(0 0 0 / 0.55);
+  -webkit-backdrop-filter: blur(calc(var(--u) * 24)) saturate(1.4);
+  backdrop-filter: blur(calc(var(--u) * 24)) saturate(1.4);
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 6)) scale(0.96);
+  transform-origin: bottom left;
+  pointer-events: none;
+  transition:
+    opacity 70ms var(--ease-out),
+    transform 120ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.stack[data-open] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition:
+    opacity 120ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+
+/* Each row settles in behind the one below it, 14ms apart. */
+.head,
+.row {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 6));
+}
+
+.stack[data-open] :is(.head, .row) {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 300ms var(--ease-out) calc(var(--step) * 14ms),
+    transform 300ms var(--ease-out) calc(var(--step) * 14ms);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 10);
+  height: calc(var(--u) * 34);
+  padding-inline: calc(var(--u) * 8);
+}
+
+.head b {
+  flex: 1;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.me {
+  display: grid;
+  place-items: center;
+  width: calc(var(--u) * 22);
+  height: calc(var(--u) * 22);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.16);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2);
+  color: rgb(255 255 255 / 0.8);
+}
+
+.me svg {
+  width: calc(var(--u) * 13);
+  height: calc(var(--u) * 13);
+}
+
+.others {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 6);
+}
+
+.others i {
+  width: 1px;
+  height: calc(var(--u) * 16);
+  margin-inline: calc(var(--u) * 2);
+  background: rgb(255 255 255 / 0.12);
+}
+
+.avatar,
+.private {
+  display: grid;
+  place-items: center;
+  width: calc(var(--u) * 20);
+  height: calc(var(--u) * 20);
+  border-radius: 50%;
+}
+
+.avatar {
+  color: #111113;
+  box-shadow: inset 0 0 0 0.5px rgb(0 0 0 / 0.14);
+}
+
+.avatar[data-tone="pink"] {
+  background: linear-gradient(180deg, oklch(74% 0.13 355deg), oklch(60% 0.16 0deg));
+}
+
+.avatar[data-tone="blue"] {
+  background: linear-gradient(180deg, oklch(72% 0.12 245deg), oklch(56% 0.15 252deg));
+}
+
+.avatar svg {
+  width: calc(var(--u) * 10);
+  height: calc(var(--u) * 10);
+}
+
+.private {
+  color: rgb(255 255 255 / 0.7);
+}
+
+.private svg {
+  width: calc(var(--u) * 15);
+  height: calc(var(--u) * 15);
+}
+
+.group {
+  position: relative;
+  padding-top: calc(var(--u) * 9);
+}
+
+.group::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--u) * 4);
+  left: calc(var(--u) * 8);
+  right: calc(var(--u) * 8);
+  height: 1px;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.stack .row {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 10);
+  width: 100%;
+  height: calc(var(--u) * 32);
+  padding-inline: calc(var(--u) * 8);
+  border-radius: calc(var(--u) * 16);
+  font-weight: 450;
+  text-align: left;
+}
+
+.stack .row:hover {
+  background: rgb(255 255 255 / 0.08);
+}
+
+.stack .row:active {
+  background: rgb(255 255 255 / 0.11);
+}
+
+.row svg {
+  flex: none;
+  width: calc(var(--u) * 16);
+  height: calc(var(--u) * 16);
+  color: rgb(255 255 255 / 0.62);
+}
+
+.row span {
+  flex: 1;
+}
+
+.row kbd {
+  color: rgb(255 255 255 / 0.4);
+  font-family: inherit;
+  font-size: calc(var(--u) * 11.5);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.stack .row:hover kbd {
+  color: rgb(255 255 255 / 0.62);
+}
