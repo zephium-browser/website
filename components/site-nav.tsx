@@ -51,9 +51,13 @@ export function SiteNav({ stars = 0 }: { stars?: number }) {
         </nav>
 
         <div className={styles.actions}>
-          <a href={site.repo} className={styles.star} aria-label={`Star Zephium on GitHub, ${stars} stars`}>
+          <a
+            href={site.repo}
+            className={styles.star}
+            aria-label={stars ? `Star Zephium on GitHub, ${stars} stars` : "Star Zephium on GitHub"}
+          >
             <HugeiconsIcon icon={StarIcon} size={15} strokeWidth={1.8} aria-hidden />
-            <span className={styles.count}>{formatStars(stars)}</span>
+            <span className={styles.count}>{stars ? formatStars(stars) : "Star"}</span>
           </a>
           <DownloadLink className={styles.download}>Download</DownloadLink>
           <button

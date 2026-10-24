@@ -1,16 +1,33 @@
 import { site } from "@/lib/site";
 
 /**
- * The repository's stars, read once while the site is built, so visitors'
- * browsers never call GitHub. Zero while the repository is private or GitHub
- * cannot be reached; a deploy after it goes public picks up the real count.
+ * The repository's stars, read while the site is built, so visitors'
+ * browsers never call GitHub. Every page's layout asks, so the answer is
+ * shared: one request per build worker, and through Next's data cache one per
+ * hour per build machine. GitHub allows an address 60 anonymous reads an
+ * hour, and asking once per page used to run out and leave some pages at
+ * zero. Zero still means GitHub could not be reached; the nav then shows no
+ * number rather than a wrong one.
  */
-export async function getStars(): Promise<number> {
+let stars: Promise<number> | null = null;
+
+export function getStars(): Promise<number> {
+  stars ??= readStars();
+  return stars;
+}
+
+async function readStars(): Promise<number> {
   const path = new URL(site.repo).pathname;
   try {
+    // A token, when the build has one, lifts the anonymous limit altogether.
+    const token = process.env.GITHUB_TOKEN;
     const response = await fetch(`https://api.github.com/repos${path}`, {
-      headers: { Accept: "application/vnd.github+json" },
-      signal: AbortSignal.timeout(5000),
+      headers: {
+        Accept: "application/vnd.github+json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(8000),
     });
     if (!response.ok) return 0;
     const data = (await response.json()) as { stargazers_count?: number };

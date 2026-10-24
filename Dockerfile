@@ -12,7 +12,10 @@ COPY . .
 ARG NEXT_PUBLIC_UMAMI_SRC=""
 ARG NEXT_PUBLIC_UMAMI_ID=""
 ENV NEXT_PUBLIC_UMAMI_SRC=$NEXT_PUBLIC_UMAMI_SRC NEXT_PUBLIC_UMAMI_ID=$NEXT_PUBLIC_UMAMI_ID
-RUN pnpm build
+# Optional: a read-only token, so reading the star count is never rate limited.
+# Used for this one step; the served image is the nginx stage below.
+ARG GITHUB_TOKEN=""
+RUN GITHUB_TOKEN=$GITHUB_TOKEN pnpm build
 
 FROM nginx:1.27-alpine
 # The official image fills ${VARS} in /etc/nginx/templates at start and
