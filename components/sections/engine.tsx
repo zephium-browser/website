@@ -13,7 +13,7 @@ function WindowsMark() {
 }
 
 const FIGURES = [
-  { value: site.appSize.replace("about ", ""), label: "installed" },
+  { value: site.appSize.replace("about ", ""), label: "app size" },
   { value: "Instant", label: "to start" },
   { value: "Lighter", label: "on memory" },
   { value: "Longer", label: "on battery" },

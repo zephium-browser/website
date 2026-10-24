@@ -87,7 +87,7 @@ export function SiteFooter() {
             })}
           </PreferredPlatform>
           <p className={styles.note}>
-            Free and open source, {site.appSize} installed.{" "}
+            Free and open source, with an app size of {site.appSize}.{" "}
             <span>
               {soon.slice(0, -1).join(", ")} and {soon.at(-1)} are on the way.
             </span>

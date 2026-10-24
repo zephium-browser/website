@@ -24,7 +24,7 @@ export const site = {
   backendSelfHosting: `${backendRepo}/blob/main/docs/self-hosting.md`,
   commercialLicensing: `${backendRepo}/blob/main/COMMERCIAL-LICENSING.md`,
   backendLicense: "AGPL-3.0-only",
-  /** Approximate size of the installed app (macOS is the larger), as the site states it. */
+  /** Approximate app size (macOS is the larger), as the site states it. */
   appSize: "about 40 MB",
   /**
    * The launch film on YouTube, by its video ID. Empty until it is published;

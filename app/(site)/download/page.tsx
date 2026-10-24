@@ -6,7 +6,7 @@ import { DownloadExperience, DownloadView } from "./download-view";
 
 export const metadata: Metadata = {
   title: "Download",
-  description: `Download ${site.name} for macOS or Windows. Free and open source, ${site.appSize} installed.`,
+  description: `Download ${site.name} for macOS or Windows. Free and open source, with an app size of ${site.appSize}.`,
   alternates: { canonical: "/download" },
 };
 
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
  */
 export default function DownloadPage() {
   return (
-    <PageShell title="Download" lede={`Free and open source, ${site.appSize} installed.`}>
+    <PageShell title="Download" lede={`Free and open source, with an app size of ${site.appSize}.`}>
       <Suspense fallback={<DownloadView start={null} plan={null} />}>
         <DownloadExperience />
       </Suspense>

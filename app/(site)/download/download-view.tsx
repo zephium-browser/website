@@ -200,7 +200,7 @@ export function DownloadView({ start, plan }: { start: string | null; plan: stri
           <span>Free and open source</span>
         </li>
         <li>
-          <span>{site.appSize} installed</span>
+          <span>{site.appSize} app size</span>
         </li>
       </ul>
     </div>
