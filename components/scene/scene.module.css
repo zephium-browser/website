@@ -252,10 +252,6 @@
   background: rgb(255 255 255 / 0.24);
 }
 
-.playGlyph {
-  fill: currentColor;
-}
-
 .primary:active,
 .secondary:active {
   transform: scale(0.98);

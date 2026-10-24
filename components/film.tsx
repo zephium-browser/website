@@ -2,12 +2,12 @@
 
 import { Cancel01Icon, PlayIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { hasFilm, site } from "@/lib/site";
 import styles from "./film.module.css";
 
 /*
- * The launch film. Anything can offer it (a button, the poster); one player
+ * The launch film. Anything can offer it (the poster); one player
  * plays it, over the page. Nothing is loaded from YouTube until someone
  * presses play, and then only from youtube-nocookie.com. While the film has
  * no video yet, every way to it is left out.
@@ -17,16 +17,6 @@ const OPEN = "zephium:film";
 
 export function openFilm() {
   window.dispatchEvent(new Event(OPEN));
-}
-
-/** A button that plays the film; nothing while there is none. */
-export function FilmButton({ className, children }: { className?: string; children: ReactNode }) {
-  if (!hasFilm()) return null;
-  return (
-    <button type="button" className={className} onClick={openFilm}>
-      {children}
-    </button>
-  );
 }
 
 /** The film as a picture to press: its poster, with play over it. */

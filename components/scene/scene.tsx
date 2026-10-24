@@ -1,12 +1,11 @@
 "use client";
 
-import { AppleIcon, ArrowRight01Icon, GithubIcon, PlayIcon, WindowsNewIcon } from "@hugeicons/core-free-icons";
+import { AppleIcon, ArrowRight01Icon, GithubIcon, WindowsNewIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Fragment, useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { DownloadLink } from "@/components/download-link";
-import { FilmButton } from "@/components/film";
 import { useDesktop } from "@/components/preferred-platform";
-import { hasFilm, site } from "@/lib/site";
+import { site } from "@/lib/site";
 import { Clouds } from "./clouds";
 import {
   CHAPTERS,
@@ -213,17 +212,10 @@ export function Scene() {
               ) : null}
               {desktop === "macos" ? "Download for Mac" : desktop === "windows" ? "Download for Windows" : "Download"}
             </DownloadLink>
-            {/* Once there is a film, it takes the second place; the stars stay in the bar. */}
-            <FilmButton className={styles.secondary}>
-              <HugeiconsIcon icon={PlayIcon} size={15} strokeWidth={1.8} className={styles.playGlyph} aria-hidden />
-              Watch the film
-            </FilmButton>
-            {hasFilm() ? null : (
-              <a href={site.repo} className={styles.secondary}>
-                <HugeiconsIcon icon={GithubIcon} size={17} strokeWidth={1.7} aria-hidden />
-                Star on GitHub
-              </a>
-            )}
+            <a href={site.repo} className={styles.secondary}>
+              <HugeiconsIcon icon={GithubIcon} size={17} strokeWidth={1.7} aria-hidden />
+              Star on GitHub
+            </a>
           </div>
         </div>
 
