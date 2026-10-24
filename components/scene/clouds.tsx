@@ -1,51 +1,54 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./clouds.module.css";
 
 /*
- * The sky. Clouds are drawn once, by a shader, into three layers (far, middle,
- * near), and from then on only moved, never redrawn. The far and near layers
- * are painted as tiles that repeat seamlessly, so they can drift sideways for
- * ever on the compositor; the middle clouds frame the words and only sway.
- * Moving the pointer leans the layers by their depth, in quiet parallax. The
- * sky's gradient and the sun are plain CSS behind them.
+ * The sky: Zephium's own picture (the new tab's day sky, before it is baked),
+ * kept alive by one shader. The clouds breathe on a slow current; they lean
+ * with the pointer by their depth (bright, low cloud is near, the open blue
+ * is far); and the pointer's wake stirs them, the way a hand moves air,
+ * before the air settles. The sky arrives the way the product's sky meets a
+ * page: through its halftone, each cloud a field of dots that grows until it
+ * is whole, the bright cloud first. When the opening ends it leaves the same
+ * way, from the bottom up, into the night of the page below.
  *
- * The cloud shader descends from one made for Aceternity UI: each cloud is an
- * envelope (a dome over a flat base) filled with domain-warped billow noise,
- * shaded by a second density sample toward the sun.
+ * Nothing is drawn while the sky is out of sight or fully gone. Where WebGL
+ * is missing, the picture is shown plainly.
  */
 
 const VERT = `
 attribute vec2 a_pos;
-varying vec2 v_uv;
 void main() {
-  v_uv = a_pos * 0.5 + 0.5;
   gl_Position = vec4(a_pos, 0.0, 1.0);
 }
 `;
 
+/** Steps of the pointer's wake the shader remembers. */
+const WAKE = 10;
+
 const FRAG = `
 precision highp float;
-varying vec2 v_uv;
 
+uniform sampler2D u_img;
 uniform vec2 u_res;
-uniform float u_layer;
-// The tile's width in the shader's units, and whether the layer repeats.
-uniform float u_period;
-uniform float u_wrap;
-uniform vec3 u_cloud;
-uniform vec3 u_skyTop;
-uniform vec3 u_skyBottom;
+uniform vec2 u_img_size;
+uniform float u_dpr;
+uniform float u_time;
+uniform vec2 u_lean;
+uniform vec4 u_wake[${WAKE}];
+uniform float u_develop;
+uniform float u_exit;
+uniform float u_dither;
+uniform vec3 u_ground;
 
-const mat2 R = mat2(0.80, 0.60, -0.60, 0.80);
-const float T = 37.0;
+const mat2 R = mat2(0.8, 0.6, -0.6, 0.8);
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(41.31, 289.17))) * 26737.367);
 }
 
-float vnoise(vec2 p) {
+float noise(vec2 p) {
   vec2 i = floor(p);
   vec2 f = fract(p);
   f = f * f * (3.0 - 2.0 * f);
@@ -59,104 +62,107 @@ float vnoise(vec2 p) {
 float fbm(vec2 p) {
   float sum = 0.0;
   float amp = 0.5;
-  for (int i = 0; i < 5; i++) {
-    sum += amp * vnoise(p);
-    p = R * p * 2.03 + 19.19;
+  for (int i = 0; i < 3; i++) {
+    sum += amp * noise(p);
+    p = R * p * 2.07 + 11.3;
     amp *= 0.5;
   }
   return sum;
 }
 
-float billow(vec2 p) {
-  float sum = 0.0;
-  float amp = 0.5;
-  for (int i = 0; i < 6; i++) {
-    sum += amp * (1.0 - abs(2.0 * vnoise(p) - 1.0));
-    p = R * p * 2.11 + 13.37;
-    amp *= 0.5;
+// The screen (0..1, y down) onto the picture, covering it, a little larger
+// than the screen so leaning never shows an edge. The bank stays low.
+vec2 cover(vec2 s) {
+  float a = u_res.x / u_res.y;
+  float A = u_img_size.x / u_img_size.y;
+  vec2 ratio = vec2(min(a / A, 1.0), min(A / a, 1.0));
+  vec2 anchor = vec2(0.5, 0.66);
+  return (s - anchor) * ratio / 1.07 + anchor;
+}
+
+// How much a colour is cloud rather than sky: bright and unsaturated.
+float cloudOf(vec3 c) {
+  float lum = dot(c, vec3(0.299, 0.587, 0.114));
+  float sat = max(c.r, max(c.g, c.b)) - min(c.r, min(c.g, c.b));
+  return smoothstep(0.55, 0.92, lum) * (1.0 - smoothstep(0.12, 0.42, sat));
+}
+
+vec3 sky(vec2 s) {
+  vec2 uv = cover(s);
+  // Near is low and cloudy; the open blue is far.
+  float depth = mix(0.22, 1.0, cloudOf(texture2D(u_img, uv).rgb)) * mix(0.55, 1.0, s.y);
+
+  // The pointer's wake: each recent step pushes the air it passed through.
+  float a = u_res.x / u_res.y;
+  vec2 push = vec2(0.0);
+  for (int i = 0; i < ${WAKE}; i++) {
+    vec4 w = u_wake[i];
+    vec2 d = (s - w.xy) * vec2(a, 1.0);
+    push += w.zw * exp(-dot(d, d) * 26.0);
   }
-  return sum;
+
+  float t = u_time;
+  vec2 q = uv * vec2(3.2, 5.0);
+  vec2 current = vec2(fbm(q + vec2(t * 0.022, 0.0)), fbm(q + vec2(7.3, -t * 0.018))) - 0.5;
+
+  uv += current * 0.011 * depth;
+  uv.x += sin(t * 0.045) * 0.004 * depth;
+  uv -= u_lean * vec2(0.014, 0.009) * depth;
+  uv -= push * 0.055 * depth;
+  vec3 c = texture2D(u_img, uv).rgb;
+
+  // A breath of light on the cloud the pointer passes through.
+  return c + cloudOf(c) * min(length(push), 0.3) * 0.35;
 }
 
-float density(vec2 p, vec2 c, vec2 r, float seed) {
-  vec2 q = p - c;
-  float ry = q.y > 0.0 ? r.y : r.y * 0.42;
-  float env = 1.0 - length(vec2(q.x / r.x, q.y / ry));
-  if (env < -0.35) return 0.0;
-  vec2 dp = q * (2.4 / r.x) + seed;
-  dp += 0.6 * vec2(fbm(dp * 1.4 + T * 0.04), fbm(dp * 1.4 + 7.7 - T * 0.03));
-  return env + (billow(dp * 1.6) - 0.62) * 0.62;
-}
-
-// Lays one cloud over what is already there, premultiplied. On a repeating
-// layer the cloud is measured from its nearest copy, so it wraps the seam.
-vec4 cloud(vec4 under, vec2 p, vec2 c, vec2 r, float seed, float dist) {
-  if (u_wrap > 0.5) p.x = c.x + mod(p.x - c.x + u_period * 0.5, u_period) - u_period * 0.5;
-  float d = density(p, c, r, seed);
-  if (d < 0.02) return under;
-  float up = density(p + vec2(0.0, r.y * 0.55), c, r, seed);
-  float shade = clamp((up - d) * 1.1 + d * 0.55, 0.0, 1.0);
-
-  vec3 sky = mix(u_skyBottom, u_skyTop, v_uv.y);
-  vec3 lit = u_cloud * vec3(1.04, 1.03, 1.0);
-  vec3 dark = mix(u_cloud * vec3(0.6, 0.64, 0.72), sky, 0.36);
-  vec3 col = mix(lit, dark, shade * 0.85);
-
-  float rim = smoothstep(0.02, 0.14, d) * (1.0 - smoothstep(0.14, 0.40, d));
-  float sunward = clamp(0.5 + (p.x - c.x) * 0.9 + (p.y - c.y) * 1.4, 0.0, 1.0);
-  col += rim * mix(0.05, 0.14, sunward) * vec3(1.0, 0.97, 0.9);
-  col = mix(col, sky, dist * 0.35);
-
-  float a = smoothstep(0.02, 0.38, d) * mix(1.0, 0.8, dist);
-  return vec4(col * a, a) + under * (1.0 - a);
+// How much of the sky a halftone cell keeps, 0..1. Arriving, the bright
+// cloud comes first and the blue after; leaving, the sky goes from the
+// bottom up, the cloud holding on longest.
+float coverage(vec2 centre, float lum) {
+  vec2 cell = floor(centre / (7.0 * u_dpr));
+  float grain = hash(cell) * 0.35 + noise(cell * 0.09) * 0.45;
+  float arrive = clamp(u_develop * 1.9 - grain - (1.0 - lum) * 0.5, 0.0, 1.0);
+  float rise = 1.0 - centre.y / u_res.y + (lum - 0.6) * 0.18 + (grain - 0.4) * 0.12;
+  float front = u_exit * 1.55 - 0.4;
+  return min(arrive, smoothstep(front, front + 0.38, rise));
 }
 
 void main() {
-  float aspect = u_res.x / u_res.y;
-  vec2 p = vec2(v_uv.x * aspect, v_uv.y);
-  float w = aspect;
-  vec4 c = vec4(0.0);
+  vec2 frag = vec2(gl_FragCoord.x, u_res.y - gl_FragCoord.y);
+  vec3 col = sky(frag / u_res);
 
-  if (u_layer < 0.5) {
-    // Far: thin cirrus high up, and two small clouds.
-    float band = smoothstep(0.55, 0.8, v_uv.y) * (1.0 - smoothstep(0.92, 1.0, v_uv.y));
-    // Blended with itself one tile over, so the streaks repeat without a seam.
-    float fade = p.x / u_period;
-    float streak = mix(fbm(vec2(p.x * 1.6, p.y * 12.0)), fbm(vec2((p.x - u_period) * 1.6, p.y * 12.0)), fade);
-    float wisp = smoothstep(0.52, 0.8, streak) * band * 0.3;
-    c = vec4(u_cloud * wisp, wisp);
-    c = cloud(c, p, vec2(w * 0.16, 0.82), vec2(0.20, 0.09), 43.7, 1.0);
-    c = cloud(c, p, vec2(w * 0.74, 0.86), vec2(0.24, 0.10), 71.3, 0.9);
-  } else if (u_layer < 1.5) {
-    // Middle: one on each side, framing the words.
-    c = cloud(c, p, vec2(w * 0.04, 0.56), vec2(0.34, 0.15), 17.3, 0.55);
-    c = cloud(c, p, vec2(w * 0.97, 0.62), vec2(0.30, 0.14), 29.9, 0.45);
-  } else {
-    // Near: large and low, the bank the window rises out of.
-    c = cloud(c, p, vec2(w * 0.08, 0.2), vec2(0.56, 0.24), 91.1, 0.1);
-    c = cloud(c, p, vec2(w * 0.9, 0.16), vec2(0.6, 0.25), 57.2, 0.0);
-    c = cloud(c, p, vec2(w * 0.52, -0.02), vec2(0.5, 0.17), 12.9, 0.2);
+  if (u_dither > 0.5) {
+    // The product's screen: a dot per cell, its radius from the sky's tone
+    // at the cell, overlapping its neighbours as it grows to solid.
+    float size = 7.0 * u_dpr;
+    vec2 cell = floor(frag / size);
+    float shown = 0.0;
+    for (int y = -1; y <= 1; y++) {
+      for (int x = -1; x <= 1; x++) {
+        vec2 centre = (cell + vec2(float(x), float(y)) + 0.5) * size;
+        vec3 tone = texture2D(u_img, cover(centre / u_res)).rgb;
+        float lum = dot(tone, vec3(0.299, 0.587, 0.114));
+        float r = size * 0.74 * sqrt(coverage(centre, lum));
+        shown = max(shown, clamp(r - length(frag - centre) + 0.5, 0.0, 1.0));
+      }
+    }
+    col = mix(u_ground, col, shown);
   }
 
-  gl_FragColor = c;
+  // A whisper of grain, so the gradients never band.
+  col += (hash(frag + fract(u_time) * 61.0) - 0.5) * (2.0 / 255.0);
+  gl_FragColor = vec4(col, 1.0);
 }
 `;
 
-const SKY_TOP = [0x38 / 255, 0x76 / 255, 0xba / 255];
-const SKY_BOTTOM = [0x8c / 255, 0xbf / 255, 0xe8 / 255];
-const CLOUD = [0xfb / 255, 0xf8 / 255, 0xf2 / 255];
+/** The page the sky dissolves into (--color-ground). */
+const GROUND = [9 / 255, 9 / 255, 11 / 255];
 
-/** How far, in CSS pixels, each layer leans at the pointer's furthest reach. */
-const DEPTH = [10, 22, 40];
+/** Seconds the sky takes to arrive. */
+const ARRIVAL = 1.9;
 
-/** How fast the repeating layers drift, in CSS pixels a second. */
-const DRIFT = [12, 0, 27];
-
-/** Paint resolution per layer, as a share of the screen's: far clouds are softest. */
-const SHARPNESS = [0.32, 0.45, 0.5];
-
-/** Which layers repeat and drift; the middle one frames the words. */
-const WRAPS = [true, false, true];
+/** How long a step of the pointer's wake lasts, in seconds. */
+const WAKE_LIFE = 1.4;
 
 function compile(gl: WebGLRenderingContext, type: number, source: string) {
   const shader = gl.createShader(type);
@@ -170,158 +176,256 @@ function compile(gl: WebGLRenderingContext, type: number, source: string) {
   return shader;
 }
 
-type Layer = { tiles: HTMLCanvasElement[]; width: number; height: number; wrap: boolean };
-
-/** Draws each layer into its canvases. Returns false without WebGL. */
-function paint(layers: Layer[]) {
-  const width = Math.max(...layers.map((layer) => layer.width));
-  const height = Math.max(...layers.map((layer) => layer.height));
-  const surface = document.createElement("canvas");
-  surface.width = width;
-  surface.height = height;
-  const gl = surface.getContext("webgl", { alpha: true, premultipliedAlpha: true, antialias: false });
-  if (!gl) return false;
-
-  const vert = compile(gl, gl.VERTEX_SHADER, VERT);
-  const frag = compile(gl, gl.FRAGMENT_SHADER, FRAG);
-  const program = gl.createProgram();
-  if (!vert || !frag || !program) return false;
-  gl.attachShader(program, vert);
-  gl.attachShader(program, frag);
-  gl.bindAttribLocation(program, 0, "a_pos");
-  gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return false;
-  gl.useProgram(program);
-
-  const buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(0);
-  gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-
-  gl.uniform3fv(gl.getUniformLocation(program, "u_cloud"), CLOUD);
-  gl.uniform3fv(gl.getUniformLocation(program, "u_skyTop"), SKY_TOP);
-  gl.uniform3fv(gl.getUniformLocation(program, "u_skyBottom"), SKY_BOTTOM);
-  const res = gl.getUniformLocation(program, "u_res");
-  const index = gl.getUniformLocation(program, "u_layer");
-  const period = gl.getUniformLocation(program, "u_period");
-  const wrap = gl.getUniformLocation(program, "u_wrap");
-
-  layers.forEach((layer, n) => {
-    // Drawn in the bottom-left corner of the surface, where GL starts.
-    gl.viewport(0, 0, layer.width, layer.height);
-    gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.uniform2f(res, layer.width, layer.height);
-    gl.uniform1f(index, n);
-    gl.uniform1f(period, layer.width / layer.height);
-    gl.uniform1f(wrap, layer.wrap ? 1 : 0);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-    for (const tile of layer.tiles) {
-      tile.width = layer.width;
-      tile.height = layer.height;
-      const context = tile.getContext("2d");
-      context?.clearRect(0, 0, layer.width, layer.height);
-      context?.drawImage(surface, 0, height - layer.height, layer.width, layer.height, 0, 0, layer.width, layer.height);
-    }
+function picture(src: string) {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    image.decoding = "async";
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = src;
   });
-
-  gl.deleteBuffer(buffer);
-  gl.deleteProgram(program);
-  gl.deleteShader(vert);
-  gl.deleteShader(frag);
-  gl.getExtension("WEBGL_lose_context")?.loseContext();
-  return true;
 }
+
+const easeOut = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
 
 export function Clouds({ className }: { className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const root = ref.current;
-    if (!root) return;
-    const tracks = [...root.querySelectorAll<HTMLElement>("[data-track]")];
-
-    // Paint at a resolution that suits soft shapes, and again only when the
-    // width really changes (a phone's toolbar resizing the height does not).
-    // A repeating tile is at least as wide as its layer, and wide enough that
-    // the largest cloud fits inside it once.
-    let painted = 0;
-    const draw = () => {
-      const box = root.getBoundingClientRect();
-      if (!box.width || Math.abs(box.width - painted) < 24) return;
-      painted = box.width;
-      const ratio = Math.min(window.devicePixelRatio || 1, 2) * (box.width < 900 ? 0.8 : 1);
-      const layerWidth = box.width * 1.08;
-      const layerHeight = box.height * 1.08;
-      const tileWidth = Math.ceil(Math.max(layerWidth, layerHeight * 1.9));
-      const layers = tracks.map((track, n) => {
-        const wrap = WRAPS[n] ?? false;
-        const cssWidth = wrap ? tileWidth : layerWidth;
-        track.style.setProperty("--tile", `${cssWidth}px`);
-        track.style.setProperty("--drift", `${Math.round(tileWidth / (DRIFT[n] || 1))}s`);
-        const scale = ratio * (SHARPNESS[n] ?? 0.45);
-        return {
-          tiles: [...track.querySelectorAll("canvas")],
-          width: Math.round(cssWidth * scale),
-          height: Math.round(layerHeight * scale),
-          wrap,
-        };
-      });
-      if (paint(layers)) root.dataset.painted = "";
+    const canvas = canvasRef.current;
+    // The scene writes its progress (--exit) on the stage; the sky reads it there.
+    const stage = root?.parentElement;
+    if (!root || !canvas || !stage) return;
+    const flat = () => {
+      root.dataset.flat = "";
     };
-    let timer = 0;
-    const resize = new ResizeObserver(() => {
-      window.clearTimeout(timer);
-      timer = window.setTimeout(draw, painted ? 250 : 0);
-    });
-    resize.observe(root);
 
-    // The drift stops while the sky is out of sight.
-    const sight = new IntersectionObserver(([entry]) => {
-      root.toggleAttribute("data-away", !entry?.isIntersecting);
-    });
-    sight.observe(root);
+    const gl = canvas.getContext("webgl", { alpha: false, antialias: false, powerPreference: "low-power" });
+    const vert = gl && compile(gl, gl.VERTEX_SHADER, VERT);
+    const frag = gl && compile(gl, gl.FRAGMENT_SHADER, FRAG);
+    const program = gl?.createProgram();
+    if (!gl || !vert || !frag || !program) return flat();
+    gl.attachShader(program, vert);
+    gl.attachShader(program, frag);
+    gl.bindAttribLocation(program, 0, "a_pos");
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return flat();
+    gl.useProgram(program);
 
-    // Parallax, eased, and only while the pointer is moving.
-    const fine = window.matchMedia("(pointer: fine)").matches;
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+    const at = (name: string) => gl.getUniformLocation(program, name);
+    const u = {
+      res: at("u_res"),
+      size: at("u_img_size"),
+      dpr: at("u_dpr"),
+      time: at("u_time"),
+      lean: at("u_lean"),
+      wake: at("u_wake"),
+      develop: at("u_develop"),
+      exit: at("u_exit"),
+      dither: at("u_dither"),
+    };
+    gl.uniform3fv(at("u_ground"), GROUND);
+    gl.uniform1i(at("u_img"), 0);
+
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const aim = { x: 0, y: 0 };
-    const now = { x: 0, y: 0 };
+    const fine = window.matchMedia("(pointer: fine)").matches;
+    const narrow = window.innerWidth < 900;
+
+    // Soft shapes need few pixels: at most one and a half per CSS pixel, and
+    // fewer if the device cannot keep up.
+    let ratio = Math.min(window.devicePixelRatio || 1, 1.5) * (narrow ? 0.85 : 1);
+    const size = () => {
+      const box = root.getBoundingClientRect();
+      const width = Math.max(1, Math.round(box.width * ratio));
+      const height = Math.max(1, Math.round(box.height * ratio));
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+      gl.viewport(0, 0, width, height);
+      gl.uniform2f(u.res, width, height);
+      gl.uniform1f(u.dpr, ratio);
+    };
+
+    let ready = false;
+    let alive = true;
+    let visible = true;
+    let born = 0;
     let frame = 0;
-    const step = () => {
-      now.x += (aim.x - now.x) * 0.06;
-      now.y += (aim.y - now.y) * 0.06;
-      root.style.setProperty("--mx", now.x.toFixed(4));
-      root.style.setProperty("--my", now.y.toFixed(4));
-      frame = Math.abs(aim.x - now.x) + Math.abs(aim.y - now.y) > 0.0005 ? requestAnimationFrame(step) : 0;
+    let last = 0;
+    let frames = 0;
+    let slow = 0;
+    let drawnExit = -1;
+
+    const aim = { x: 0, y: 0 };
+    const lean = { x: 0, y: 0 };
+    // The wake: recent steps of the pointer, as position and velocity.
+    const wake = new Float32Array(WAKE * 4);
+    const pace = new Float32Array(WAKE * 2);
+    const ages = new Float32Array(WAKE).fill(WAKE_LIFE);
+    let next = 0;
+    let pointer: { x: number; y: number; t: number } | null = null;
+
+    const readExit = () => Number.parseFloat(stage.style.getPropertyValue("--exit")) || 0;
+
+    const draw = (time: number) => {
+      frame = 0;
+      if (!alive || !ready) return;
+      const dt = last ? Math.min(0.05, (time - last) / 1000) : 1 / 60;
+      last = time;
+      if (!born) born = time;
+      const age = (time - born) / 1000;
+
+      lean.x += (aim.x - lean.x) * (1 - Math.exp(-dt * 2.4));
+      lean.y += (aim.y - lean.y) * (1 - Math.exp(-dt * 2.4));
+      let stirring = false;
+      for (let i = 0; i < WAKE; i++) {
+        ages[i] += dt;
+        const life = Math.max(0, 1 - ages[i] / WAKE_LIFE);
+        const fade = life * life * (3 - 2 * life);
+        wake[i * 4 + 2] = pace[i * 2] * fade;
+        wake[i * 4 + 3] = pace[i * 2 + 1] * fade;
+        if (life > 0) stirring = true;
+      }
+
+      const exit = readExit();
+      const develop = still ? 1 : easeOut(age / ARRIVAL);
+      gl.uniform1f(u.time, still ? 0 : age + 40);
+      gl.uniform2f(u.lean, lean.x, lean.y);
+      gl.uniform4fv(u.wake, wake);
+      gl.uniform1f(u.develop, develop);
+      gl.uniform1f(u.exit, exit);
+      gl.uniform1f(u.dither, develop < 1 || exit > 0.001 ? 1 : 0);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      drawnExit = exit;
+
+      // If frames run long, draw fewer pixels; the clouds are soft anyway.
+      frames += 1;
+      if (dt > 1 / 40) slow += 1;
+      if (frames === 90) {
+        if (slow > 30 && ratio > 0.6) {
+          ratio = Math.max(0.6, ratio * 0.75);
+          size();
+        }
+        frames = 0;
+        slow = 0;
+      }
+
+      const settling = Math.abs(aim.x - lean.x) + Math.abs(aim.y - lean.y) > 0.001;
+      const gone = exit > 0.999;
+      const moving = !still && !gone;
+      if (visible && (moving || develop < 1 || ((stirring || settling) && !gone))) {
+        frame = requestAnimationFrame(draw);
+      }
     };
+    const wakeUp = () => {
+      if (!frame && visible && ready && alive) {
+        last = 0;
+        frame = requestAnimationFrame(draw);
+      }
+    };
+
+    // Once the sky is gone (or with reduced motion) it redraws only when the
+    // scene moves it.
+    const onScroll = () => {
+      if (Math.abs(readExit() - drawnExit) > 0.0005) wakeUp();
+    };
+
     const move = (event: PointerEvent) => {
-      aim.x = (event.clientX / window.innerWidth) * 2 - 1;
-      aim.y = (event.clientY / window.innerHeight) * 2 - 1;
-      if (!frame) frame = requestAnimationFrame(step);
+      const box = root.getBoundingClientRect();
+      const x = (event.clientX - box.left) / box.width;
+      const y = (event.clientY - box.top) / box.height;
+      aim.x = x * 2 - 1;
+      aim.y = y * 2 - 1;
+      const now = event.timeStamp;
+      if (pointer && now > pointer.t) {
+        const dt = Math.max(0.008, (now - pointer.t) / 1000);
+        // A step is kept once the pointer has moved a little, so the wake is
+        // spread along its path rather than heaped where it rests.
+        const prev = (next + WAKE - 1) % WAKE;
+        const dx = x - wake[prev * 4];
+        const dy = y - wake[prev * 4 + 1];
+        if (dx * dx + dy * dy > 0.0004 || ages[prev] > 0.12) {
+          wake[next * 4] = x;
+          wake[next * 4 + 1] = y;
+          pace[next * 2] = Math.max(-2.5, Math.min(2.5, (x - pointer.x) / dt)) * 0.12;
+          pace[next * 2 + 1] = Math.max(-2.5, Math.min(2.5, (y - pointer.y) / dt)) * 0.12;
+          ages[next] = 0;
+          next = (next + 1) % WAKE;
+        }
+      }
+      pointer = { x, y, t: now };
+      wakeUp();
     };
+
+    const resize = new ResizeObserver(() => {
+      size();
+      wakeUp();
+    });
+    const sight = new IntersectionObserver(([entry]) => {
+      visible = Boolean(entry?.isIntersecting) && !document.hidden;
+      wakeUp();
+    });
+    const onVisibility = () => {
+      visible = !document.hidden && root.getBoundingClientRect().bottom > 0;
+      wakeUp();
+    };
+
+    const texture = gl.createTexture();
+    const source = narrow ? "/sky/day-900" : "/sky/day-1672";
+    picture(`${source}.avif`)
+      .catch(() => picture(`${source}.jpg`))
+      .then((image) => {
+        if (!alive) return;
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+        gl.uniform2f(u.size, image.naturalWidth, image.naturalHeight);
+        size();
+        ready = true;
+        stage.dataset.sky = "live";
+        wakeUp();
+      })
+      .catch(flat);
+
+    resize.observe(root);
+    sight.observe(root);
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("scroll", onScroll, { passive: true });
     if (fine && !still) window.addEventListener("pointermove", move, { passive: true });
 
     return () => {
-      window.clearTimeout(timer);
+      alive = false;
       cancelAnimationFrame(frame);
       resize.disconnect();
       sight.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", move);
+      gl.deleteTexture(texture);
+      gl.deleteBuffer(buffer);
+      gl.deleteProgram(program);
+      gl.deleteShader(vert);
+      gl.deleteShader(frag);
+      delete stage.dataset.sky;
     };
   }, []);
 
   return (
     <div ref={ref} className={`${styles.sky} ${className ?? ""}`} aria-hidden="true">
-      {DEPTH.map((depth, index) => (
-        <div key={depth} className={styles.layer} style={{ "--depth": depth, "--index": index } as CSSProperties}>
-          <div className={styles.track} data-track data-wrap={WRAPS[index] || undefined}>
-            <canvas />
-            {WRAPS[index] ? <canvas /> : null}
-          </div>
-        </div>
-      ))}
+      <canvas ref={canvasRef} className={styles.canvas} />
     </div>
   );
 }

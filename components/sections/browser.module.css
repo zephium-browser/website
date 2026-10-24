@@ -78,7 +78,7 @@
   border-radius: 21px;
   background:
     linear-gradient(rgb(14 30 58 / 0.12), rgb(14 30 58 / 0.12)),
-    image-set(url("/shots/sky-800.webp") 1x, url("/shots/sky-1600.webp") 2x) var(--at, 50% 50%) / 220% auto;
+    image-set(url("/sky/day-900.avif") 1x type("image/avif"), url("/sky/day-1672.avif") 2x type("image/avif"), url("/sky/day-900.jpg") 1x type("image/jpeg"), url("/sky/day-1672.jpg") 2x type("image/jpeg")) var(--at, 50% 50%) / 220% auto;
 }
 
 .foot {

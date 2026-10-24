@@ -43,6 +43,11 @@
   pointer-events: none;
 }
 
+/* The live sky leaves through its own halftone instead. */
+.stage[data-sky="live"] .dusk {
+  display: none;
+}
+
 /* The promise, over the sky. It drifts up and away as the browser rises. */
 .copy {
   position: absolute;
@@ -245,6 +250,10 @@
 
 .secondary:hover {
   background: rgb(255 255 255 / 0.24);
+}
+
+.playGlyph {
+  fill: currentColor;
 }
 
 .primary:active,
