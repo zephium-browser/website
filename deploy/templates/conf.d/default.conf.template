@@ -69,8 +69,8 @@ server {
     try_files $uri =404;
   }
 
-  # The star count, refreshed by the container (deploy/stars.sh) every few
-  # hours; browsers may keep it for ten minutes.
+  # The star count, refreshed by the container (deploy/stars.sh) every
+  # hour; browsers may keep it for ten minutes.
   location = /stars.json {
     include /etc/nginx/snippets/headers.conf;
     add_header Cache-Control "public, max-age=600" always;
