@@ -71,14 +71,29 @@
   padding: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 40px) 8px;
 }
 
-/* The desk: a piece of the sky, inset in the card like a screen. */
+/* The desk: a piece of the sky, inset in the card like a screen. The sky
+   covers the desk whatever its shape, then is brought 2.2 times closer about
+   the desk's chosen point, so a tall desk never runs out of picture. */
 .visual[data-desk] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   margin: 8px 8px 0;
   padding: clamp(28px, 3.4vw, 48px) clamp(16px, 3vw, 40px);
   border-radius: 21px;
+}
+
+.visual[data-desk]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background:
     linear-gradient(rgb(14 30 58 / 0.12), rgb(14 30 58 / 0.12)),
-    image-set(url("/sky/day-900.avif") 1x type("image/avif"), url("/sky/day-1672.avif") 2x type("image/avif"), url("/sky/day-900.jpg") 1x type("image/jpeg"), url("/sky/day-1672.jpg") 2x type("image/jpeg")) var(--at, 50% 50%) / 220% auto;
+    image-set(url("/sky/day-900.avif") 1x type("image/avif"), url("/sky/day-1672.avif") 2x type("image/avif"), url("/sky/day-900.jpg") 1x type("image/jpeg"), url("/sky/day-1672.jpg") 2x type("image/jpeg")) var(--at, 50% 50%) / cover no-repeat;
+  transform: scale(2.2);
+  transform-origin: var(--at, 50% 50%);
+  pointer-events: none;
 }
 
 .foot {
