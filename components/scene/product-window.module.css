@@ -37,7 +37,8 @@
   transition: grid-template-columns 800ms var(--ease-emphasized);
 }
 
-.window button {
+/* A reset with no weight of its own, so every button's class wins over it. */
+:where(.window button) {
   appearance: none;
   padding: 0;
   border: 0;

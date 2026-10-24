@@ -267,7 +267,9 @@ button.more.whole .text {
 
 /* Next opens the capsule: its chevron points where the rows will be. */
 .action.disclosure {
-  padding-inline-end: calc(var(--u-) * 10);
+  gap: calc(var(--u-) * 3);
+  block-size: calc(var(--u-) * 28);
+  padding-inline: calc(var(--u-) * 13) calc(var(--u-) * 9);
   background: var(--color-control);
   color: var(--color-text);
 }
