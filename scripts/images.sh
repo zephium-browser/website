@@ -41,6 +41,6 @@ jpeg() { # source, output, width
 for w in 900 1672; do avif media/sky-day-source.png "public/sky/day-$w.avif" "$w" 18; jpeg media/sky-day-source.png "public/sky/day-$w.jpg" "$w"; done
 for w in 1200 2200; do avif media/sky-night-baked.avif "public/sky/night-$w.avif" "$w" 24; jpeg media/sky-night-baked.avif "public/sky/night-$w.jpg" "$w"; done
 for w in 1280 2560; do avif media/film-poster.png "public/film/poster-$w.avif" "$w" 22; jpeg media/film-poster.png "public/film/poster-$w.jpg" "$w"; done
-for w in 1280 2560; do avif media/work-status-page.png "public/shots/status-page-$w.avif" "$w" 20; jpeg media/work-status-page.png "public/shots/status-page-$w.jpg" "$w"; done
+for w in 1280 2560; do avif media/work-run.png "public/shots/work-run-$w.avif" "$w" 20; jpeg media/work-run.png "public/shots/work-run-$w.jpg" "$w"; done
 ffmpeg -v error -y -i media/film-poster.png -vf "scale=1200:675:flags=lanczos,crop=1200:630:0:12" -q:v 2 app/opengraph-image.jpg
 cp app/opengraph-image.jpg app/twitter-image.jpg

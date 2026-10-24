@@ -52,14 +52,14 @@ export function Work() {
           <picture>
             <source
               type="image/avif"
-              srcSet="/shots/status-page-1280.avif 1280w, /shots/status-page-2560.avif 2560w"
+              srcSet="/shots/work-run-1280.avif 1280w, /shots/work-run-2560.avif 2560w"
               sizes="(min-width: 1360px) 1280px, 94vw"
             />
             <img
-              src="/shots/status-page-1280.jpg"
-              srcSet="/shots/status-page-1280.jpg 1280w, /shots/status-page-2560.jpg 2560w"
+              src="/shots/work-run-1280.jpg"
+              srcSet="/shots/work-run-1280.jpg 1280w, /shots/work-run-2560.jpg 2560w"
               sizes="(min-width: 1360px) 1280px, 94vw"
-              alt="A Work canvas in Zephium: the helpers' pages on the left, a table comparing Uptime Kuma, Gatus and OpenStatus with Gatus picked, and charts of what each takes to run."
+              alt="A whole Work run in Zephium: the request and its context, three helpers reading Uptime Kuma, Gatus and OpenStatus on their own sites, a local helper checking the endpoints, the status page it built, then the answer, a comparison table and charts, a diagram of how it fits, the config and four tasks."
               width={2560}
               height={1440}
               loading="lazy"
@@ -68,8 +68,9 @@ export function Work() {
           </picture>
         </div>
         <figcaption className="container-page" data-reveal>
-          One request. Helpers read three projects on their own sites, the agent weighed them in a
-          table and charts, then built the pick and left the config.
+          One request, the whole run. Helpers read three projects on their own sites, a local helper
+          checked the endpoints, and the agent built the pick, weighed all three and left the config
+          and the tasks.
         </figcaption>
       </figure>
 
