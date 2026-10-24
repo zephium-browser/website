@@ -37,7 +37,7 @@ export const site = {
   /** Community links. An empty one is left out of the footer until it exists. */
   social: {
     github: "https://github.com/crynta",
-    x: "",
+    x: "https://x.com/CryntaDev",
     discord: "https://discord.gg/tyveTUyEp7",
     youtube: "https://www.youtube.com/@crynta",
   },
