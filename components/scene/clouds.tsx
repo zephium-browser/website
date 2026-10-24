@@ -117,13 +117,15 @@ vec3 sky(vec2 s) {
 
 // How much of the sky a halftone cell keeps, 0..1. Arriving, the bright
 // cloud comes first and the blue after; leaving, the sky goes from the
-// bottom up, the cloud holding on longest.
+// bottom up, the cloud holding on longest. Every cell is whole when the sky
+// has arrived and nothing has left, and gone when it has, so the screen can
+// be switched off at either end without a single dot changing.
 float coverage(vec2 centre, float lum) {
   vec2 cell = floor(centre / (7.0 * u_dpr));
   float grain = hash(cell) * 0.35 + noise(cell * 0.09) * 0.45;
-  float arrive = clamp(u_develop * 1.9 - grain - (1.0 - lum) * 0.5, 0.0, 1.0);
+  float arrive = clamp(u_develop * 2.35 - grain - (1.0 - lum) * 0.5, 0.0, 1.0);
   float rise = 1.0 - centre.y / u_res.y + (lum - 0.6) * 0.18 + (grain - 0.4) * 0.12;
-  float front = u_exit * 1.55 - 0.4;
+  float front = u_exit * 2.0 - 0.6;
   return min(arrive, smoothstep(front, front + 0.38, rise));
 }
 
@@ -263,6 +265,7 @@ export function Clouds({ className }: { className?: string }) {
     let last = 0;
     let frames = 0;
     let slow = 0;
+    let tick = 0;
     let drawnExit = -1;
 
     const aim = { x: 0, y: 0 };
@@ -298,6 +301,16 @@ export function Clouds({ className }: { className?: string }) {
 
       const exit = readExit();
       const develop = still ? 1 : easeOut(age / ARRIVAL);
+      const settling = Math.abs(aim.x - lean.x) + Math.abs(aim.y - lean.y) > 0.001;
+      const gone = exit > 0.999;
+      // While nothing but the slow current moves, every other frame is
+      // enough; the pointer, the scroll and the arrival get every frame.
+      const busy = develop < 1 || stirring || settling || Math.abs(exit - drawnExit) > 0.0005;
+      tick += 1;
+      if (!busy && tick % 2 === 1) {
+        if (visible && !still && !gone) frame = requestAnimationFrame(draw);
+        return;
+      }
       gl.uniform1f(u.time, still ? 0 : age + 40);
       gl.uniform2f(u.lean, lean.x, lean.y);
       gl.uniform4fv(u.wake, wake);
@@ -309,7 +322,7 @@ export function Clouds({ className }: { className?: string }) {
 
       // If frames run long, draw fewer pixels; the clouds are soft anyway.
       frames += 1;
-      if (dt > 1 / 40) slow += 1;
+      if (dt > (busy ? 1 / 40 : 1 / 20)) slow += 1;
       if (frames === 90) {
         if (slow > 30 && ratio > 0.6) {
           ratio = Math.max(0.6, ratio * 0.75);
@@ -319,8 +332,6 @@ export function Clouds({ className }: { className?: string }) {
         slow = 0;
       }
 
-      const settling = Math.abs(aim.x - lean.x) + Math.abs(aim.y - lean.y) > 0.001;
-      const gone = exit > 0.999;
       const moving = !still && !gone;
       if (visible && (moving || develop < 1 || ((stirring || settling) && !gone))) {
         frame = requestAnimationFrame(draw);
@@ -366,9 +377,14 @@ export function Clouds({ className }: { className?: string }) {
       wakeUp();
     };
 
+    // Resizing clears the canvas, so the sky is drawn again at once, in the
+    // same frame, rather than showing a blank one.
     const resize = new ResizeObserver(() => {
       size();
-      wakeUp();
+      if (!ready) return;
+      cancelAnimationFrame(frame);
+      frame = 0;
+      draw(performance.now());
     });
     const sight = new IntersectionObserver(([entry]) => {
       visible = Boolean(entry?.isIntersecting) && !document.hidden;
