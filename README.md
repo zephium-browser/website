@@ -38,6 +38,8 @@ app/billing/return/   where checkout and the billing portal send people back to;
 public/.well-known/   security.txt (RFC 9116), served as text/plain by nginx
 components/scene/     the opening: sky, headline, and the Zephium window that plays the film
 components/sections/  the home page sections after it
+components/docs/      the documentation pages; their topics and order are lib/docs.ts
+components/film.tsx   the launch film: the poster, the button and the player (site.film)
 components/work/      the Work canvas the film runs on
 components/island/    the island, the run's one line of status
 lib/site.ts           facts more than one page states: links, contacts, platforms, size, licenses
@@ -53,14 +55,15 @@ deploy/, Dockerfile   the production container
   `lib/` and the site is rebuilt when they change. The GitHub star count is
   read once, at build time.
 - **The opening scene** (`components/scene`) is one pinned section: the sky
-  (`clouds.tsx`, three cloud layers painted once by a shader, then only moved:
-  the far and near layers drift as seamless tiles on the compositor, and all
-  of them lean with the pointer), the headline, and one Zephium window.
-  Scrolling plays the Work run as a film (`film.ts`): scroll sets where the
-  film should be, and a spring with a speed limit follows it, so flicks glide
-  and no chapter is skipped. Every continuous change is driven by one CSS
-  variable (`--p`); the page only re-renders when a discrete state flips.
-  Phones get a portrait window with its own camera framing.
+  (`clouds.tsx`: the new tab's own day picture, kept alive by one shader; the
+  clouds breathe, lean with the pointer by their depth and stir in its wake,
+  and the sky arrives and leaves through the product's halftone), the
+  headline, and one Zephium window. Scrolling plays the Work run as a film
+  (`film.ts`): scroll sets where the film should be, and a spring with a speed
+  limit follows it, so flicks glide and no chapter is skipped. Every continuous
+  change is driven by one CSS variable (`--p`); the page only re-renders when a
+  discrete state flips. Phones get a portrait window with its own camera
+  framing.
 - **The window** is HTML and CSS measured from the product (1196 x 700 design
   pixels, `--u` is one design pixel), using the product's tokens, its agent
   characters and its icons ([Hugeicons](https://hugeicons.com), free set). The
@@ -101,6 +104,7 @@ Environment:
 | `NEXT_PUBLIC_UMAMI_SRC` | build | `https://<umami host>/script.js` |
 | `NEXT_PUBLIC_UMAMI_ID` | build | the website ID from Umami |
 | `UMAMI_ORIGIN` | runtime | `https://<umami host>`, allowed by the CSP |
+| `GITHUB_TOKEN` | build | optional; a fine-grained token with no permissions, so reading the star count is never rate limited |
 
 Leave all three empty to run without analytics. Build variables must be marked
 as build-time in Coolify.

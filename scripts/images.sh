@@ -16,7 +16,6 @@ photo() { # source, output
   cwebp -q 82 -m 6 -sharp_yuv -mt -quiet "$tmp/photo.png" -o "$2"
 }
 
-for w in 1280 2482; do shot media/architecture.png "public/shots/architecture-$w.webp" "$w"; done
 for w in 960 1934; do shot media/board.png "public/shots/board-$w.webp" "$w"; done
 for w in 489 978; do shot media/attachments.png "public/shots/attachments-$w.webp" "$w"; done
 for w in 800 1553; do shot media/launcher.png "public/shots/launcher-$w.webp" "$w"; done
@@ -30,9 +29,18 @@ for w in 840 1678; do
   cwebp -q 86 -m 6 -sharp_yuv -mt -quiet "$tmp/photo.png" -o "public/shots/starship-$w.webp"
 done
 
-# The hero's own sky, captured from the site, as the desktop behind the
-# browser cards' panels.
-for w in 800 1600; do
-  magick media/sky.png -resize "${w}x" -strip "$tmp/photo.png"
-  cwebp -q 80 -m 6 -sharp_yuv -mt -quiet "$tmp/photo.png" -o "public/shots/sky-$w.webp"
-done
+# The sky (the new tab's day source, the hero and the cards' desks), the new
+# tab's baked night sky, the film's poster and the Work shot from the film,
+# as AVIF with a JPEG beside each. ffmpeg with libsvtav1.
+avif() { # source, output, width, crf
+  ffmpeg -v error -y -i "$1" -vf "scale=$3:-2:flags=lanczos,format=yuv420p10le" -frames:v 1 -c:v libsvtav1 -crf "$4" -preset 4 "$2"
+}
+jpeg() { # source, output, width
+  ffmpeg -v error -y -i "$1" -vf "scale=$3:-2:flags=lanczos" -q:v 3 "$2"
+}
+for w in 900 1672; do avif media/sky-day-source.png "public/sky/day-$w.avif" "$w" 18; jpeg media/sky-day-source.png "public/sky/day-$w.jpg" "$w"; done
+for w in 1200 2200; do avif media/sky-night-baked.avif "public/sky/night-$w.avif" "$w" 24; jpeg media/sky-night-baked.avif "public/sky/night-$w.jpg" "$w"; done
+for w in 1280 2560; do avif media/film-poster.png "public/film/poster-$w.avif" "$w" 22; jpeg media/film-poster.png "public/film/poster-$w.jpg" "$w"; done
+for w in 1280 2560; do avif media/work-status-page.png "public/shots/status-page-$w.avif" "$w" 20; jpeg media/work-status-page.png "public/shots/status-page-$w.jpg" "$w"; done
+ffmpeg -v error -y -i media/film-poster.png -vf "scale=1200:675:flags=lanczos,crop=1200:630:0:12" -q:v 2 app/opengraph-image.jpg
+cp app/opengraph-image.jpg app/twitter-image.jpg
