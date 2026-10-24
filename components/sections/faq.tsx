@@ -35,7 +35,7 @@ export const QUESTIONS: Question[] = [
   },
   {
     q: "Is it free?",
-    a: "The browser is free and open source, under the Mozilla Public License 2.0. Zephium AI has a free one-time allowance, with optional Pro and Max plans for more. With your own keys or a local model, you pay only your provider, or nothing at all.",
+    a: "The browser is free and open source, under the Mozilla Public License 2.0. Zephium AI starts you with 250 free credits, and Pro and Max add 2,000 or 10,000 every month. With your own keys or a local model, you pay only your provider, or nothing at all.",
     more: { href: "/pricing", label: "See pricing" },
   },
   {

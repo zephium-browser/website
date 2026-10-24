@@ -10,19 +10,19 @@ import styles from "./pricing.module.css";
 
 export const metadata: Metadata = {
   title: "Pricing",
-  description: `${site.name} is free and open source. Zephium AI is optional: a free one-time allowance, Pro at $20 a month and Max at $100 a month.`,
+  description: `${site.name} is free and open source, with 250 Zephium AI credits to start. Pro is $20 a month with 2,000 credits; Max is $100 a month with 10,000.`,
   alternates: { canonical: "/pricing" },
 };
 
 /** How usage works, said once and plainly. */
 const USAGE = [
   {
-    title: "Free is a one-time allowance",
-    body: "When you sign up you get a limited amount of Zephium AI, on fast, everyday models. It does not renew.",
+    title: "Free starts you with 250 credits",
+    body: "They arrive when you sign up, for fast, everyday models. They are yours once and do not renew.",
   },
   {
-    title: "Pro and Max renew monthly",
-    body: "Their usage is included and renews every month, on yearly plans too.",
+    title: "Pro and Max renew every month",
+    body: "2,000 or 10,000 credits, fresh each month, on yearly plans too.",
   },
   {
     title: "No surprise charges",
@@ -45,7 +45,7 @@ const USAGE = [
 const QUESTIONS: Question[] = [
   {
     q: "Can I use Zephium without paying?",
-    a: "Yes, fully. The browser, Work and agents are free and open source, with your own API keys or a local model. Zephium AI also comes with a limited free allowance when you sign up.",
+    a: "Yes, fully. The browser, Work and agents are free and open source, with your own API keys or a local model. Signing up for Zephium AI also gives you 250 free credits.",
   },
   {
     q: "Where do I subscribe?",
@@ -75,12 +75,12 @@ export default function PricingPage() {
     <PageShell
       title={
         <>
-          The browser is free.
+          Everything, free.
           <br />
-          <span className="text-quiet">Zephium AI is optional.</span>
+          <span className="text-quiet">More AI when you want it.</span>
         </>
       }
-      lede={`${site.name} is free and open source. Add Zephium AI when you want hosted models without managing keys.`}
+      lede={`The browser, Work and agents cost nothing, with your own keys or a local model. A plan adds Zephium AI credits for frontier models, with no keys to manage.`}
     >
       <div className={styles.page}>
         <Plans />

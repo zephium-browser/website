@@ -115,6 +115,14 @@ export function Plans() {
                 </p>
                 <span className="sr-only">{spoken}</span>
               </div>
+              <p className={styles.credits}>
+                <b>{plan.credits.amount.toLocaleString("en-US")}</b>
+                <span>
+                  AI credits
+                  <br />
+                  {plan.credits.when}
+                </span>
+              </p>
               <DownloadLink plan={plan.id} className={plan.recommended ? styles.primary : styles.secondary}>
                 {plan.cta}
               </DownloadLink>

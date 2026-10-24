@@ -86,7 +86,7 @@
 }
 
 /*
- * On wide screens the cards share their rows (name, line, price, button,
+ * On wide screens the cards share their rows (name, line, price, credits, button,
  * list), so the buttons and the lists start on one line however long a
  * description runs.
  */
@@ -98,7 +98,7 @@
 
   .plan {
     display: grid;
-    grid-row: span 5;
+    grid-row: span 6;
     grid-template-rows: subgrid;
   }
 }
@@ -155,6 +155,35 @@
 
 .pricing {
   margin-top: 28px;
+}
+
+/* The plan's Zephium AI credits: one figure, and when they arrive. */
+.credits {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 12px 14px;
+  border-radius: var(--radius-row);
+  background: rgb(255 255 255 / 0.035);
+  box-shadow: inset 0 0 0 0.5px var(--color-line-strong);
+}
+
+.credits b {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(180deg, #fff 20%, var(--color-sheen) 140%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.credits span {
+  color: var(--color-muted);
+  font-size: 12.5px;
+  line-height: 1.3;
 }
 
 .price {
