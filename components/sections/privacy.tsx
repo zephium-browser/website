@@ -2,25 +2,25 @@ import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { CSSProperties } from "react";
 import { site } from "@/lib/site";
-import { Zero } from "./zero";
+import { Statement } from "./statement";
 import styles from "./privacy.module.css";
 
 const POINTS = [
   {
-    title: "Local first.",
-    body: "History, tasks, notes and activity live on your device. You never need an account to browse.",
+    title: "Kept on your device.",
+    body: "History, tabs, tasks, notes and activity live in your profile, on your computer. No telemetry, no usage analytics.",
   },
   {
-    title: "Your choice of model.",
-    body: "Zephium's own AI, your keys for OpenAI, Anthropic or Gemini, or a model on your machine.",
+    title: "Your model, your call.",
+    body: "Your own key goes straight from your device to OpenAI, Anthropic or Gemini. A local model never leaves it.",
   },
   {
-    title: "Nothing out of sight.",
-    body: "Every page an agent opens and everything it sends is on the canvas, and you can stop it at any time.",
+    title: "An account only for Zephium AI.",
+    body: "Sign in with an email code, no password. Prompts pass through to the model, and our servers never store them.",
   },
 ];
 
-/** Privacy, said with one number and three plain promises. */
+/** Privacy, said in one sentence and three plain promises. */
 export function Privacy() {
   return (
     <section id="privacy" className={`container-page ${styles.section}`} aria-labelledby="privacy-title">
@@ -33,10 +33,10 @@ export function Privacy() {
         </p>
       </header>
 
-      <figure className={styles.figure} data-reveal="fade">
-        <Zero />
-        <figcaption>
-          bytes of telemetry, ever. <span>Zephium never reports how you browse.</span>
+      <figure className={styles.figure}>
+        <Statement text="How you browse never leaves your device." />
+        <figcaption data-reveal>
+          Until you sign in, Zephium doesn&apos;t contact our servers at all.
         </figcaption>
       </figure>
 

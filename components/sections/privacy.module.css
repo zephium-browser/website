@@ -20,61 +20,41 @@
   text-wrap: balance;
 }
 
-/* One number, set very large, the way a spec sheet would set it. */
+/* One sentence, set as large as a number on a spec sheet. Its words light
+   one after another, from the faint of the page to full white. */
 .figure {
-  margin: clamp(56px, 7vw, 96px) 0 0;
+  margin: clamp(56px, 7vw, 96px) auto 0;
+  max-width: 1080px;
 }
 
-.zero {
-  display: inline-block;
-  height: 1em;
-  overflow: hidden;
-  font-size: clamp(9rem, 4rem + 16vw, 17rem);
+.statement {
+  font-size: clamp(2.6rem, 1rem + 5vw, 5.6rem);
   font-weight: 600;
   line-height: 1;
-  letter-spacing: -0.02em;
-  padding-inline: 0.04em;
-  font-variant-numeric: tabular-nums;
-  -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
-  mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+  letter-spacing: -0.05em;
+  text-wrap: balance;
 }
 
-/* The digits stand in a column; seen, the column rolls to its last, zero. */
-.reel {
-  display: flex;
-  flex-direction: column;
-  transition: transform 2.2s cubic-bezier(0.2, 0.9, 0.1, 1) 0.25s;
+.statement span {
+  color: rgb(244 244 246 / 0.16);
+  transition: color 900ms var(--ease-out) calc(0.15s + var(--i) * 0.09s);
 }
 
-.reel span {
-  display: block;
-  height: 1em;
-}
-
-.zero[data-seen] .reel {
-  transform: translateY(-90%);
+.statement[data-seen] span {
+  color: var(--color-text);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reel {
-    transform: translateY(-90%);
+  .statement span {
     transition: none;
   }
 }
 
 .figure figcaption {
-  margin-top: 6px;
-  color: var(--color-text);
-  font-size: clamp(1.1rem, 1rem + 0.4vw, 1.35rem);
-  font-weight: 500;
+  margin-top: clamp(22px, 2.6vw, 34px);
+  color: var(--color-muted);
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
   letter-spacing: -0.015em;
-}
-
-.figure figcaption span {
-  display: block;
-  margin-top: 6px;
-  color: var(--color-faint);
-  font-weight: 400;
 }
 
 /* Three promises in a row, divided by hairlines, nothing around them. */
