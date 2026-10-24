@@ -6,10 +6,7 @@ import styles from "./privacy.module.css";
 
 const DIGITS = [7, 3, 9, 1, 6, 4, 8, 2, 5, 0];
 
-/**
- * A large numeral, lit from above, that rolls through a few digits, blurring
- * as it runs, and settles on zero.
- */
+/** A large numeral, lit from above, that rolls through a few digits and settles on zero. */
 export function Zero() {
   const ref = useRef<HTMLSpanElement>(null);
   const seen = useInView(ref, "0px 0px -25% 0px");

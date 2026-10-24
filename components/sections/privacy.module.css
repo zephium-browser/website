@@ -55,7 +55,7 @@
 }
 
 /* The digits stand in a column; seen, the column rolls to its last, zero,
-   blurring while it runs and settling with the smallest give. */
+   and settles with the smallest give. */
 .reel {
   display: flex;
   flex-direction: column;
@@ -77,21 +77,12 @@
 @keyframes roll {
   0% {
     transform: translateY(0);
-    filter: blur(0);
-  }
-  18% {
-    filter: blur(3px);
-  }
-  62% {
-    filter: blur(1.5px);
   }
   86% {
     transform: translateY(-90.6%);
-    filter: blur(0);
   }
   100% {
     transform: translateY(-90%);
-    filter: blur(0);
   }
 }
 
