@@ -340,10 +340,10 @@ export function ProductWindow({
           >
             <Icon icon={SidebarLeftIcon} className={styles.railIcon} />
           </button>
-          <button type="button" className={styles.railButton} aria-label="Search" onClick={() => setLauncher(true)}>
+          <button type="button" className={`${styles.railButton} ${styles.railBrowse}`} aria-label="Search" onClick={() => setLauncher(true)}>
             <Icon icon={Search01Icon} className={styles.railIcon} />
           </button>
-          <span className={styles.railButton} aria-hidden="true">
+          <span className={`${styles.railButton} ${styles.railBrowse}`} aria-hidden="true">
             <Icon icon={Layers01Icon} className={styles.railIcon} />
           </span>
           {TABS.map((entry) => (
@@ -358,7 +358,7 @@ export function ProductWindow({
               <Favicon tab={entry} size={17} />
             </button>
           ))}
-          <button type="button" className={styles.railButton} aria-label="New tab" onClick={() => choose(NEW_TAB)}>
+          <button type="button" className={`${styles.railButton} ${styles.railBrowse}`} aria-label="New tab" onClick={() => choose(NEW_TAB)}>
             <Icon icon={Add01Icon} className={styles.railIcon} />
           </button>
           <span className={styles.railDock}>

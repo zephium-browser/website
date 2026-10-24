@@ -493,6 +493,12 @@
   display: none;
 }
 
+/* In Work the rail keeps the switch, the tabs, the kept sites and you;
+   search, spaces and a new tab belong to Browse. */
+.window[data-mode="work"] .railBrowse {
+  display: none;
+}
+
 .window[data-folded] .unfold {
   display: grid;
 }
