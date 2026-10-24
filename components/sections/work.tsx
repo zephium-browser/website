@@ -15,7 +15,7 @@ import { RequestLine } from "./request-line";
 import styles from "./work.module.css";
 
 const REQUEST =
-  "Design the system architecture for an AI SaaS product, then compare AWS, Vercel, Hetzner and Cloudflare to host it.";
+  "Set up a status page for Zephium: compare Uptime Kuma, Gatus and OpenStatus, then build the one that fits.";
 
 const ABILITIES: { icon: IconSvgElement; title: string; body: string }[] = [
   { icon: Globe02Icon, title: "Live pages.", body: "Helpers browse real sites, and you can watch every one." },
@@ -51,23 +51,25 @@ export function Work() {
         <div className={styles.canvas} data-reveal="fade">
           <picture>
             <source
-              type="image/webp"
-              srcSet="/shots/architecture-1280.webp 1280w, /shots/architecture-2482.webp 2482w"
+              type="image/avif"
+              srcSet="/shots/status-page-1280.avif 1280w, /shots/status-page-2560.avif 2560w"
               sizes="(min-width: 1360px) 1280px, 94vw"
             />
             <img
-              src="/shots/architecture-2482.webp"
-              alt="A Work canvas with the request, its sources, a recommendation, a table comparing AWS, Vercel, Hetzner and Cloudflare, and a reference architecture for an AI product."
-              width={2482}
-              height={1574}
+              src="/shots/status-page-1280.jpg"
+              srcSet="/shots/status-page-1280.jpg 1280w, /shots/status-page-2560.jpg 2560w"
+              sizes="(min-width: 1360px) 1280px, 94vw"
+              alt="A Work canvas in Zephium: the helpers' pages on the left, a table comparing Uptime Kuma, Gatus and OpenStatus with Gatus picked, and charts of what each takes to run."
+              width={2560}
+              height={1440}
               loading="lazy"
               decoding="async"
             />
           </picture>
         </div>
         <figcaption className="container-page" data-reveal>
-          One request. The agent drew the architecture, read four pricing pages and weighed the
-          hosts in a table.
+          One request. Helpers read three projects on their own sites, the agent weighed them in a
+          table and charts, then built the pick and left the config.
         </figcaption>
       </figure>
 
