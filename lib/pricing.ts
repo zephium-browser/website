@@ -35,7 +35,7 @@ export const plans: readonly Plan[] = [
     features: [
       "The full browser, with Work and agents",
       "Your own API keys or local models, no account needed",
-      "250 free Zephium AI credits to try everything, on fast, everyday models",
+      "Free Zephium AI credits to try everything, on fast, everyday models",
       "Free and open source",
     ],
     cta: "Download Zephium",
@@ -48,7 +48,7 @@ export const plans: readonly Plan[] = [
     price: { monthly: 20, yearly: 200 },
     features: [
       "Everything in Free",
-      "2,000 Zephium AI credits, renewed every month",
+      "Automatic model routing: the right model for every step, for the best quality at the best cost",
       "Every model, including frontier models such as Claude Opus, except Fable and Astra",
       "Top-ups whenever you need more",
     ],
@@ -63,7 +63,7 @@ export const plans: readonly Plan[] = [
     price: { monthly: 100, yearly: 1000 },
     features: [
       "Everything in Pro",
-      "10,000 Zephium AI credits every month, five times Pro",
+      "Five times the Zephium AI usage of Pro",
       "Fable (Anthropic) and Astra (OpenAI)",
       "Early access to new features and versions",
     ],
