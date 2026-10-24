@@ -181,9 +181,23 @@
 }
 
 .credits span {
+  flex: 1;
   color: var(--color-muted);
   font-size: 12.5px;
   line-height: 1.3;
+}
+
+.credits i {
+  align-self: center;
+  padding: 4px 9px;
+  border-radius: var(--radius-capsule);
+  background: rgb(201 214 255 / 0.12);
+  color: var(--color-sheen);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  font-variant-numeric: tabular-nums;
 }
 
 .price {
@@ -221,6 +235,15 @@
  */
 .swap {
   display: inline-grid;
+  justify-items: start;
+}
+
+.swap[data-sized] {
+  transition: width 560ms var(--ease-emphasized);
+}
+
+.swap .item {
+  white-space: nowrap;
 }
 
 .swap[data-roll] {

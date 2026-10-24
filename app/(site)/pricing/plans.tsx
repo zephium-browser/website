@@ -2,7 +2,7 @@
 
 import { Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import { DownloadLink } from "@/components/download-link";
 import { type Billing, currency, formatPrice, monthsFree, plans } from "@/lib/pricing";
 import styles from "./pricing.module.css";
@@ -15,12 +15,22 @@ const saving = `${monthsFree(paid[0])} months free`;
 
 /**
  * Two versions of the same thing, one on top of the other in a single grid
- * cell, so the cell is as large as the larger and swapping them moves nothing.
+ * cell. The cell takes the width of the one shown and eases to the other's
+ * when they swap, so "$20" sits as close to "/month" as "$200" to "/year".
  * The one that is not chosen waits above or below, and a change slides them.
  */
 function Swap({ at, roll, children }: { at: 0 | 1; roll?: boolean; children: [ReactNode, ReactNode] }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  useLayoutEffect(() => {
+    const cell = ref.current;
+    const shown = cell?.children[at] as HTMLElement | undefined;
+    if (!cell || !shown) return;
+    cell.style.width = `${shown.offsetWidth}px`;
+    // The first width is set as it is; only later ones ease.
+    requestAnimationFrame(() => cell.setAttribute("data-sized", ""));
+  }, [at]);
   return (
-    <span className={styles.swap} data-roll={roll || undefined} aria-hidden>
+    <span ref={ref} className={styles.swap} data-roll={roll || undefined} aria-hidden>
       {children.map((child, index) => (
         <span key={index} className={styles.item} data-state={index === at ? "on" : index < at ? "before" : "after"}>
           {child}
@@ -118,10 +128,11 @@ export function Plans() {
               <p className={styles.credits}>
                 <b>{plan.credits.amount.toLocaleString("en-US")}</b>
                 <span>
-                  AI credits
+                  {plan.credits.label}
                   <br />
                   {plan.credits.when}
                 </span>
+                {plan.credits.badge ? <i>{plan.credits.badge}</i> : null}
               </p>
               <DownloadLink plan={plan.id} className={plan.recommended ? styles.primary : styles.secondary}>
                 {plan.cta}

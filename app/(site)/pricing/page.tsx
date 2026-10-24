@@ -77,7 +77,7 @@ export default function PricingPage() {
         <>
           Everything, free.
           <br />
-          <span className="text-quiet">More AI when you want it.</span>
+          <span className="text-quiet">More AI, on demand.</span>
         </>
       }
       lede={`The browser, Work and agents cost nothing, with your own keys or a local model. A plan adds Zephium AI credits for frontier models, with no keys to manage.`}

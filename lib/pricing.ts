@@ -11,8 +11,8 @@ export type Plan = {
   name: string;
   /** One line under the name. */
   blurb: string;
-  /** Zephium AI credits, and when they come. */
-  credits: { amount: number; when: string };
+  /** Zephium AI credits: how many, what they are for, when they come, and a word on scale. */
+  credits: { amount: number; label: string; when: string; badge?: string };
   /** Whole US dollars. Free is 0 either way. */
   price: { monthly: number; yearly: number };
   /** What the plan includes, shortest first. */
@@ -30,12 +30,12 @@ export const plans: readonly Plan[] = [
     id: "free",
     name: "Free",
     blurb: "The whole browser, Work and agents, for good.",
-    credits: { amount: 250, when: "when you sign up" },
+    credits: { amount: 250, label: "free AI credits", when: "to try everything, at sign-up" },
     price: { monthly: 0, yearly: 0 },
     features: [
       "The full browser, with Work and agents",
       "Your own API keys or local models, no account needed",
-      "250 Zephium AI credits to start, on fast, everyday models",
+      "250 free Zephium AI credits to try everything, on fast, everyday models",
       "Free and open source",
     ],
     cta: "Download Zephium",
@@ -44,7 +44,7 @@ export const plans: readonly Plan[] = [
     id: "pro",
     name: "Pro",
     blurb: "Frontier models for everyday work, with no keys to manage.",
-    credits: { amount: 2000, when: "every month" },
+    credits: { amount: 2000, label: "AI credits", when: "every month" },
     price: { monthly: 20, yearly: 200 },
     features: [
       "Everything in Free",
@@ -59,11 +59,11 @@ export const plans: readonly Plan[] = [
     id: "max",
     name: "Max",
     blurb: "For days your agents never stop, with the newest models first.",
-    credits: { amount: 10000, when: "every month" },
+    credits: { amount: 10000, label: "AI credits", when: "every month", badge: "5× Pro" },
     price: { monthly: 100, yearly: 1000 },
     features: [
       "Everything in Pro",
-      "10,000 Zephium AI credits, renewed every month",
+      "10,000 Zephium AI credits every month, five times Pro",
       "Fable (Anthropic) and Astra (OpenAI)",
       "Early access to new features and versions",
     ],
