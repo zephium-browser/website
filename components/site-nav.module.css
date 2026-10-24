@@ -44,6 +44,7 @@
 }
 
 .home {
+  cursor: pointer;
   flex: none;
   border-radius: var(--radius-inset);
 }
@@ -68,11 +69,20 @@
   font-size: 14px;
   font-weight: 450;
   letter-spacing: -0.006em;
-  transition: color 160ms var(--ease-out);
+  cursor: pointer;
+  transition:
+    color 160ms var(--ease-out),
+    background-color 160ms var(--ease-out);
 }
 
+/* Hover is a soft pill, so it shows over the sky as well as over the page. */
 .link:hover {
+  background: rgb(255 255 255 / 0.08);
   color: #fff;
+}
+
+:global(:root[data-sky]) .link:hover {
+  background: rgb(255 255 255 / 0.16);
 }
 
 :global(:root[data-sky]) .link {
@@ -95,6 +105,7 @@
 
 /* Star on GitHub: a quiet capsule with the count. */
 .star {
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -154,6 +165,7 @@
 }
 
 .download {
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   height: 34px;
