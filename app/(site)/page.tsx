@@ -1,6 +1,8 @@
+import { FilmPlayer } from "@/components/film";
 import { Scene } from "@/components/scene/scene";
 import { Browser, Everyday } from "@/components/sections/browser";
 import { Engine } from "@/components/sections/engine";
+import { Film } from "@/components/sections/film";
 import { Faq, QUESTIONS } from "@/components/sections/faq";
 import { Privacy } from "@/components/sections/privacy";
 import { Work } from "@/components/sections/work";
@@ -19,12 +21,14 @@ export default function Home() {
   return (
     <>
       <Scene />
+      <Film />
       <Browser />
       <Privacy />
       <Work />
       <Everyday />
       <Engine />
       <Faq />
+      <FilmPlayer />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd).replace(/</g, "\\u003c") }}

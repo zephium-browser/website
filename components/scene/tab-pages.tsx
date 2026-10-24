@@ -355,7 +355,7 @@ export function GitHubPage() {
         </div>
         <aside className={styles.about}>
           <h4>About</h4>
-          <p>A browser-native work environment, rebuilt for you and your agents.</p>
+          <p>A browser and work environment, reimagined for you and your agents.</p>
           <span className={styles.link}>zephium.app</span>
           <ul>
             <li>

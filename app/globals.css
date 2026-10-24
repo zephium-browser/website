@@ -162,3 +162,8 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* The page holds still behind a modal (the film). */
+html:has(dialog[open]) {
+  overflow: hidden;
+}

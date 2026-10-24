@@ -1,0 +1,33 @@
+.section {
+  padding-block: clamp(96px, 14vw, 180px) 0;
+}
+
+.head {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  margin-bottom: clamp(36px, 5vw, 64px);
+  text-align: center;
+}
+
+.head h2 {
+  font-size: var(--text-headline);
+  font-weight: 600;
+  line-height: var(--text-headline--line-height);
+  letter-spacing: var(--text-headline--letter-spacing);
+  text-wrap: balance;
+}
+
+.head p {
+  max-width: 34rem;
+  color: var(--color-muted);
+  font-size: var(--text-lede);
+  line-height: var(--text-lede--line-height);
+  letter-spacing: var(--text-lede--letter-spacing);
+  text-wrap: balance;
+}
+
+.poster {
+  max-width: 1200px;
+  margin-inline: auto;
+}

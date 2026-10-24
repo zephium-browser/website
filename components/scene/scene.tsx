@@ -1,11 +1,12 @@
 "use client";
 
-import { AppleIcon, ArrowRight01Icon, GithubIcon, WindowsNewIcon } from "@hugeicons/core-free-icons";
+import { AppleIcon, ArrowRight01Icon, GithubIcon, PlayIcon, WindowsNewIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Fragment, useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { DownloadLink } from "@/components/download-link";
+import { FilmButton } from "@/components/film";
 import { useDesktop } from "@/components/preferred-platform";
-import { site } from "@/lib/site";
+import { hasFilm, site } from "@/lib/site";
 import { Clouds } from "./clouds";
 import {
   CHAPTERS,
@@ -25,7 +26,7 @@ import styles from "./scene.module.css";
 
 const COMPACT = "(max-width: 720px)";
 
-const TITLE = "A browser-native work environment, rebuilt for you and your agents.";
+const TITLE = "A browser and work environment, reimagined for you and your agents.";
 /** The last word of the first clause; the light in the title changes after it. */
 const COMMA = TITLE.split(" ").findIndex((word) => word.endsWith(","));
 
@@ -199,10 +200,7 @@ export function Scene() {
               </Fragment>
             ))}
           </h1>
-          <p className={styles.lede}>
-            A fast, private browser. <br className={styles.break} />
-            One switch away, a canvas where your agents work in plain sight.
-          </p>
+          <p className={styles.lede}>Fast, private and fully featured. Free and open source.</p>
           <div className={styles.actions}>
             <DownloadLink className={styles.primary}>
               {desktop ? (
@@ -215,10 +213,17 @@ export function Scene() {
               ) : null}
               {desktop === "macos" ? "Download for Mac" : desktop === "windows" ? "Download for Windows" : "Download"}
             </DownloadLink>
-            <a href={site.repo} className={styles.secondary}>
-              <HugeiconsIcon icon={GithubIcon} size={17} strokeWidth={1.7} aria-hidden />
-              Star on GitHub
-            </a>
+            {/* Once there is a film, it takes the second place; the stars stay in the bar. */}
+            <FilmButton className={styles.secondary}>
+              <HugeiconsIcon icon={PlayIcon} size={15} strokeWidth={1.8} className={styles.playGlyph} aria-hidden />
+              Watch the film
+            </FilmButton>
+            {hasFilm() ? null : (
+              <a href={site.repo} className={styles.secondary}>
+                <HugeiconsIcon icon={GithubIcon} size={17} strokeWidth={1.7} aria-hidden />
+                Star on GitHub
+              </a>
+            )}
           </div>
         </div>
 

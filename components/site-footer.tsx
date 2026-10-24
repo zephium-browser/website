@@ -71,8 +71,8 @@ export function SiteFooter() {
     <footer className={styles.footer}>
       <section className={`container-page ${styles.cta}`} aria-labelledby="cta-title">
         <h2 id="cta-title" data-reveal>
-          Rebuilt for you.
-          <span> Ready for your agents.</span>
+          Your next browser.
+          <span> Your last AI workspace.</span>
         </h2>
         <div className={styles.get} data-reveal style={{ "--delay": "0.08s" } as CSSProperties}>
           <PreferredPlatform className={styles.downloads}>
