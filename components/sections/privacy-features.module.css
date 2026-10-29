@@ -1,0 +1,295 @@
+.figure {
+  margin: clamp(48px, 6vw, 72px) 0 0;
+}
+
+/* The desk: a piece of the day sky, inset like the cards' screens, with the
+   settings and the window lying on it as glass. */
+.desk {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 20px;
+  align-items: center;
+  overflow: hidden;
+  padding: clamp(16px, 3vw, 28px) clamp(14px, 4vw, 56px);
+  border-radius: 28px;
+  background: #111113;
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.09);
+  text-align: left;
+}
+
+.desk::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(rgb(14 30 58 / 0.12), rgb(14 30 58 / 0.12)),
+    image-set(url("/sky/day-900.avif") 1x type("image/avif"), url("/sky/day-1672.avif") 2x type("image/avif"), url("/sky/day-900.jpg") 1x type("image/jpeg"), url("/sky/day-1672.jpg") 2x type("image/jpeg")) 40% 30% / cover no-repeat;
+  transform: scale(2.2);
+  transform-origin: 40% 30%;
+  pointer-events: none;
+}
+
+@media (min-width: 700px) {
+  .desk {
+    padding-block: clamp(32px, 4vw, 56px);
+  }
+}
+
+@media (min-width: 1080px) {
+  .desk {
+    grid-template-columns: minmax(300px, 340px) minmax(0, 1fr);
+    gap: clamp(28px, 3.4vw, 48px);
+  }
+}
+
+/* The settings: the same glass as the window, a little quieter. */
+.panel {
+  --text: #f4f4f6;
+  --muted: rgb(244 244 246 / 0.7);
+  --faint: rgb(244 244 246 / 0.5);
+
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+  padding: 0 18px 18px;
+  border-radius: 18px;
+  background: rgb(16 34 56 / 0.62);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.16),
+    inset 0 1px 0 rgb(255 255 255 / 0.22),
+    0 2px 6px rgb(10 30 60 / 0.12),
+    0 30px 80px -20px rgb(10 30 60 / 0.45);
+  color: var(--text);
+  font-family: var(--font-system);
+  -webkit-backdrop-filter: blur(50px) saturate(1.5);
+  backdrop-filter: blur(50px) saturate(1.5);
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  height: 44px;
+  align-items: center;
+}
+
+.toolbar i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.24);
+  box-shadow: inset 0 0 0 0.5px rgb(0 0 0 / 0.12);
+}
+
+.panel h3 {
+  font-size: 22px;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.panel > p {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.group {
+  margin: 16px 0 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.1);
+  list-style: none;
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  padding: 10px 14px 10px 12px;
+}
+
+.row + .row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 52px;
+  height: 0.5px;
+  background: rgb(255 255 255 / 0.14);
+}
+
+.glyph {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.12);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.12);
+  transition: opacity 300ms var(--ease-out);
+}
+
+.glyph svg {
+  width: 17px;
+  height: 17px;
+}
+
+.text {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+  transition: opacity 300ms var(--ease-out);
+}
+
+.text b {
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+
+.text small {
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+/* On a narrow phone a note may take two lines; both rows keep room for two,
+   so the panel is the same height whichever way the switches are set. */
+@media (max-width: 440px) {
+  .text small {
+    min-height: 2.7em;
+  }
+}
+
+.row[data-disabled] :is(.glyph, .text) {
+  opacity: 0.5;
+}
+
+.panel > .footnote {
+  margin-top: 12px;
+  padding-inline: 4px;
+  color: var(--faint);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* The switch, in macOS's shape: a 42 x 26 pill and a round white thumb that
+   stretches a little under a press. The hit area reaches past the pill. */
+.switch {
+  position: relative;
+  flex: none;
+  width: 42px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.2);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.12);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 260ms var(--ease-out);
+}
+
+.switch::after {
+  content: "";
+  position: absolute;
+  inset: -9px -6px;
+}
+
+.switch[aria-checked="true"] {
+  background: #0a84ff;
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.18);
+}
+
+.switch[aria-disabled="true"] {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.switch:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.9);
+  outline-offset: 3px;
+}
+
+.knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 1px 3px rgb(0 0 0 / 0.3),
+    0 0 0 0.5px rgb(0 0 0 / 0.08);
+  transition:
+    translate 320ms var(--ease-emphasized),
+    width 200ms var(--ease-out);
+}
+
+.switch[aria-checked="true"] .knob {
+  translate: 16px 0;
+}
+
+.switch:not([aria-disabled="true"]):active .knob {
+  width: 26px;
+}
+
+.switch[aria-checked="true"]:not([aria-disabled="true"]):active .knob {
+  translate: 12px 0;
+}
+
+/* The caption: one line that changes with the switches. Its three possible
+   lines are stacked, unseen, in one cell, so the page never moves. */
+.caption {
+  display: grid;
+  justify-items: center;
+  margin-top: 22px;
+  color: var(--color-muted);
+  font-size: var(--text-lede);
+  line-height: 1.45;
+  letter-spacing: -0.012em;
+  text-align: center;
+}
+
+.sizer {
+  display: grid;
+  grid-area: 1 / 1;
+  visibility: hidden;
+}
+
+.sizer > span {
+  grid-area: 1 / 1;
+}
+
+.line {
+  grid-area: 1 / 1;
+  animation: settle 420ms var(--ease-out) both;
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .switch,
+  .knob {
+    transition-duration: 1ms;
+  }
+
+  .line {
+    animation: none;
+  }
+}

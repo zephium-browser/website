@@ -2,47 +2,42 @@ import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { CSSProperties } from "react";
 import { site } from "@/lib/site";
-import { Zero } from "./zero";
+import { PrivacyFeatures } from "./privacy-features";
 import styles from "./privacy.module.css";
 
 const POINTS = [
   {
-    title: "Kept on your device.",
-    body: "History, tabs, tasks, notes and activity live in your profile, on your computer. No telemetry, no usage analytics.",
+    title: "On your device.",
+    body: "History, tabs, Work and notes stay in your profile, on your computer. There is no telemetry and no usage analytics.",
   },
   {
     title: "Your model, your call.",
-    body: "Your own key goes straight from your device to OpenAI, Anthropic or Gemini. A local model never leaves it.",
+    body: "Your own key goes straight from your device to OpenAI, Anthropic or Gemini, and a local model never leaves it. Zephium AI prompts pass through to the model and are never stored.",
   },
   {
-    title: "An account only for Zephium AI.",
-    body: "Sign in with an email code, no password. Prompts pass through to the model, and our servers never store them.",
+    title: "An account when you want one.",
+    body: "It is optional. Today it brings Zephium AI, and free sync across your devices is coming. Browsing never needs one.",
   },
 ];
 
-/** Privacy, said with one number and three plain promises. */
+/**
+ * A browser first, and yours to shape: the Features switches with the window
+ * they change, then three plain promises about where things live.
+ */
 export function Privacy() {
   return (
     <section id="privacy" className={`container-page ${styles.section}`} aria-labelledby="privacy-title">
       <header className={styles.head}>
         <h2 id="privacy-title" data-reveal>
-          Private by design.
+          Yours, with or without AI.
         </h2>
         <p data-reveal style={{ "--delay": "0.08s" } as CSSProperties}>
-          You stay in control of your data, your models and your agents.
+          Zephium is a complete browser on its own. Add AI and Work when you want them, and take
+          them away whenever you like.
         </p>
       </header>
 
-      <figure className={styles.figure} data-reveal="fade">
-        <Zero />
-        <figcaption>
-          <b>Zero telemetry.</b>
-          <span>
-            How you browse never leaves your device. Until you sign in, Zephium doesn&apos;t contact
-            our servers at all.
-          </span>
-        </figcaption>
-      </figure>
+      <PrivacyFeatures />
 
       <ul className={styles.points}>
         {POINTS.map((point, index) => (

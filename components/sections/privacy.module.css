@@ -20,108 +20,11 @@
   text-wrap: balance;
 }
 
-/* One number, set very large, the way a spec sheet would set it, lit from
-   above like the hero's title, with the faintest sky behind it. */
-.figure {
-  position: relative;
-  margin: clamp(56px, 7vw, 96px) 0 0;
-}
-
-.figure::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: min(560px, 80vw);
-  aspect-ratio: 1.6;
-  background: radial-gradient(closest-side, rgb(141 185 242 / 0.12), transparent);
-  translate: -50% -12%;
-  pointer-events: none;
-}
-
-.zero {
-  position: relative;
-  display: inline-block;
-  height: 1em;
-  overflow: hidden;
-  font-size: clamp(9rem, 4rem + 16vw, 17rem);
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  padding-inline: 0.04em;
-  font-variant-numeric: tabular-nums;
-  -webkit-mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
-  mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
-}
-
-/* The digits stand in a column; seen, the column rolls to its last, zero,
-   and settles with the smallest give. */
-.reel {
-  display: flex;
-  flex-direction: column;
-}
-
-.reel span {
-  display: block;
-  height: 1em;
-  background: linear-gradient(180deg, #fff 18%, #dfe9fb 62%, #9fbde8 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.zero[data-seen] .reel {
-  animation: roll 2.4s cubic-bezier(0.2, 0.9, 0.1, 1) 0.2s both;
-}
-
-@keyframes roll {
-  0% {
-    transform: translateY(0);
-  }
-  86% {
-    transform: translateY(-90.6%);
-  }
-  100% {
-    transform: translateY(-90%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reel,
-  .zero[data-seen] .reel {
-    transform: translateY(-90%);
-    animation: none;
-  }
-}
-
-.figure figcaption {
-  display: grid;
-  justify-items: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.figure figcaption b {
-  color: var(--color-text);
-  font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.9rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-}
-
-.figure figcaption span {
-  max-width: 34rem;
-  color: var(--color-muted);
-  font-size: clamp(1.02rem, 0.95rem + 0.3vw, 1.18rem);
-  line-height: 1.5;
-  letter-spacing: -0.012em;
-  text-wrap: balance;
-}
-
 /* Three promises in a row, divided by hairlines, nothing around them. */
 .points {
   display: grid;
   max-width: 1080px;
-  margin: clamp(72px, 9vw, 120px) auto 0;
+  margin: clamp(56px, 7vw, 88px) auto 0;
   padding: 0;
   border-top: 0.5px solid rgb(255 255 255 / 0.12);
   list-style: none;
