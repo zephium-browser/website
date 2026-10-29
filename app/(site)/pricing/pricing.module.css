@@ -1,8 +1,92 @@
-/* Pricing: a switch, three plain cards, then the small print said kindly. */
-.page {
+/*
+ * Pricing: the title, a switch and three cards on the day sky, then the small
+ * print said kindly on the ordinary ground.
+ *
+ * The sky runs behind everything down to the foot of the cards, then fades
+ * into the page's ground. Inside it the text tokens are lifted to white, so
+ * every piece of text below keeps its contrast without its own rule.
+ */
+.top {
+  --color-text: #fff;
+  --color-muted: rgb(255 255 255 / 0.86);
+  --color-faint: rgb(255 255 255 / 0.76);
+  position: relative;
+  isolation: isolate;
+  padding-bottom: clamp(88px, 11vw, 160px);
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  overflow: hidden;
+  background: #1f6bd6;
+}
+
+.sky img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 0;
+}
+
+/*
+ * Lower down the clouds are drawn into the blue (a multiply, so the sky's own
+ * light stays in it), so the plans always sit on a vibrant blue and never on
+ * a pale haze.
+ */
+.sky::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, #fff 360px, #6a9fec 900px, #4f88e2 100%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* A little deeper blue behind the title, and the sky's way out into the ground. */
+.sky::after {
+  z-index: 2;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      transparent calc(100% - clamp(200px, 24vw, 360px)),
+      rgb(9 9 11 / 0.2) calc(100% - clamp(140px, 17vw, 260px)),
+      rgb(9 9 11 / 0.55) calc(100% - clamp(80px, 9vw, 140px)),
+      rgb(9 9 11 / 0.88) calc(100% - clamp(30px, 3.4vw, 50px)),
+      var(--color-ground) 100%
+    ),
+    radial-gradient(54% 300px at 50% 260px, rgb(12 40 92 / 0.42), transparent),
+    linear-gradient(rgb(14 38 80 / 0.12), rgb(14 38 80 / 0.12));
+  pointer-events: none;
+}
+
+.top .shell {
+  padding-bottom: 0;
+}
+
+.top .lede {
+  color: rgb(255 255 255 / 0.94);
+}
+
+.top :global(.text-quiet) {
+  color: rgb(255 255 255 / 0.82);
+}
+
+.plansWrap {
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+.rest {
   display: grid;
   gap: clamp(64px, 8vw, 104px);
-  margin-top: clamp(40px, 5vw, 64px);
+  padding-bottom: clamp(96px, 12vw, 160px);
 }
 
 /*
@@ -19,8 +103,10 @@
   margin: 0 auto 32px;
   padding: 3px;
   border-radius: var(--radius-capsule);
-  background: rgb(255 255 255 / 0.05);
-  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.14);
+  background: rgb(12 30 62 / 0.4);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.3);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  backdrop-filter: blur(20px) saturate(1.8);
 }
 
 .toggle:not([data-ready]) {
@@ -32,8 +118,7 @@
   inset: 3px auto 3px 3px;
   width: calc((100% - 6px) / 2);
   border-radius: var(--radius-capsule);
-  background: rgb(255 255 255 / 0.14);
-  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.12);
+  background: #fff;
   transition: transform 520ms var(--spring);
 }
 
@@ -59,9 +144,13 @@
   transition: color 250ms var(--ease-out);
 }
 
-.toggle button:hover,
+.toggle button:hover {
+  color: #fff;
+}
+
+/* The chosen side is a white pill, so its words go dark. */
 .toggle button[aria-pressed="true"] {
-  color: var(--color-text);
+  color: #0b1f36;
 }
 
 /* The saving, said quietly beside the word it belongs to. */
@@ -74,7 +163,7 @@
 }
 
 .toggle button[aria-pressed="true"] small {
-  color: var(--color-muted);
+  color: rgb(11 31 54 / 0.72);
 }
 
 .plans {
@@ -107,7 +196,15 @@
   position: relative;
   padding: 28px;
   border-radius: var(--radius-card);
-  background: var(--color-plate);
+  background: rgb(10 28 62 / 0.58);
+  -webkit-backdrop-filter: blur(28px) saturate(1.7);
+  backdrop-filter: blur(28px) saturate(1.7);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .plan {
+    background: rgb(14 32 64 / 0.9);
+  }
 }
 
 /* The hairline is its own layer, so it can brighten on hover without
@@ -117,26 +214,28 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.09);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.24);
   pointer-events: none;
   transition: box-shadow 250ms var(--ease-out);
 }
 
 .plan:hover::after {
-  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.2);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.36);
 }
 
 /* The suggested plan is a shade lighter, with a firmer edge. Nothing else. */
 .plan[data-recommended] {
-  background: var(--color-surface);
+  background:
+    linear-gradient(rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.1)),
+    rgb(10 28 62 / 0.58);
 }
 
 .plan[data-recommended]::after {
-  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.26);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.5);
 }
 
 .plan[data-recommended]:hover::after {
-  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.38);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.65);
 }
 
 .plan h3 {
@@ -165,8 +264,8 @@
   margin-top: 20px;
   padding: 12px 14px;
   border-radius: var(--radius-row);
-  background: rgb(255 255 255 / 0.035);
-  box-shadow: inset 0 0 0 0.5px var(--color-line-strong);
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.2);
 }
 
 .credits b {
@@ -191,8 +290,8 @@
   align-self: center;
   padding: 4px 9px;
   border-radius: var(--radius-capsule);
-  background: rgb(201 214 255 / 0.12);
-  color: var(--color-sheen);
+  background: rgb(6 20 48 / 0.5);
+  color: #fff;
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
@@ -303,12 +402,12 @@
 }
 
 .secondary {
-  background: rgb(255 255 255 / 0.08);
-  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.16);
+  background: rgb(255 255 255 / 0.12);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.34);
 }
 
 .secondary:hover {
-  background: rgb(255 255 255 / 0.13);
+  background: rgb(255 255 255 / 0.2);
 }
 
 .primary:active,
@@ -322,7 +421,7 @@
   gap: 12px;
   margin: 28px 0 0;
   padding: 24px 0 0;
-  border-top: 0.5px solid rgb(255 255 255 / 0.1);
+  border-top: 0.5px solid rgb(255 255 255 / 0.22);
   list-style: none;
 }
 
@@ -343,7 +442,7 @@
 
 .note {
   max-width: 40rem;
-  margin: 24px auto 0;
+  margin: 0 auto;
   color: var(--color-faint);
   font-size: 14px;
   text-align: center;

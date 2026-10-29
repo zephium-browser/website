@@ -3,10 +3,11 @@ import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { PageShell } from "@/components/prose";
+import prose from "@/components/prose.module.css";
 import { FaqList, type Question } from "@/components/sections/faq";
 import { site } from "@/lib/site";
-import { Plans } from "./plans";
+import { Plans, PlansNote } from "./plans";
+import { PricingSky } from "./pricing-sky";
 import styles from "./pricing.module.css";
 
 export const metadata: Metadata = pageMetadata({
@@ -71,21 +72,37 @@ const QUESTIONS: Question[] = [
   },
 ];
 
+/**
+ * The top of the page, the title, the switch and the plans, sits on the day
+ * sky. The sky fades into the page's own ground under the plans, and
+ * everything after them is on the ordinary background.
+ */
 export default function PricingPage() {
   return (
-    <PageShell
-      title={
-        <>
-          Everything, free.
-          <br />
-          <span className="text-quiet">More AI, on demand.</span>
-        </>
-      }
-      lede={`The browser, Work and agents cost nothing, with your own keys or a local model. A plan adds Zephium AI credits for frontier models, with no keys to manage.`}
-    >
-      <div className={styles.page}>
-        <h2 className="sr-only">Plans</h2>
-        <Plans />
+    <>
+      <div className={styles.top}>
+        <PricingSky />
+        <section className={`container-page ${prose.shell} ${styles.shell}`}>
+          <header className={prose.head}>
+            <h1 className={prose.title}>
+              Everything, free.
+              <br />
+              <span className="text-quiet">More AI, on demand.</span>
+            </h1>
+            <p className={`${prose.lede} ${styles.lede}`}>
+              The browser, Work and agents cost nothing, with your own keys or a local model. A plan adds
+              Zephium AI credits for frontier models, with no keys to manage.
+            </p>
+          </header>
+          <div className={styles.plansWrap}>
+            <h2 className="sr-only">Plans</h2>
+            <Plans />
+          </div>
+        </section>
+      </div>
+
+      <div className={`container-page ${styles.rest}`}>
+        <PlansNote />
 
         <section aria-labelledby="usage-title" className={styles.block}>
           <h2 id="usage-title">How Zephium AI usage works</h2>
@@ -109,8 +126,8 @@ export default function PricingPage() {
             <h2 id="self-title">Run it yourself.</h2>
             <p>
               Everything is open source. The browser and this website are under the {site.license}; the
-              backend behind Zephium AI is under the {site.backendLicense}, and you can host it
-              yourself. A Cloud subscription is not a commercial license or a support contract.
+              backend behind Zephium AI is under the {site.backendLicense}, and you can host it yourself. A
+              Cloud subscription is not a commercial license or a support contract.
             </p>
           </div>
           <ul>
@@ -141,6 +158,6 @@ export default function PricingPage() {
           <Link href="/support">Support</Link>
         </nav>
       </div>
-    </PageShell>
+    </>
   );
 }
