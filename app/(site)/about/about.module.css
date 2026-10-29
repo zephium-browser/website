@@ -10,7 +10,7 @@
 
 @media (min-width: 640px) {
   .follow {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -69,4 +69,54 @@
 .link:hover .arrow {
   color: var(--color-text);
   transform: translate(1px, -1px);
+}
+
+/* The people who have sent changes: handles in a wrapping row. The class is
+   doubled so it wins over the reading column's own list style. */
+.people.people {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 14px;
+  padding: 0;
+  list-style: none;
+}
+
+.people.people a {
+  display: inline-flex;
+  text-decoration: none;
+  align-items: center;
+  min-height: 28px;
+  padding-inline: 12px;
+  border-radius: var(--radius-capsule);
+  background: rgb(255 255 255 / 0.06);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.12);
+  color: var(--color-muted);
+  font-size: 15px;
+  line-height: 1;
+  transition:
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+}
+
+.people.people a:hover {
+  background: rgb(255 255 255 / 0.11);
+  color: var(--color-text);
+}
+
+/* How to write, under the places to follow. */
+.contact {
+  max-width: 42rem;
+  margin: 40px auto 0;
+  color: var(--color-faint);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.contact a {
+  color: var(--color-muted);
+}
+
+.contact a:hover {
+  color: var(--color-text);
 }
