@@ -15,6 +15,15 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        waitlist: [disabled, mocked-staging, actions-only]
+    env:
+      NEXT_PUBLIC_LINUX_WAITLIST_ENABLED: ${{ matrix.waitlist == 'mocked-staging' && 'true' || 'false' }}
+      NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN: ${{ matrix.waitlist != 'disabled' && 'https://staging-api.zephium.app' || '' }}
+      # Prove the private page excludes analytics even when the site enables it.
+      NEXT_PUBLIC_UMAMI_SRC: ${{ matrix.waitlist == 'mocked-staging' && 'https://analytics.example.invalid/script.js' || '' }}
+      NEXT_PUBLIC_UMAMI_ID: ${{ matrix.waitlist == 'mocked-staging' && 'waitlist-test' || '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -25,7 +34,26 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm build
+      - run: pnpm exec playwright-core install --with-deps chromium
+      # Exercise the actual production host's envsubst, clean URLs and headers.
+      - name: Start nginx static host
+        run: |
+          docker run --detach --name waitlist-host --publish 127.0.0.1:4173:80 \
+            --env NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx \
+            --env UMAMI_ORIGIN=https://analytics.example.invalid \
+            --env LINUX_WAITLIST_API_ORIGIN="$NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN" \
+            --volume "$PWD/out:/usr/share/nginx/html:ro" \
+            --volume "$PWD/deploy/templates:/etc/nginx/templates:ro" \
+            nginx:1.27-alpine
+          curl --fail --retry 10 --retry-connrefused --retry-delay 1 http://127.0.0.1:4173/healthz
+          docker exec waitlist-host nginx -t
+      - run: pnpm test:waitlist
+        env:
+          WAITLIST_TEST_BASE_URL: http://127.0.0.1:4173
+      - if: always()
+        run: docker rm --force waitlist-host
       - uses: actions/upload-artifact@v4
+        if: matrix.waitlist == 'disabled'
         with:
           name: site
           path: out

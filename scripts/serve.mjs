@@ -21,7 +21,7 @@ const file = (path) => {
   }
 };
 
-createServer((request, response) => {
+const server = createServer((request, response) => {
   const url = new URL(request.url, "http://x");
   // The billing return page answers once at its slash-less address, as nginx does.
   if (url.pathname === "/billing/return/") {
@@ -29,11 +29,22 @@ createServer((request, response) => {
     return;
   }
   const path = normalize(decodeURIComponent(url.pathname));
-  const base = join(root, path);
+  const privateAction = path.match(/^\/linux\/(confirm|unsubscribe)(?:\.html|\/)?$/);
+  const base = join(root, privateAction ? `/linux/${privateAction[1]}` : path);
   const found =
     file(base) ?? file(`${base}.html`) ?? file(join(base, "index.html"));
   const target = found ?? join(root, "404.html");
   const type = found && path === "/opengraph-image" ? "image/png" : types[extname(target)];
-  response.writeHead(found ? 200 : 404, { "content-type": type ?? "application/octet-stream" });
+  const headers = { "content-type": type ?? "application/octet-stream" };
+  // Match the private email-link routes' production policy, including aliases.
+  if (privateAction) {
+    const origin = process.env.NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN;
+    const api = ["https://api.zephium.app", "https://staging-api.zephium.app"].includes(origin) ? origin : "";
+    headers["referrer-policy"] = "no-referrer";
+    headers["x-robots-tag"] = "noindex, nofollow";
+    headers["cache-control"] = "no-store";
+    headers["content-security-policy"] = `default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' ${api}; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'`;
+  }
+  response.writeHead(found ? 200 : 404, headers);
   createReadStream(target).pipe(response);
-}).listen(port, () => console.log(`http://localhost:${port}`));
+}).listen(port, "127.0.0.1", () => console.log(`http://127.0.0.1:${server.address().port}`));

@@ -8,7 +8,9 @@
     "start": "node scripts/serve.mjs",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "check": "next typegen && eslint && tsc --noEmit"
+    "check": "next typegen && eslint && tsc --noEmit",
+    "test:waitlist": "node scripts/test-waitlist.mjs",
+    "test:waitlist:staging": "node scripts/test-waitlist-staging.mjs"
   },
   "dependencies": {
     "@hugeicons/core-free-icons": "^4.3.5",

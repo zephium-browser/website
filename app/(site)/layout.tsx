@@ -8,7 +8,8 @@ import { site } from "@/lib/site";
  * Page views, counted by our own Umami: cookieless, on our own server, and
  * only on zephium.app. Off unless both values are set when the site is built.
  * Query strings are never recorded. The script lives here, not in the root
- * layout, so pages outside this group (the billing return page) carry none.
+ * layout, so pages outside this group (billing return and Linux email links)
+ * carry none. Never add form tracking or error replay to waitlist components.
  */
 const analytics = {
   src: process.env.NEXT_PUBLIC_UMAMI_SRC,

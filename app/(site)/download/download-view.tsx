@@ -12,6 +12,7 @@ import {
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { detectPlatform, usePlatform } from "@/components/preferred-platform";
+import { LinuxWaitlistSignup } from "@/components/linux-waitlist/signup";
 import { plans } from "@/lib/pricing";
 import { downloadUrl, platforms, site, type Platform, type PlatformId } from "@/lib/site";
 import styles from "./download.module.css";
@@ -185,6 +186,8 @@ export function DownloadView({ start, plan }: { start: string | null; plan: stri
           </div>
         </div>
       </section>
+
+      <LinuxWaitlistSignup />
 
       <ul className={styles.links}>
         <li>

@@ -4,7 +4,7 @@ import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy",
-  description: `How ${site.name} and ${new URL(site.url).host} handle your data: no telemetry, your data on your device, an optional account, and models you choose.`,
+  description: `How ${site.name} and ${new URL(site.url).host} handle your data: local browsing data, optional accounts, models you choose, and the optional Linux release notification.`,
   alternates: { canonical: "/privacy" },
 };
 
@@ -15,7 +15,7 @@ export default function PrivacyPage() {
       title="Privacy"
       lede={`The short version: the browser collects nothing about how you browse, your data stays on your device, an account is optional, and this website counts page views without knowing who you are.`}
     >
-      <Prose updated="October 19, 2026">
+      <Prose updated="October 29, 2026">
         <p>
           This policy covers the {site.name} browser and the website at {host}. {site.name} is open
           source, so every statement about the browser below can be checked against{" "}
@@ -124,6 +124,28 @@ export default function PrivacyPage() {
           you bought and whether it is active.
         </p>
 
+        <h2>Linux release notification</h2>
+        <p>
+          Submitting the Linux notification form asks us to use your email address for one
+          email when Zephium for Linux is available. There is no confirmation step or email at
+          signup. This is a separate, optional opt-in, not a general newsletter. It creates no
+          Zephium account or subscription and does not sign you up for other marketing emails.
+        </p>
+        <p>
+          We store your normalized email address, signup time and consent version until you
+          unsubscribe or we deliberately clean up the release list. Signup does not verify
+          ownership of your mailbox. The Linux release email will include an unsubscribe link.
+          This notification is managed independently of Zephium accounts. You can also contact
+          <a href={`mailto:${site.contact.support}`}> {site.contact.support}</a> about your data.
+        </p>
+        <p>
+          We use bounded abuse-prevention records with keyed identifiers rather than raw IP
+          addresses in the waitlist. Your email address and private email-link tokens are never
+          sent to website analytics. Unsubscribe and legacy confirmation pages load no analytics
+          or error replay. Existing confirmation links from the previous flow remain compatible
+          until they expire; legacy unconfirmed addresses are not automatically enrolled.
+        </p>
+
         <h2>Who helps us run it</h2>
         <p>
           {site.name} is currently operated by {site.operator.name}, an individual based in{" "}
@@ -135,8 +157,9 @@ export default function PrivacyPage() {
             <a href="https://polar.sh">Polar</a>, the merchant of record, for payments;
           </li>
           <li>
-            <a href="https://resend.com">Resend</a>, for sign-in emails. It receives only your
-            email address and the code;
+            <a href="https://resend.com">Resend</a>, for sign-in emails and Linux notification
+            emails. It receives the recipient email address and the email content, including
+            the sign-in code or the confirmation and unsubscribe links as applicable;
           </li>
           <li>
             <a href="https://www.hetzner.com">Hetzner</a>, where our servers run;
@@ -178,7 +201,8 @@ export default function PrivacyPage() {
           advertising. We count page views with a self-hosted, cookieless instance of Umami: it
           counts visits, pages and referrers without storing personal data and without following
           you across other sites. It does not record query strings. The page that checkout and the
-          billing portal return to loads no analytics at all.
+          billing portal return to and the Linux confirmation and unsubscribe page load no
+          analytics or error replay at all.
         </p>
         <p>
           This is separate from the browser, which has no telemetry. Visiting this website tells
