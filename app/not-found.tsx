@@ -4,9 +4,19 @@ import { ZephiumLogo } from "@/components/brand";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
 import { getStars } from "@/lib/github";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+const base = pageMetadata({
   title: "Page not found",
+  description: "There is nothing at this address. The page may have moved, or the link was mistyped.",
+  path: "/",
+});
+
+/** A missing page has no address of its own to claim, so no canonical or share URL. */
+export const metadata: Metadata = {
+  ...base,
+  alternates: { canonical: null },
+  openGraph: { ...base.openGraph, url: undefined },
   robots: { index: false },
 };
 

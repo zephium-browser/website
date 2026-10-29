@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
-import { platforms, site } from "@/lib/site";
+import { feedAlternate } from "@/lib/metadata";
+import { site } from "@/lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
     "AI agents",
     "work environment",
   ],
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/", types: feedAlternate },
   openGraph: {
     type: "website",
     siteName: site.name,
@@ -42,22 +43,6 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: site.name,
-  description: site.description,
-  url: site.url,
-  applicationCategory: "BrowserApplication",
-  operatingSystem: platforms
-    .filter((platform) => platform.status === "available")
-    .map((platform) => platform.name)
-    .join(", "),
-  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  license: `https://spdx.org/licenses/${site.license}.html`,
-  codeRepository: site.repo,
-};
-
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
@@ -69,12 +54,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         {children}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-          }}
-        />
       </body>
     </html>
   );

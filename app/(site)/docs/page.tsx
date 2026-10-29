@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -8,11 +9,11 @@ import { docPath, topics } from "@/lib/docs";
 import { site } from "@/lib/site";
 import styles from "./docs.module.css";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Docs",
   description: `Documentation for ${site.name}: getting started, browsing, the Zephium assistant, Work and agents, models and keys, extensions, privacy and security, and keyboard shortcuts.`,
-  alternates: { canonical: "/docs" },
-};
+  path: "/docs",
+});
 
 export default function DocsPage() {
   return (

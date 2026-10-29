@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { Suspense } from "react";
 import { PageShell } from "@/components/prose";
 import { site } from "@/lib/site";
 import { DownloadExperience, DownloadView } from "./download-view";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Download",
   description: `Download ${site.name} for macOS or Windows. Free and open source, with an app size of ${site.appSize}.`,
-  alternates: { canonical: "/download" },
-};
+  path: "/download",
+});
 
 /**
  * Where every Download button lands. The download starts here, not on the

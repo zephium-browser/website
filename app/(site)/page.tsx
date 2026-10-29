@@ -6,6 +6,7 @@ import { Film } from "@/components/sections/film";
 import { Faq, QUESTIONS } from "@/components/sections/faq";
 import { Privacy } from "@/components/sections/privacy";
 import { Work } from "@/components/sections/work";
+import { HomeStructuredData } from "@/components/structured-data";
 
 const faqLd = {
   "@context": "https://schema.org",
@@ -20,6 +21,7 @@ const faqLd = {
 export default function Home() {
   return (
     <>
+      <HomeStructuredData />
       <Scene />
       <Film />
       <Browser />
