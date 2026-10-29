@@ -27,7 +27,7 @@ export function StaysPage({ bare = false }: { bare?: boolean }) {
         <span className={styles.search}>
           <b>SoMa</b>
           <i />
-          Mar 2 – Mar 16
+          Mar 2 to Mar 16
           <i />1 guest
         </span>
         <span className={styles.avatar} />
@@ -86,7 +86,7 @@ export function FlightsPage({ bare = false }: { bare?: boolean }) {
         <span className={styles.search}>
           <b>London (LHR)</b> → <b>San Francisco (SFO)</b>
           <i />
-          Mar 2 – Mar 16
+          Mar 2 to Mar 16
           <i />1 adult
         </span>
       </div>
@@ -102,10 +102,10 @@ export function FlightsPage({ bare = false }: { bare?: boolean }) {
             <span className={styles.carrier}>{flight.airline}</span>
             <span className={styles.times}>
               <b>
-                {flight.depart} – {flight.arrive}
+                {flight.depart} to {flight.arrive}
               </b>
               <span>
-                {flight.from}–{flight.to}
+                {flight.from} → {flight.to}
               </span>
             </span>
             <span className={styles.leg}>

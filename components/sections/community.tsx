@@ -22,7 +22,7 @@ const PLACES = [
     href: site.social.discord,
     path: siDiscord.path,
     title: "Join the Discord",
-    body: "Talk with the maker, report bugs and see what is next.",
+    body: "Talk to the maker, report a bug, see what ships next.",
   },
   {
     id: "x",
@@ -46,7 +46,7 @@ const PLACES = [
     href: site.social.producthunt,
     path: siProducthunt.path,
     title: "Follow on Product Hunt",
-    body: "Follow along there and tell others what you think.",
+    body: "Every launch, the day it goes live.",
   },
 ].filter((place) => place.href);
 
@@ -63,7 +63,7 @@ export async function Community() {
           Built in the open.
         </h2>
         <p data-reveal style={{ "--delay": "0.08s" } as CSSProperties}>
-          Zephium is made in public with the people who use it. Come say hello.
+          Zephium is made in public, with the people who use it.
         </p>
       </header>
 

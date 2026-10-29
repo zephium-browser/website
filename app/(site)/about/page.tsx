@@ -48,7 +48,7 @@ export default async function AboutPage() {
         <h2>Who makes {site.name}</h2>
         <p>
           {site.name} is made by <a href={site.author.url}>{site.author.name}</a>, a software and AI
-          engineer who has coded every day for more than five years and builds open-source. It
+          engineer who has written code every day for more than five years, most of it in the open. It
           began as a browser worth choosing on its own: fast, private and quiet, with your
           extensions and everything else already inside. One switch away is Work, a canvas where
           agents open real pages in plain sight, compare and build, and leave you something to keep.
@@ -98,7 +98,7 @@ export default async function AboutPage() {
         <p>
           <a href={site.author.url}>{site.author.name}</a> makes {site.name}.
           {contributors.length > 0
-            ? " These people have sent changes to the browser, and are part of it:"
+            ? " These people have sent changes to the browser:"
             : " Anyone can send a change, and the people who do are listed on the browser's repository."}
         </p>
         {contributors.length > 0 ? (

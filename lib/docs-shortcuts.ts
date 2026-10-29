@@ -37,7 +37,7 @@ export const shortcutGroups: ShortcutGroup[] = [
       same("Previous tab", "⌃ ⇧ Tab", "Ctrl Shift Tab"),
       same("Select tab above", "⌘ ⌥ ↑", "Ctrl Alt ↑"),
       same("Select tab below", "⌘ ⌥ ↓", "Ctrl Alt ↓"),
-      same("Select tab 1 to 8", "⌘ 1–8", "Ctrl 1–8"),
+      same("Select tab 1 to 8", "⌘ 1-8", "Ctrl 1-8"),
       same("Select last tab", "⌘ 9", "Ctrl 9"),
       same("Compact mode", "⌘ ⇧ S", "Ctrl Shift S"),
     ],
@@ -48,7 +48,7 @@ export const shortcutGroups: ShortcutGroup[] = [
     shortcuts: [
       same("Next space", "⌘ ⌥ →", "Ctrl Alt →"),
       same("Previous space", "⌘ ⌥ ←", "Ctrl Alt ←"),
-      same("Switch to space 1 to 9", "⌃ 1–9", "Ctrl Shift 1–9"),
+      same("Switch to space 1 to 9", "⌃ 1-9", "Ctrl Shift 1-9"),
     ],
   },
   {

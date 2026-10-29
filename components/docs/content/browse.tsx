@@ -97,8 +97,8 @@ export const browse: Doc = {
             </li>
             <li>
               Switch with the same menu, with <Keys keys="⌘ ⌥ →" /> and <Keys keys="⌘ ⌥ ←" />, or jump
-              to one directly with <Keys keys="⌃ 1–9" />. On Windows the keys are{" "}
-              <Keys keys="Ctrl Alt →" />, <Keys keys="Ctrl Alt ←" /> and <Keys keys="Ctrl Shift 1–9" />.
+              to one directly with <Keys keys="⌃ 1-9" />. On Windows the keys are{" "}
+              <Keys keys="Ctrl Alt →" />, <Keys keys="Ctrl Alt ←" /> and <Keys keys="Ctrl Shift 1-9" />.
             </li>
           </Steps>
           <p>
