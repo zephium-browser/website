@@ -304,7 +304,8 @@
    it is gone within the first few lines of scroll. */
 .hint {
   position: absolute;
-  bottom: 20px;
+  /* Just above the window's first peek, so it never sits on the page inside. */
+  top: calc(var(--start) - 50px);
   left: 50%;
   display: inline-flex;
   align-items: center;
@@ -348,8 +349,8 @@
   }
 }
 
-/* A short window leaves no clear room under the buttons. */
-@media (max-height: 640px) {
+/* A short or narrow window leaves no clear room under the buttons; on a phone the window peeking in is cue enough. */
+@media (max-height: 640px), (max-width: 720px) {
   .hint {
     display: none;
   }
