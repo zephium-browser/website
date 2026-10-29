@@ -29,7 +29,7 @@ const PLACES = [
     href: site.social.x,
     path: siX.path,
     title: `Follow ${site.author.name} on X`,
-    body: "The person who makes Zephium, posting what he is building.",
+    body: "The person who makes Zephium, building it in public.",
   },
   {
     id: "youtube",
