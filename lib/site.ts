@@ -8,7 +8,7 @@ const backendRepo = "https://github.com/zephium-browser/backend";
 export const site = {
   name: "Zephium",
   url: "https://zephium.app",
-  title: "Zephium — a browser and work environment for you and your agents",
+  title: "Zephium: a browser and work environment for you and your agents",
   tagline: "A browser and work environment, reimagined for you and your agents.",
   description:
     "Zephium is a fast, private, open-source browser built in Rust, with Work: a canvas where you and your agents browse, compare and plan in the open, and keep the results.",
@@ -40,6 +40,7 @@ export const site = {
     x: "https://x.com/CryntaDev",
     discord: "https://discord.gg/tyveTUyEp7",
     youtube: "https://www.youtube.com/@crynta",
+    producthunt: "https://www.producthunt.com/@crynta",
   },
   /** Where to write, by topic. */
   contact: {
