@@ -145,6 +145,84 @@
   background: rgb(255 255 255 / 0.3);
 }
 
+/*
+ * Everything else in a release sits behind one disclosure. It is plain
+ * details and summary, so it works without script and the browser's find
+ * opens it when the text is on a closed one.
+ */
+.all {
+  margin-top: 32px;
+  border-block: 0.5px solid rgb(255 255 255 / 0.12);
+  interpolate-size: allow-keywords;
+}
+
+.all summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 48px;
+  padding-inline: 12px;
+  border-radius: var(--radius-inset);
+  color: var(--color-muted);
+  font-size: 14.5px;
+  font-weight: 550;
+  letter-spacing: -0.005em;
+  font-variant-numeric: tabular-nums;
+  list-style: none;
+  cursor: pointer;
+  transition: color 200ms var(--ease-out);
+}
+
+.all summary::-webkit-details-marker {
+  display: none;
+}
+
+.all summary:focus-visible {
+  outline-offset: -2px;
+}
+
+.all summary:hover {
+  color: var(--color-text);
+}
+
+.all summary svg {
+  flex: none;
+  transition: transform 300ms var(--ease-emphasized);
+}
+
+.all[open] summary svg {
+  transform: rotate(180deg);
+}
+
+.all::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 400ms var(--ease-emphasized),
+    content-visibility 400ms allow-discrete;
+}
+
+.all[open]::details-content {
+  block-size: auto;
+}
+
+/* The first group inside sits close under the disclosure, the last has room below. */
+.all .section:first-of-type {
+  margin-top: 8px;
+}
+
+.all .section:last-of-type {
+  padding-bottom: 28px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .all::details-content,
+  .all summary svg {
+    transition: none;
+  }
+}
+
 /* The thanks to a release's contributors, a quiet line before the links. */
 .thanks {
   max-width: 40rem;
