@@ -10,6 +10,12 @@
   padding-block: clamp(96px, 12vw, 168px) clamp(48px, 6vw, 80px);
 }
 
+/* Pages with their own space below their last line (96 to 160px) ask for none
+   above this, so the two do not add up to twice the room. */
+.cta[data-flush] {
+  padding-top: 0;
+}
+
 @media (min-width: 900px) {
   .cta {
     grid-template-columns: 1fr auto;
@@ -93,6 +99,21 @@
 
 .note span {
   display: block;
+}
+
+.linux {
+  color: var(--color-muted);
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.25);
+  text-underline-offset: 4px;
+  transition:
+    color 160ms var(--ease-out),
+    text-decoration-color 160ms var(--ease-out);
+}
+
+.linux:hover {
+  color: var(--color-text);
+  text-decoration-color: currentColor;
 }
 
 .note {

@@ -4,6 +4,7 @@ import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import type { CSSProperties } from "react";
 import { siDiscord, siGithub, siX, siYoutube } from "simple-icons";
 import { ZephiumLockup } from "@/components/brand";
+import { FooterCta } from "@/components/footer-cta";
 import { FooterMark } from "@/components/footer-mark";
 import { PreferredPlatform } from "@/components/preferred-platform";
 import { downloadPath, platforms, site, type PlatformId } from "@/lib/site";
@@ -69,7 +70,7 @@ const soon = platforms.filter((platform) => platform.status === "soon").map((pla
 export function SiteFooter() {
   return (
     <footer className={styles.footer}>
-      <section className={`container-page ${styles.cta}`} aria-labelledby="cta-title">
+      <FooterCta>
         <h2 id="cta-title" data-reveal>
           Your next browser.
           <span> Your last AI workspace.</span>
@@ -91,9 +92,14 @@ export function SiteFooter() {
             <span>
               {soon.slice(0, -1).join(", ")} and {soon.at(-1)} are on the way.
             </span>
+            <span>
+              <Link href="/download#linux" className={styles.linux}>
+                Linux? Get notified
+              </Link>
+            </span>
           </p>
         </div>
-      </section>
+      </FooterCta>
 
       <FooterMark />
 
