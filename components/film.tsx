@@ -28,12 +28,12 @@ export function FilmPoster({ minutes }: { minutes: string }) {
         <source
           type="image/avif"
           srcSet="/film/poster-1280.avif 1280w, /film/poster-2560.avif 2560w"
-          sizes="(min-width: 1240px) 1200px, 94vw"
+          sizes="(min-width: 1240px) 1120px, 94vw"
         />
         <img
           src="/film/poster-1280.jpg"
           srcSet="/film/poster-1280.jpg 1280w, /film/poster-2560.jpg 2560w"
-          sizes="(min-width: 1240px) 1200px, 94vw"
+          sizes="(min-width: 1240px) 1120px, 94vw"
           alt=""
           width={1280}
           height={720}

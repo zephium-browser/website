@@ -1,4 +1,4 @@
-/* The poster: the film's own frame, lifted off the page, with play over it. */
+/* The poster: the film's own frame, set on the page, with play over it. */
 .poster {
   position: relative;
   display: block;
@@ -9,8 +9,8 @@
   border-radius: var(--radius-panel);
   background: var(--color-plate);
   box-shadow:
-    inset 0 0 0 1px var(--color-line),
-    0 40px 120px -40px rgb(40 90 170 / 0.45);
+    inset 0 0 0 1px var(--color-line-strong),
+    0 30px 80px -40px rgb(0 0 0 / 0.7);
   cursor: pointer;
   isolation: isolate;
 }
