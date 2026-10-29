@@ -15,9 +15,95 @@ export type Release = {
   title: string;
   summary: string;
   sections: ReleaseSection[];
+  /**
+   * GitHub handles of the people outside the project whose changes are in
+   * this release. The page thanks them at the end of the entry.
+   */
+  thanks?: string[];
+  /** Those in `thanks` who contributed for the first time in this release. */
+  firstContributions?: string[];
 };
 
 export const RELEASES: Release[] = [
+  {
+    version: "1.0.4",
+    date: "2026-10-28",
+    title: "Shaped by the first week",
+    summary:
+      "Four days after launch: a sidebar that hides, a new tab you can make your own, the everyday things a browser needs, Windows brought closer to the Mac, and the first changes from people outside the project.",
+    sections: [
+      {
+        title: "Highlights",
+        items: [
+          "The sidebar hides. Press its toggle, then move to the left edge of the window to bring it back over the page.",
+          "Make the new tab yours: keep the sky or choose a picture from your computer, dim it, and show or hide the wordmark, the tracker, your focus and your tasks. One press resets it.",
+          "On a new tab, the window's glass takes on the light of the sky.",
+          "Zephium opens on a new tab. A startup choice you made yourself stays as it was.",
+          "Windows wears Mica Alt, with a frame that follows your theme. Windows 10 uses acrylic.",
+        ],
+      },
+      {
+        title: "Browse",
+        items: [
+          "A page that cannot open, or whose tab crashed, says why and offers Retry or Reload, including tabs restored at launch.",
+          "Recently Closed brings a tab back to its own space. Back and Forward list a tab's history, and View Source and Save Page As are in the menu.",
+          "Closing the last tab opens a new one.",
+          "Downloads pause and resume, and risky files ask before they are kept.",
+          "Sites that ask for a username and password through the browser get a sign-in card, and a refused certificate says what is wrong.",
+          "One site panel at the end of the address field: the connection, blocking, permissions, zoom, hidden elements, extensions and clearing this site's data. Site Settings lists every site's permissions.",
+          "Zoom is remembered for each site. Tabs show their sound and mute from the icon, and the tab that is playing has a player in the sidebar.",
+          "A manual HTTP(S) or SOCKS5 proxy.",
+          "Bookmarks appear in the address bar's suggestions, and bookmarks and history export to a file.",
+          "Import from Helium, Dia, Vivaldi, Opera, Opera GX, Comet, Chromium, Floorp, LibreWolf and Waterfox. Chrome bookmarks kept under a signed-in account come across too.",
+          "Essentials belong to each space.",
+        ],
+      },
+      {
+        title: "Windows",
+        items: [
+          "Save Image As and Save Link As work again.",
+          "Switching tabs or opening a new tab no longer closes the browser.",
+          "Passwords and forms save and fill, and Chrome's keyboard shortcuts work: F5, F11, F12, Alt with the arrows, and the rest.",
+          "A page that stops responding offers Wait or Reload.",
+          "The launcher no longer freezes the window the first time, an extension's toolbar no longer holds it up, and fullscreen on a maximized window ends cleanly.",
+          "If Zephium cannot start, it says why in plain words and shows where the log is.",
+          "A SmartScreen switch in Settings under Privacy, and a link to Windows' own diagnostic data settings.",
+        ],
+      },
+      {
+        title: "macOS",
+        items: [
+          "Pages that open in a new tab after a redirect, like adding another Google account, load instead of staying blank.",
+          "The in-field menus of extensions such as Bitwarden show up on sites.",
+          "The launcher takes typing the moment it opens.",
+          "Printing no longer changes the Mac's page setup, and the window controls line up with the sidebar's header.",
+        ],
+      },
+      {
+        title: "Work and Ask Zephium",
+        items: [
+          "A free Groq key that runs into its limit now says so, and what to do, instead of failing without a reason. Qwen 3.8 27B is available on Groq.",
+          "A helper no longer gets stuck when a model sends empty fields along with its request.",
+          "Runs on a model on your own device or network cost nothing.",
+          "What Ask Zephium writes can be selected and copied.",
+        ],
+      },
+      {
+        title: "Security and privacy",
+        items: [
+          "Extensions are kept apart by profile: one cannot replace another's, and deleting a profile removes its extensions.",
+          "A saved provider key is only ever sent to the address it was saved for.",
+          "Ask Zephium asks before it searches, and shows the exact query and where it goes. Allowing history no longer shares your open tabs.",
+          "Windows updates are bound to their version and platform, so an older installer can never be offered as a newer one.",
+          "Clear browsing data covers cookies, site data and the cache, and can clear a single site.",
+          "Notes are not overwritten by a quick edit made outside Zephium, and deleting a profile waits for its notes, so deleted notes cannot come back.",
+          "Safari's files are not read until you choose to import.",
+        ],
+      },
+    ],
+    thanks: ["mydd7", "kd100100", "nduongg04", "ErnieBernie10"],
+    firstContributions: ["kd100100", "nduongg04", "ErnieBernie10"],
+  },
   {
     version: "1.0.3",
     date: "2026-10-24",
@@ -123,6 +209,9 @@ export const RELEASES: Release[] = [
     ],
   },
 ];
+
+/** Where the feed of these releases is served. */
+export const changelogFeedPath = "/changelog.xml";
 
 /** The anchor for a release, e.g. "v1-0-0-beta-1". */
 export const releaseAnchor = (version: string) => `v${version.replace(/\./g, "-")}`;

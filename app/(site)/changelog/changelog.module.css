@@ -1,3 +1,29 @@
+/* The feed link, small and at the edge of the column. */
+.feed {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 60rem;
+  margin: clamp(32px, 4vw, 48px) auto 0;
+}
+
+.feed a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  color: var(--color-faint);
+  font-size: 14px;
+  transition: color 200ms var(--ease-out);
+}
+
+.feed a:hover {
+  color: var(--color-text);
+}
+
+.feed + .releases {
+  margin-top: 12px;
+}
+
 /* Releases, newest first: the version and date beside each entry, held in
    view while you read it on wide screens. */
 .releases {
@@ -117,6 +143,25 @@
   height: 5px;
   border-radius: 50%;
   background: rgb(255 255 255 / 0.3);
+}
+
+/* The thanks to a release's contributors, a quiet line before the links. */
+.thanks {
+  max-width: 40rem;
+  margin-top: 32px;
+  color: var(--color-faint);
+  font-size: 14.5px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.thanks a {
+  color: var(--color-muted);
+  transition: color 200ms var(--ease-out);
+}
+
+.thanks a:hover {
+  color: var(--color-text);
 }
 
 .links {
