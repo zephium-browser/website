@@ -10,9 +10,9 @@ import {
   WindowsNewIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { detectPlatform, usePlatform } from "@/components/preferred-platform";
-import { LinuxWaitlistSignup } from "@/components/linux-waitlist/signup";
+import { LinuxWaitlist } from "@/components/linux-waitlist/waitlist";
 import { plans } from "@/lib/pricing";
 import { downloadUrl, platforms, site, type Platform, type PlatformId } from "@/lib/site";
 import styles from "./download.module.css";
@@ -23,9 +23,17 @@ const ICONS: Partial<Record<PlatformId, IconSvgElement>> = {
 };
 
 /** Install steps, kept to what is true on both systems. */
-const STEPS: Partial<Record<PlatformId, string[]>> = {
+const STEPS: Partial<Record<PlatformId, ReactNode[]>> = {
   macos: ["Open the downloaded .dmg.", "Drag Zephium to Applications.", "Open Zephium."],
-  windows: ["Run the downloaded setup .exe.", "Follow the installer.", "Open Zephium."],
+  windows: [
+    "Run the downloaded setup .exe.",
+    <>
+      The installer is not code-signed yet, so SmartScreen may warn you. Choose <strong>More info</strong>, then{" "}
+      <strong>Run anyway</strong>.
+    </>,
+    "Follow the installer.",
+    "Open Zephium.",
+  ],
 };
 
 const available = platforms.filter((platform) => platform.status === "available");
@@ -69,65 +77,96 @@ export function DownloadView({ start, plan }: { start: string | null; plan: stri
     window.location.assign(downloadUrl(target));
   }, [start]);
 
+  useEffect(() => {
+    // For a Linux visitor the section moves above the fold after detection; keep an old link on it.
+    if (detected !== "linux" || !/^#linux(-notification)?$/.test(window.location.hash)) return;
+    document.getElementById("linux")?.scrollIntoView();
+  }, [detected]);
+
   const chosen = plans.find((item) => item.id === plan && item.id !== "free");
   const startedPlatform = available.find((platform) => platform.id === started);
   const own = available.find((platform) => platform.id === detected);
   const elsewhere = detected ? platforms.find((platform) => platform.id === detected && platform.status === "soon") : null;
+  // A Linux visitor's first question is whether Linux is out, so the notification leads the page.
+  const linuxFirst = detected === "linux" && !startedPlatform;
   const ordered = own ? [own, ...available.filter((platform) => platform !== own)] : available;
 
   return (
     <div className={styles.page}>
-      <section className={styles.status} aria-labelledby="status-title" data-reveal>
-        <div role="status">
-          {startedPlatform ? (
-            <>
-              <span className={styles.check} aria-hidden>
-                <HugeiconsIcon icon={Tick02Icon} size={20} strokeWidth={2} />
-              </span>
-              <h2 id="status-title">Your download has started</h2>
-              <p>
-                Zephium for {startedPlatform.name} is on its way. If nothing happens, check your browser&apos;s
-                downloads, or{" "}
-                <a href={downloadUrl(startedPlatform)} className={styles.again}>
-                  download again
-                </a>
-                .
-              </p>
-            </>
-          ) : own ? (
-            <>
-              <h2 id="status-title">Download Zephium for {label(own)}</h2>
-              <p>{own.requirement}.</p>
-              <a href={downloadUrl(own)} className={styles.primary} data-preferred>
-                <HugeiconsIcon icon={ICONS[own.id] ?? Download04Icon} size={18} strokeWidth={1.8} aria-hidden />
-                Download for {label(own)}
-              </a>
-            </>
-          ) : (
-            <>
-              <h2 id="status-title">
-                {elsewhere ? `Zephium for ${elsewhere.name} is on the way` : "Download Zephium"}
-              </h2>
-              <p>
-                {elsewhere
-                  ? "For now it is available for macOS and Windows."
-                  : "Available for macOS and Windows."}
-              </p>
+      <section
+        id={linuxFirst ? "linux" : undefined}
+        className={styles.status}
+        aria-labelledby={linuxFirst ? "linux-title" : "status-title"}
+        data-reveal
+      >
+        {linuxFirst ? (
+          <>
+            <span id="linux-notification" className={styles.anchor} />
+            <LinuxWaitlist headingId="linux-title" />
+            <div className={styles.alt}>
+              <p>Also available for macOS and Windows.</p>
               <div className={styles.buttons}>
-                {available.map((platform, index) => (
-                  <a
-                    key={platform.id}
-                    href={downloadUrl(platform)}
-                    className={index === 0 ? styles.primary : styles.secondary}
-                  >
+                {available.map((platform) => (
+                  <a key={platform.id} href={downloadUrl(platform)} className={styles.secondary}>
                     <HugeiconsIcon icon={ICONS[platform.id] ?? Download04Icon} size={18} strokeWidth={1.8} aria-hidden />
                     Download for {label(platform)}
                   </a>
                 ))}
               </div>
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        ) : (
+          <div role="status">
+            {startedPlatform ? (
+              <>
+                <span className={styles.check} aria-hidden>
+                  <HugeiconsIcon icon={Tick02Icon} size={20} strokeWidth={2} />
+                </span>
+                <h2 id="status-title">Your download has started</h2>
+                <p>
+                  Zephium for {startedPlatform.name} is on its way. If nothing happens, check your browser&apos;s
+                  downloads, or{" "}
+                  <a href={downloadUrl(startedPlatform)} className={styles.again}>
+                    download again
+                  </a>
+                  .
+                </p>
+              </>
+            ) : own ? (
+              <>
+                <h2 id="status-title">Download Zephium for {label(own)}</h2>
+                <p>{own.requirement}.</p>
+                <a href={downloadUrl(own)} className={styles.primary} data-preferred>
+                  <HugeiconsIcon icon={ICONS[own.id] ?? Download04Icon} size={18} strokeWidth={1.8} aria-hidden />
+                  Download for {label(own)}
+                </a>
+              </>
+            ) : (
+              <>
+                <h2 id="status-title">
+                  {elsewhere ? `Zephium for ${elsewhere.name} is on the way` : "Download Zephium"}
+                </h2>
+                <p>
+                  {elsewhere
+                    ? "For now it is available for macOS and Windows."
+                    : "Available for macOS and Windows."}
+                </p>
+                <div className={styles.buttons}>
+                  {available.map((platform, index) => (
+                    <a
+                      key={platform.id}
+                      href={downloadUrl(platform)}
+                      className={index === 0 ? styles.primary : styles.secondary}
+                    >
+                      <HugeiconsIcon icon={ICONS[platform.id] ?? Download04Icon} size={18} strokeWidth={1.8} aria-hidden />
+                      Download for {label(platform)}
+                    </a>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </section>
 
       <section aria-labelledby="install-title" className={styles.block} data-reveal>
@@ -145,8 +184,8 @@ export function DownloadView({ start, plan }: { start: string | null; plan: stri
               </header>
               <p className={styles.requirement}>{platform.requirement}</p>
               <ol>
-                {STEPS[platform.id]?.map((step) => (
-                  <li key={step}>{step}</li>
+                {STEPS[platform.id]?.map((step, index) => (
+                  <li key={index}>{step}</li>
                 ))}
               </ol>
               <a href={downloadUrl(platform)} className={styles.file}>
@@ -161,6 +200,13 @@ export function DownloadView({ start, plan }: { start: string | null; plan: stri
           way.
         </p>
       </section>
+
+      {linuxFirst ? null : (
+        <section id="linux" className={styles.status} aria-labelledby="linux-title" data-reveal>
+          <span id="linux-notification" className={styles.anchor} />
+          <LinuxWaitlist headingId="linux-title" />
+        </section>
+      )}
 
       <section aria-labelledby="next-title" className={styles.block} data-reveal style={{ "--delay": "0.06s" } as CSSProperties}>
         <h2 id="next-title">Next</h2>
@@ -186,8 +232,6 @@ export function DownloadView({ start, plan }: { start: string | null; plan: stri
           </div>
         </div>
       </section>
-
-      <LinuxWaitlistSignup />
 
       <ul className={styles.links}>
         <li>

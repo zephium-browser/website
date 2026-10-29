@@ -29,14 +29,14 @@ const server = createServer((request, response) => {
     return;
   }
   const path = normalize(decodeURIComponent(url.pathname));
-  const privateAction = path.match(/^\/linux\/(confirm|unsubscribe)(?:\.html|\/)?$/);
-  const base = join(root, privateAction ? `/linux/${privateAction[1]}` : path);
+  const privateAction = /^\/linux\/unsubscribe(?:\.html|\/)?$/.test(path);
+  const base = join(root, privateAction ? "/linux/unsubscribe" : path);
   const found =
     file(base) ?? file(`${base}.html`) ?? file(join(base, "index.html"));
   const target = found ?? join(root, "404.html");
   const type = found && path === "/opengraph-image" ? "image/png" : types[extname(target)];
   const headers = { "content-type": type ?? "application/octet-stream" };
-  // Match the private email-link routes' production policy, including aliases.
+  // Match the unsubscribe page's production policy, including its aliases.
   if (privateAction) {
     const origin = process.env.NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN;
     const api = ["https://api.zephium.app", "https://staging-api.zephium.app"].includes(origin) ? origin : "";
