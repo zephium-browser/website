@@ -1,0 +1,58 @@
+name: Changelog check
+
+# A release of the browser should never ship without its changelog entry here.
+# This reads the latest public release and opens an issue when lib/changelog.ts
+# does not mention it yet.
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the latest release
+        id: release
+        run: |
+          tag=$(gh api repos/zephium-browser/Zephium/releases/latest --jq .tag_name)
+          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Look for it in the changelog
+        id: entry
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          if grep -Fq "version: \"$VERSION\"" lib/changelog.ts; then
+            echo "lib/changelog.ts has $VERSION"
+          else
+            echo "missing=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open an issue when it is missing
+        if: steps.entry.outputs.missing == 'true'
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          title="Changelog is missing $VERSION"
+          body="Zephium $VERSION is released, but lib/changelog.ts has no entry for it. Add one, then this check passes. Release: https://github.com/zephium-browser/Zephium/releases/tag/v$VERSION"
+          existing=$(gh issue list --state open --search "\"$title\" in:title" --json number,title \
+            --jq "map(select(.title == \"$title\")) | .[0].number // empty")
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "Still missing as of $(date -u +%F). $body"
+          else
+            gh issue create --title "$title" --body "$body"
+          fi
+          echo "::error::$title"
+          exit 1
