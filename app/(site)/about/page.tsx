@@ -27,14 +27,14 @@ const FOLLOW = [
   { label: "Discord", note: "The community", href: social.discord, path: siDiscord.path },
   { label: "GitHub", note: handle(site.social.github), href: social.github, path: siGithub.path },
   { label: "X", note: `@${handle(site.social.x)}`, href: social.x, path: siX.path },
-  { label: "Product Hunt", note: "Zephium", href: social.producthunt, path: siProducthunt.path },
+  { label: "Product Hunt", note: "@crynta", href: social.producthunt, path: siProducthunt.path },
 ].filter((item): item is typeof item & { href: string } => Boolean(item.href));
 
 /** The releases so far, as plainly as they happened. */
 const TIMELINE = [
   { version: "1.0.0-beta.1", date: "4 October 2026", text: "The first public beta." },
   { version: "1.0.3", date: "24 October 2026", text: "The public release." },
-  { version: "1.0.4", date: "28 October 2026", text: "The first changes from the community." },
+  { version: "1.0.4", date: "28 October 2026", text: "Fixes from the first launch week, many of them sent by contributors." },
 ];
 
 export default async function AboutPage() {

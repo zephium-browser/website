@@ -30,7 +30,7 @@ export const RELEASES: Release[] = [
     date: "2026-10-28",
     title: "Shaped by the first week",
     summary:
-      "Four days after launch: a sidebar that hides, a new tab you can make your own, the everyday things a browser needs, Windows brought closer to the Mac, and the first changes from people outside the project.",
+      "Four days after launch: a sidebar that hides, a new tab you can make your own, the everyday things a browser needs, Windows brought closer to the Mac, and fixes sent in by people who use Zephium.",
     sections: [
       {
         title: "Highlights",
@@ -141,6 +141,8 @@ export const RELEASES: Release[] = [
         ],
       },
     ],
+    thanks: ["drunkardleo-10", "mydd7"],
+    firstContributions: ["drunkardleo-10", "mydd7"],
   },
   {
     version: "1.0.0-beta.2",

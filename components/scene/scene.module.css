@@ -506,7 +506,7 @@
     --below: 78px;
     --w: min(calc(100vw - 24px), calc((100svh - var(--above) - var(--below)) * 0.6516));
     --h: calc(var(--w) * 1.5348);
-    --start: max(66svh, 520px);
+    --start: max(68svh, 560px);
   }
 
   .chip {
