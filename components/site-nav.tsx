@@ -22,7 +22,7 @@ const links = [
 
 /** Community links for the small-screen menu; one that is not set yet is left out. */
 const community = [
-  { label: "GitHub", href: site.repo, path: siGithub.path },
+  { label: "GitHub", href: site.social.github, path: siGithub.path },
   { label: "X", href: site.social.x, path: siX.path },
   { label: "Discord", href: site.social.discord, path: siDiscord.path },
   { label: "YouTube", href: site.social.youtube, path: siYoutube.path },

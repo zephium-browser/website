@@ -23,11 +23,11 @@ const handle = (url: string) => new URL(url).pathname.slice(1);
 
 /** The places to follow along; one without an address yet is left out. */
 const FOLLOW = [
-  { label: "YouTube", note: "@crynta", href: social.youtube, path: siYoutube.path },
+  { label: "YouTube", note: "Films and builds", href: social.youtube, path: siYoutube.path },
   { label: "Discord", note: "The community", href: social.discord, path: siDiscord.path },
-  { label: "GitHub", note: handle(site.social.github), href: social.github, path: siGithub.path },
-  { label: "X", note: `@${handle(site.social.x)}`, href: social.x, path: siX.path },
-  { label: "Product Hunt", note: "@crynta", href: social.producthunt, path: siProducthunt.path },
+  { label: "GitHub", note: "zephium-browser", href: social.github, path: siGithub.path },
+  { label: "X", note: `${site.author.name}, the maker`, href: social.x, path: siX.path },
+  { label: "Product Hunt", note: "Launches", href: social.producthunt, path: siProducthunt.path },
 ].filter((item): item is typeof item & { href: string } => Boolean(item.href));
 
 /** The releases so far, as plainly as they happened. */
