@@ -2,7 +2,14 @@
 
 import { Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { DownloadLink } from "@/components/download-link";
 import { type Billing, currency, formatPrice, monthsFree, plans } from "@/lib/pricing";
 import styles from "./pricing.module.css";
@@ -32,7 +39,11 @@ function Swap({ at, roll, children }: { at: 0 | 1; roll?: boolean; children: [Re
   return (
     <span ref={ref} className={styles.swap} data-roll={roll || undefined} aria-hidden>
       {children.map((child, index) => (
-        <span key={index} className={styles.item} data-state={index === at ? "on" : index < at ? "before" : "after"}>
+        <span
+          key={index}
+          className={styles.item}
+          data-state={index === at ? "on" : index < at ? "before" : "after"}
+        >
           {child}
         </span>
       ))}
@@ -49,7 +60,11 @@ function Swap({ at, roll, children }: { at: 0 | 1; roll?: boolean; children: [Re
 export function Plans() {
   const [billing, setBilling] = useState<Billing>("monthly");
   const [announce, setAnnounce] = useState(false);
-  const ready = useSyncExternalStore(noSubscription, () => true, () => false);
+  const ready = useSyncExternalStore(
+    noSubscription,
+    () => true,
+    () => false,
+  );
   const yearly = billing === "yearly";
   const at = yearly ? 1 : 0;
 
@@ -150,15 +165,6 @@ export function Plans() {
         })}
       </ul>
 
-      <p className={styles.note}>
-        Prices are in {currency === "USD" ? "US dollars" : currency}, as Polar charges them. Taxes may
-        apply at checkout. You subscribe in the app, under Settings &rarr; Account.
-        <noscript>
-          {" "}
-          Yearly plans: {paid.map((plan) => `${plan.name} ${formatPrice(plan.price.yearly)}`).join(", ")},{" "}
-          {saving}.
-        </noscript>
-      </p>
       <p className="sr-only" aria-live="polite">
         {announce
           ? yearly
@@ -167,5 +173,23 @@ export function Plans() {
           : ""}
       </p>
     </div>
+  );
+}
+
+/**
+ * The small print under the plans. It is its own piece because it sits below
+ * the sky, on the page's ordinary ground, where the plans sit on the sky.
+ */
+export function PlansNote() {
+  return (
+    <p className={styles.note}>
+      Prices are in {currency === "USD" ? "US dollars" : currency}, as Polar charges them. Taxes may apply at
+      checkout. You subscribe in the app, under Settings &rarr; Account.
+      <noscript>
+        {" "}
+        Yearly plans: {paid.map((plan) => `${plan.name} ${formatPrice(plan.price.yearly)}`).join(", ")},{" "}
+        {saving}.
+      </noscript>
+    </p>
   );
 }
