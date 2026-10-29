@@ -157,7 +157,7 @@ export function Canvas({ flags }: { flags: Flags }) {
 
       {/* What the stays helper found. */}
       <Piece from={4.1} to={4.4} style={at(1560, 140, 880)} className={styles.findings}>
-        <h3>{trip.stays.title}</h3>
+        <div className={styles.title}>{trip.stays.title}</div>
         <div className={styles.stays}>
           {trip.stays.options.map((stay, index) => (
             <article
@@ -190,7 +190,7 @@ export function Canvas({ flags }: { flags: Flags }) {
 
       {/* What the flights helper found. */}
       <Piece from={4.25} to={4.6} style={at(1560, 640, 620)} className={styles.findings}>
-        <h3>{trip.flights.title}</h3>
+        <div className={styles.title}>{trip.flights.title}</div>
         <div className={styles.flights}>
           {trip.flights.options.map((flight) => (
             <article key={flight.airline} className={styles.flight} data-pick={("pick" in flight && flight.pick) || undefined}>
@@ -228,7 +228,7 @@ export function Canvas({ flags }: { flags: Flags }) {
           <Character kind="lead" mood={leadMood} size={26} grounded />
           <small>Plan · {trip.plan.dates}</small>
         </span>
-        <h3>{trip.plan.title}</h3>
+        <div className={styles.title}>{trip.plan.title}</div>
         <p>{trip.plan.summary}</p>
         <div className={styles.figures}>
           {trip.plan.figures.map((figure) => (

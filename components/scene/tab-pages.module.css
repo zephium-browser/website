@@ -172,7 +172,7 @@
   color: #e6e6ea;
 }
 
-.linearList h4 {
+.linearList .group {
   display: flex;
   align-items: center;
   gap: calc(var(--u) * 9);
@@ -183,21 +183,21 @@
   font-weight: 550;
 }
 
-.linearList h4 small {
+.linearList .group small {
   color: rgb(230 230 234 / 0.45);
   font-size: inherit;
   font-weight: 450;
 }
 
-.linearList h4[data-tone="progress"] svg {
+.linearList .group[data-tone="progress"] svg {
   color: #e2b340;
 }
 
-.linearList h4[data-tone="todo"] svg {
+.linearList .group[data-tone="todo"] svg {
   color: rgb(230 230 234 / 0.5);
 }
 
-.linearList h4[data-tone="done"] svg {
+.linearList .group[data-tone="done"] svg {
   color: #6a7cf2;
 }
 
@@ -393,7 +393,7 @@
   line-height: 1;
 }
 
-.notionDoc h3 {
+.notionDoc .docTitle {
   margin-top: calc(var(--u) * 14);
   font-size: calc(var(--u) * 30);
   font-weight: 700;
@@ -421,7 +421,7 @@
   color: #183347;
 }
 
-.notionDoc h4 {
+.notionDoc .docHead {
   margin-top: calc(var(--u) * 18);
   font-size: calc(var(--u) * 17);
   font-weight: 650;
@@ -699,7 +699,7 @@
   white-space: nowrap;
 }
 
-.about h4 {
+.about .aboutHead {
   font-size: calc(var(--u) * 15);
   font-weight: 600;
 }
@@ -1045,7 +1045,7 @@
   gap: calc(var(--u) * 7);
 }
 
-.ffFilters h4 {
+.ffFilters .filterHead {
   margin-top: calc(var(--u) * 6);
   font-size: calc(var(--u) * 12.5);
   font-weight: 650;
