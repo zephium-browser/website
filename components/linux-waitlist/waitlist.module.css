@@ -314,7 +314,8 @@
   list-style: none;
 }
 
-.root > .links {
+.root > .links,
+.action > .links {
   margin-top: 8px;
 }
 
@@ -353,6 +354,176 @@
   color: var(--color-faint);
   font-size: 14px;
   cursor: pointer;
+}
+
+/* The text and the actions are two blocks only in the bar; in the panel they flow as one column. */
+.copy,
+.action {
+  display: contents;
+}
+
+/*
+ * The bar: one slim row at the end of the home page, on a pane of glass the
+ * page provides. Text on the left, the field or the links on the right; on a
+ * phone they stack and the field takes the full width.
+ */
+.bar.root {
+  justify-items: stretch;
+  gap: 20px 40px;
+  text-align: left;
+}
+
+.bar .copy,
+.bar .action {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.bar .copy p {
+  color: rgb(244 244 246 / 0.78);
+}
+
+.bar .note {
+  color: rgb(244 244 246 / 0.78);
+}
+
+.bar h2,
+.bar h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.bar .form {
+  width: 100%;
+  max-width: 28rem;
+  margin-top: 0;
+}
+
+.bar .row {
+  background: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.22);
+}
+
+.bar .row:focus-within {
+  background: rgb(255 255 255 / 0.14);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.5);
+}
+
+.bar .row[data-invalid] {
+  box-shadow: inset 0 0 0 1px rgb(238 154 174 / 0.75);
+}
+
+.bar .quiet {
+  margin-top: 8px;
+  color: rgb(244 244 246 / 0.62);
+}
+
+.bar .links {
+  justify-content: flex-start;
+}
+
+.bar .links {
+  gap: 6px;
+}
+
+.bar .links a {
+  gap: 6px;
+  padding-inline: 12px;
+  font-size: 14px;
+  background: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.2);
+  color: rgb(244 244 246 / 0.86);
+}
+
+.bar .links a:hover {
+  background: rgb(255 255 255 / 0.16);
+  color: var(--color-text);
+}
+
+.bar .thanks {
+  grid-template-columns: auto 1fr;
+  column-gap: 14px;
+}
+
+.bar .thanks .check {
+  grid-row: span 2;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+}
+
+.bar .wait {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  justify-items: start;
+  gap: 8px;
+}
+
+.bar .wait h4 {
+  color: rgb(244 244 246 / 0.62);
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+/* Under 480px the field and button stack, and only the field is a pill. */
+@media (max-width: 480px) {
+  .bar .row,
+  .bar .row:focus-within,
+  .bar .row[data-invalid] {
+    background: none;
+    box-shadow: none;
+  }
+
+  .bar .input {
+    background: rgb(255 255 255 / 0.1);
+    box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.22);
+  }
+
+  .bar .input:focus {
+    background: rgb(255 255 255 / 0.14);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.5);
+  }
+
+  .bar .row[data-invalid] .input {
+    box-shadow: inset 0 0 0 1px rgb(238 154 174 / 0.75);
+  }
+}
+
+@media (min-width: 1000px) {
+  .bar.root {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 33rem);
+    align-items: center;
+  }
+
+  .bar .links,
+  .bar .wait {
+    justify-content: flex-end;
+    justify-items: end;
+    width: 100%;
+  }
+
+  .bar .action:has(.links) {
+    justify-items: end;
+  }
+
+  .bar .again {
+    justify-self: end;
+  }
+
+  .bar .action:has(.form) {
+    justify-items: end;
+  }
+
+  .bar .action:has(.form) .quiet {
+    max-width: 28rem;
+  }
 }
 
 /* The unsubscribe page: the same material, on its own. */

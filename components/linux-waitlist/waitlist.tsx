@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState, useSyncExternalStore, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore, type ComponentProps, type FormEvent } from "react";
 import {
   forgetJoined,
   honeypotLimit,
@@ -23,13 +23,17 @@ const MESSAGES: Record<Problem, string> = {
   unknown: "We couldn't confirm that. Please try again in a moment.",
 };
 
+/** "panel" is centred and stands alone on the download page; "bar" is one slim row, for the end of the home page. */
+type Variant = "panel" | "bar";
+
 /**
  * Zephium for Linux, as the page needs it: the signup while it is open, a
  * calm thank-you once someone has joined (remembered in this browser, never
- * the address), and a plain "follow along" when signup is closed. The caller
- * supplies the panel around it and the id its heading gets.
+ * the address), and where the news will go when signup is closed. The caller
+ * supplies the surface around it and the id its heading gets; a bar sits one
+ * heading level lower, because it lives inside another section.
  */
-export function LinuxWaitlist({ headingId }: { headingId: string }) {
+export function LinuxWaitlist({ headingId, variant = "panel" }: { headingId: string; variant?: Variant }) {
   const remembered = useSyncExternalStore(subscribeJoined, readJoined, () => false);
   // Storage can be refused (private windows); a visitor who just joined still sees it worked.
   const [justJoined, setJustJoined] = useState(false);
@@ -37,10 +41,16 @@ export function LinuxWaitlist({ headingId }: { headingId: string }) {
 
   if (!linuxWaitlistEnabled) {
     return (
-      <div className={styles.root}>
-        <h2 id={headingId}>Zephium for Linux is coming.</h2>
-        <p>Follow along and you&apos;ll hear the moment it lands.</p>
-        <CommunityLinks />
+      <div className={rootClass(variant)}>
+        <div className={styles.copy}>
+          <Heading variant={variant} id={headingId}>
+            Zephium for Linux is on the way.
+          </Heading>
+          <p>News of the release goes out on Discord and X.</p>
+        </div>
+        <div className={styles.action}>
+          <CommunityLinks />
+        </div>
       </div>
     );
   }
@@ -49,6 +59,7 @@ export function LinuxWaitlist({ headingId }: { headingId: string }) {
     return (
       <Thanks
         headingId={headingId}
+        variant={variant}
         focusHeading={refocus === "thanks"}
         onAnother={() => {
           forgetJoined();
@@ -62,6 +73,7 @@ export function LinuxWaitlist({ headingId }: { headingId: string }) {
   return (
     <Signup
       headingId={headingId}
+      variant={variant}
       focusEmail={refocus === "email"}
       onJoined={() => {
         setRefocus("thanks");
@@ -72,13 +84,26 @@ export function LinuxWaitlist({ headingId }: { headingId: string }) {
   );
 }
 
+const rootClass = (variant: Variant) => (variant === "bar" ? `${styles.root} ${styles.bar}` : styles.root);
+
+function Heading({ variant, id, children, ...rest }: { variant: Variant; id: string } & ComponentProps<"h2">) {
+  const Tag = variant === "bar" ? "h3" : "h2";
+  return (
+    <Tag id={id} {...rest}>
+      {children}
+    </Tag>
+  );
+}
+
 /** The email field and its button in one row, and everything that can go wrong with them. */
 function Signup({
   headingId,
+  variant,
   focusEmail,
   onJoined,
 }: {
   headingId: string;
+  variant: Variant;
   focusEmail: boolean;
   onJoined: () => void;
 }) {
@@ -119,64 +144,70 @@ function Signup({
   }
 
   return (
-    <div className={styles.root}>
-      <h2 id={headingId}>Zephium for Linux is coming.</h2>
-      <p>Get one email when it&apos;s available.</p>
-      <form onSubmit={submit} noValidate aria-busy={pending} className={styles.form}>
-        <div hidden aria-hidden="true">
-          <label htmlFor={`${ids}-website`}>Leave this field empty</label>
-          <input
-            id={`${ids}-website`}
-            name="website"
-            type="text"
-            tabIndex={-1}
-            autoComplete="off"
-            maxLength={honeypotLimit}
-            value={website}
-            onChange={(event) => setWebsite(event.target.value)}
-          />
-        </div>
-        <div className={styles.row} data-invalid={problem === "invalid" || undefined}>
-          <label htmlFor={`${ids}-email`} className={styles.label}>
-            Email address
-          </label>
-          <input
-            ref={input}
-            id={`${ids}-email`}
-            type="email"
-            name="email"
-            placeholder="Email address"
-            autoComplete="email"
-            autoCapitalize="none"
-            spellCheck={false}
-            maxLength={254}
-            required
-            readOnly={pending}
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            aria-invalid={problem === "invalid" || undefined}
-            aria-describedby={problem ? `${quietId} ${noteId}` : quietId}
-            className={styles.input}
-          />
-          <button type="submit" disabled={pending || seconds > 0} className={styles.button}>
-            {pending ? (
-              <svg className={styles.spinner} viewBox="0 0 20 20" aria-hidden="true">
-                <circle cx="10" cy="10" r="7.5" pathLength="100" />
-              </svg>
-            ) : null}
-            {seconds > 0 ? `Try again in ${formatWait(seconds)}` : "Notify me"}
-          </button>
-        </div>
-        <p id={noteId} role="status" aria-live="polite" className={styles.note}>
-          {problem ? MESSAGES[problem] : null}
+    <div className={rootClass(variant)}>
+      <div className={styles.copy}>
+        <Heading variant={variant} id={headingId}>
+          Zephium for Linux is coming.
+        </Heading>
+        <p>Get one email when it&apos;s available.</p>
+      </div>
+      <div className={styles.action}>
+        <form onSubmit={submit} noValidate aria-busy={pending} className={styles.form}>
+          <div hidden aria-hidden="true">
+            <label htmlFor={`${ids}-website`}>Leave this field empty</label>
+            <input
+              id={`${ids}-website`}
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              maxLength={honeypotLimit}
+              value={website}
+              onChange={(event) => setWebsite(event.target.value)}
+            />
+          </div>
+          <div className={styles.row} data-invalid={problem === "invalid" || undefined}>
+            <label htmlFor={`${ids}-email`} className={styles.label}>
+              Email address
+            </label>
+            <input
+              ref={input}
+              id={`${ids}-email`}
+              type="email"
+              name="email"
+              placeholder="Email address"
+              autoComplete="email"
+              autoCapitalize="none"
+              spellCheck={false}
+              maxLength={254}
+              required
+              readOnly={pending}
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              aria-invalid={problem === "invalid" || undefined}
+              aria-describedby={problem ? `${quietId} ${noteId}` : quietId}
+              className={styles.input}
+            />
+            <button type="submit" disabled={pending || seconds > 0} className={styles.button}>
+              {pending ? (
+                <svg className={styles.spinner} viewBox="0 0 20 20" aria-hidden="true">
+                  <circle cx="10" cy="10" r="7.5" pathLength="100" />
+                </svg>
+              ) : null}
+              {seconds > 0 ? `Try again in ${formatWait(seconds)}` : "Notify me"}
+            </button>
+          </div>
+          <p id={noteId} role="status" aria-live="polite" className={styles.note}>
+            {problem ? MESSAGES[problem] : null}
+          </p>
+        </form>
+        <p id={quietId} className={styles.quiet}>
+          One release notification, not a newsletter, and no account. <Link href="/privacy">Privacy</Link>
         </p>
-      </form>
-      <p id={quietId} className={styles.quiet}>
-        One release notification, not a newsletter, and no account. <Link href="/privacy">Privacy</Link>
-      </p>
-      <noscript>
-        <p className={styles.note}>Turn on JavaScript to ask for the Linux notification.</p>
-      </noscript>
+        <noscript>
+          <p className={styles.note}>Turn on JavaScript to ask for the Linux notification.</p>
+        </noscript>
+      </div>
     </div>
   );
 }
@@ -184,10 +215,12 @@ function Signup({
 /** Joined. A check draws in, then ways to follow along until the email arrives. */
 function Thanks({
   headingId,
+  variant,
   focusHeading,
   onAnother,
 }: {
   headingId: string;
+  variant: Variant;
   focusHeading: boolean;
   onAnother: () => void;
 }) {
@@ -199,24 +232,28 @@ function Thanks({
   }, [focusHeading]);
 
   return (
-    <div className={styles.root}>
-      <span className={styles.check} aria-hidden="true">
-        <svg viewBox="0 0 48 48">
-          <circle cx="24" cy="24" r="22" pathLength="1" />
-          <path d="M15 25.5 21.5 32 33.5 17.5" pathLength="1" />
-        </svg>
-      </span>
-      <h2 id={headingId} ref={heading} tabIndex={-1}>
-        You&apos;re on the list.
-      </h2>
-      <p>We&apos;ll send one email when Zephium for Linux is ready.</p>
-      <div className={styles.wait}>
-        <h3>While you wait</h3>
-        <CommunityLinks />
+    <div className={rootClass(variant)}>
+      <div className={`${styles.copy} ${styles.thanks}`}>
+        <span className={styles.check} aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <circle cx="24" cy="24" r="22" pathLength="1" />
+            <path d="M15 25.5 21.5 32 33.5 17.5" pathLength="1" />
+          </svg>
+        </span>
+        <Heading variant={variant} id={headingId} ref={heading} tabIndex={-1}>
+          You&apos;re on the list.
+        </Heading>
+        <p>We&apos;ll send one email when Zephium for Linux is ready.</p>
       </div>
-      <button type="button" onClick={onAnother} className={styles.again}>
-        Use another address
-      </button>
+      <div className={styles.action}>
+        <div className={styles.wait}>
+          {variant === "bar" ? <h4>While you wait</h4> : <h3>While you wait</h3>}
+          <CommunityLinks />
+        </div>
+        <button type="button" onClick={onAnother} className={styles.again}>
+          Use another address
+        </button>
+      </div>
     </div>
   );
 }
