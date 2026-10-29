@@ -1,18 +1,49 @@
 import type { Metadata } from "next";
-import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
+import { ArrowUpRight01Icon, RssIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { CSSProperties } from "react";
 import { DownloadLink } from "@/components/download-link";
 import { PageShell } from "@/components/prose";
-import { RELEASES, releaseAnchor } from "@/lib/changelog";
+import { RELEASES, changelogFeedPath, releaseAnchor, type Release } from "@/lib/changelog";
+import { pageMetadata } from "@/lib/metadata";
 import { site } from "@/lib/site";
 import styles from "./changelog.module.css";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Changelog",
-  description: `What is new in ${site.name}, release by release.`,
-  alternates: { canonical: "/changelog" },
-};
+  description: `What is new in ${site.name}, release by release: the features, fixes and changes in every version since the first public beta, with the builds on GitHub.`,
+  path: "/changelog",
+});
+
+const WORDS = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+
+/** A quiet thank-you to the people outside the project whose changes are in a release. */
+function Thanks({ release }: { release: Release }) {
+  const { thanks = [], firstContributions = [] } = release;
+  if (thanks.length === 0) return null;
+  const names = thanks.map((handle) => (
+    <a key={handle} href={`https://github.com/${handle}`}>
+      @{handle}
+    </a>
+  ));
+  const first = firstContributions.length;
+  return (
+    <p className={styles.thanks}>
+      Thanks to{" "}
+      {names.map((name, index) => (
+        <span key={thanks[index]}>
+          {index > 0 ? (index === names.length - 1 ? " and " : ", ") : null}
+          {name}
+        </span>
+      ))}
+      {first > 1
+        ? `, and welcome to the ${WORDS[first] ?? first} of you who contributed for the first time.`
+        : first === 1
+          ? ", and welcome to a first-time contributor."
+          : "."}
+    </p>
+  );
+}
 
 const formatDate = (date: string) =>
   new Date(`${date}T12:00:00Z`).toLocaleDateString("en-US", {
@@ -25,6 +56,12 @@ const formatDate = (date: string) =>
 export default function ChangelogPage() {
   return (
     <PageShell title="Changelog" lede={`New in ${site.name}, release by release.`}>
+      <p className={styles.feed}>
+        <a href={changelogFeedPath}>
+          <HugeiconsIcon icon={RssIcon} size={15} strokeWidth={1.8} aria-hidden />
+          RSS feed
+        </a>
+      </p>
       <ol className={styles.releases}>
         {RELEASES.map((release, index) => (
           <li
@@ -56,6 +93,8 @@ export default function ChangelogPage() {
                   </ul>
                 </section>
               ))}
+
+              <Thanks release={release} />
 
               <div className={styles.links}>
                 {index === 0 ? (

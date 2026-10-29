@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -8,11 +9,11 @@ import { site } from "@/lib/site";
 import { Plans } from "./plans";
 import styles from "./pricing.module.css";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Pricing",
   description: `${site.name} is free and open source, with 250 Zephium AI credits to start. Pro is $20 a month with 2,000 credits; Max is $100 a month with 10,000.`,
-  alternates: { canonical: "/pricing" },
-};
+  path: "/pricing",
+});
 
 /** How usage works, said once and plainly. */
 const USAGE = [
@@ -83,6 +84,7 @@ export default function PricingPage() {
       lede={`The browser, Work and agents cost nothing, with your own keys or a local model. A plan adds Zephium AI credits for frontier models, with no keys to manage.`}
     >
       <div className={styles.page}>
+        <h2 className="sr-only">Plans</h2>
         <Plans />
 
         <section aria-labelledby="usage-title" className={styles.block}>

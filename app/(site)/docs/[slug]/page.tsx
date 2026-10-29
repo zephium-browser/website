@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { content } from "@/components/docs/content";
 import { DocPage } from "@/components/docs/doc-page";
 import { docPath, pages, topicBySlug } from "@/lib/docs";
-import { site } from "@/lib/site";
+import { DocsBreadcrumbs } from "@/components/structured-data";
+import { pageMetadata } from "@/lib/metadata";
 
 /** One page per topic, all built at deploy time. Anything else is a 404. */
 export const dynamicParams = false;
@@ -16,20 +17,12 @@ export async function generateMetadata({ params }: PageProps<"/docs/[slug]">): P
   const { slug } = await params;
   const topic = topicBySlug(slug);
   if (!topic) return {};
-  const title = `${topic.title} · Docs`;
-  return {
-    title,
+  return pageMetadata({
+    title: `${topic.title} · Docs`,
     description: topic.summary,
-    alternates: { canonical: docPath(topic.slug) },
-    openGraph: {
-      type: "article",
-      siteName: site.name,
-      title: `${title} · ${site.name}`,
-      description: topic.summary,
-      url: docPath(topic.slug),
-      locale: "en_US",
-    },
-  };
+    path: docPath(topic.slug),
+    type: "article",
+  });
 }
 
 export default async function DocsTopicPage({ params }: PageProps<"/docs/[slug]">) {
@@ -37,5 +30,10 @@ export default async function DocsTopicPage({ params }: PageProps<"/docs/[slug]"
   const topic = topicBySlug(slug);
   const doc = content[slug];
   if (!topic || !doc) notFound();
-  return <DocPage slug={topic.slug} title={topic.title} doc={doc} />;
+  return (
+    <>
+      <DocsBreadcrumbs title={topic.title} path={docPath(topic.slug)} />
+      <DocPage slug={topic.slug} title={topic.title} doc={doc} />
+    </>
+  );
 }

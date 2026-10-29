@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -7,11 +8,11 @@ import { PageShell } from "@/components/prose";
 import { site } from "@/lib/site";
 import styles from "./support.module.css";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Support",
   description: `Get help with ${site.name}: your account and billing, privacy, bugs, security reports and the community.`,
-  alternates: { canonical: "/support" },
-};
+  path: "/support",
+});
 
 const mail = (address: string) => <a href={`mailto:${address}`}>{address}</a>;
 

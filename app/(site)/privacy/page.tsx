@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { PageShell, Prose } from "@/components/prose";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy",
-  description: `How ${site.name} and ${new URL(site.url).host} handle your data: local browsing data, optional accounts, models you choose, and the optional Linux release notification.`,
-  alternates: { canonical: "/privacy" },
-};
+  description: `How ${site.name} and ${new URL(site.url).host} handle your data: no telemetry, your data on your device, an optional account, models you choose, and the optional Linux release notification.`,
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   const host = new URL(site.url).host;

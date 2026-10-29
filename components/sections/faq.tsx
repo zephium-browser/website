@@ -40,7 +40,7 @@ export const QUESTIONS: Question[] = [
   },
   {
     q: "When are Intel Macs, Linux, iOS and Android coming?",
-    a: "Intel Macs and Linux are next, and the mobile apps follow. Star the repository on GitHub to hear when they land.",
+    a: "Intel Macs and Linux are next, and the mobile apps follow. Watch the repository's releases on GitHub, or follow the changelog feed, to hear when they land.",
   },
 ];
 

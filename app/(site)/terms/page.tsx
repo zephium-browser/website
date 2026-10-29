@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { PageShell, Prose } from "@/components/prose";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Terms",
   description: `Terms of use for ${site.name}, Zephium AI and its website. The browser and website are open source under ${site.license}; the backend is under ${site.backendLicense}.`,
-  alternates: { canonical: "/terms" },
-};
+  path: "/terms",
+});
 
 export default function TermsPage() {
   const host = new URL(site.url).host;
