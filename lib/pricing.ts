@@ -49,7 +49,7 @@ export const plans: readonly Plan[] = [
     features: [
       "Everything in Free",
       "Automatic model routing: the right model for every step, for the best quality at the best cost",
-      "Every model, including frontier models such as Claude Opus, except Fable and Astra",
+      "Every Zephium AI model, frontier ones like Claude Opus included. Fable and Astra are Max only",
       "Top-ups whenever you need more",
     ],
     cta: "Get Pro",
