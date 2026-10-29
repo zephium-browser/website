@@ -41,13 +41,9 @@ const CAMERA_COMPACT: Record<Chapter, Camera> = {
   clarify: { x: 467, y: 700, zoom: 0.76 },
   spawn: { x: 1130, y: 553, zoom: 0.52 },
   results: { x: 2000, y: 370, zoom: 0.42 },
-  plan: { x: 2800, y: 470, zoom: 0.62 },
-  tasks: { x: 2800, y: 470, zoom: 0.62 },
+  plan: { x: 2800, y: 470, zoom: 0.7 },
+  tasks: { x: 2800, y: 470, zoom: 0.7 },
 };
-
-/** The page area the camera looks through, in design pixels. */
-export const PAGE = { wide: 1116, narrow: 934, tall: 684 };
-export const PAGE_COMPACT = { wide: 380, narrow: 198, tall: 690 };
 
 const clamp = (value: number, low = 0, high = 1) => Math.min(high, Math.max(low, value));
 const ease = (t: number) => t * t * (3 - 2 * t);
