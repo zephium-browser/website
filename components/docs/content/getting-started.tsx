@@ -135,8 +135,8 @@ export const gettingStarted: Doc = {
             Open <Path steps={["Settings", "General"]} /> and choose <strong>Set as default</strong> in the card at the top.
             Links you open in other apps then open in Zephium. In the
             same place, <strong>Open Zephium at login</strong> starts it when you sign in to your
-            computer, and <strong>On startup</strong> chooses between continuing where you left off and
-            starting with a new tab.
+            computer, and <strong>On startup</strong> chooses between starting with a new tab, which is the
+            default, continuing where you left off, and opening pages you pick.
           </p>
         </>
       ),

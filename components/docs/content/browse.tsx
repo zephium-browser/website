@@ -28,9 +28,14 @@ export const browse: Doc = {
             new one. Press <kbd>Return</kbd> to go, <kbd>Esc</kbd> to leave it.
           </p>
           <p>
-            Drag the edge of the sidebar to resize it. Drag it narrow, or press <Keys keys="⌘ ⇧ S" />{" "}
-            (<Keys keys="Ctrl Shift S" />), and it folds into a slim rail of icons. That is{" "}
-            <strong>Compact mode</strong>. Work always uses the rail.
+            Drag the edge of the sidebar to resize it. Drag it narrow and it folds into a slim rail of
+            icons. That is <strong>Compact mode</strong>. Work always uses the rail.
+          </p>
+          <p>
+            Press <Keys keys="⌘ ⇧ S" /> (<Keys keys="Ctrl Shift S" />) to hide the sidebar and give the
+            page the whole window. Move the pointer to the left edge of the window and the sidebar comes
+            out over the page, then tucks away again when you move off it. Press the same keys to bring it
+            back for good.
           </p>
           <H3 id="tabs">Working with tabs</H3>
           <p>Right-click a tab for its menu:</p>
@@ -142,6 +147,12 @@ export const browse: Doc = {
             Choose the gear in the corner, or open <Path steps={["Settings", "New Tab"]} />, to show a
             greeting, use your name in it, show or hide the clock, pick 12 or 24 hours, and count what is
             due on the Tasks shortcut.
+          </p>
+          <p>
+            The same page lets you change what a new tab looks like. Keep the Zephium sky, or choose a
+            picture from your computer and dim it if it is bright. Show or hide the wordmark and each
+            of the figures along the foot, and reset the page to how it came. A picture stays on your
+            device.
           </p>
         </>
       ),
@@ -307,13 +318,14 @@ export const browse: Doc = {
             <Path steps={["Settings", "Appearance"]} /> is where Zephium becomes yours. Choose{" "}
             <strong>System</strong>, <strong>Light</strong> or <strong>Dark</strong>; pick a theme or edit
             its colors, then copy it to share or import one someone gave you; set an accent color, the
-            interface font and its size; and choose a sidebar that is <strong>Expanded</strong> or{" "}
-            <strong>Compact</strong>, and a comfortable or compact density.
+            interface font and its size; and choose a sidebar that is <strong>Expanded</strong>,{" "}
+            <strong>Compact</strong> or <strong>Hidden</strong>, and a comfortable or compact density.
           </p>
           <p>
             <strong>Window material</strong> is what the window itself is made of. On macOS that is Liquid
-            Glass (which needs macOS 26), Vibrancy or Solid. On Windows it is Acrylic, Mica or Solid. <strong>Automatic</strong>{" "}
-            picks the best your system offers. <strong>Reduce motion</strong> keeps transitions subtle,
+            Glass (which needs macOS 26), Vibrancy or Solid. On Windows it is Mica, which is Mica Alt on Windows 11 and Acrylic on Windows 10, or Solid.{" "}
+            <strong>Automatic</strong> picks the best your system offers, and on a new tab the window&apos;s
+            glass takes on the light of the sky. <strong>Reduce motion</strong> keeps transitions subtle,
             and your system&apos;s own preference always takes priority.
           </p>
         </>
