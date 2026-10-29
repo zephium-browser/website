@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Cancel01Icon, Menu01Icon, StarIcon } from "@hugeicons/core-free-icons";
+import { AppleIcon, Cancel01Icon, Menu01Icon, StarIcon, WindowsNewIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useEffect, useRef, useState } from "react";
+import { siDiscord, siGithub, siLinux, siProducthunt, siX, siYoutube } from "simple-icons";
 import { ZephiumLockup } from "@/components/brand";
-import { DownloadLink } from "@/components/download-link";
+import { DownloadMenu } from "@/components/download-menu";
 import { useStars } from "@/components/use-stars";
 import { formatStars } from "@/lib/github";
-import { site } from "@/lib/site";
+import { downloadPath, site } from "@/lib/site";
 import styles from "./site-nav.module.css";
 
 const links = [
@@ -18,6 +19,15 @@ const links = [
   { href: "/changelog", label: "Changelog" },
   { href: "/about", label: "About" },
 ];
+
+/** Community links for the small-screen menu; one that is not set yet is left out. */
+const community = [
+  { label: "GitHub", href: site.repo, path: siGithub.path },
+  { label: "X", href: site.social.x, path: siX.path },
+  { label: "Discord", href: site.social.discord, path: siDiscord.path },
+  { label: "YouTube", href: site.social.youtube, path: siYoutube.path },
+  { label: "Product Hunt", href: site.social.producthunt, path: siProducthunt.path },
+].filter((item) => item.href);
 
 /**
  * The bar across the top. Over the sky it has no material at all; over the
@@ -61,7 +71,7 @@ export function SiteNav({ stars = 0 }: { stars?: number }) {
             <HugeiconsIcon icon={StarIcon} size={15} strokeWidth={1.8} aria-hidden />
             <span className={styles.count}>{count ? formatStars(count) : "Star"}</span>
           </a>
-          <DownloadLink className={styles.download}>Download</DownloadLink>
+          <DownloadMenu variant="nav" />
           <button
             type="button"
             className={styles.menu}
@@ -81,10 +91,36 @@ export function SiteNav({ stars = 0 }: { stars?: number }) {
             {link.label}
           </Link>
         ))}
-        <DownloadLink onClick={() => setOpen(false)}>Download</DownloadLink>
-        <a href={site.repo} onClick={() => setOpen(false)}>
-          GitHub
-        </a>
+        <Link href="/support" onClick={() => setOpen(false)}>
+          Support
+        </Link>
+        <div className={styles.downloads}>
+          <Link href={downloadPath({ platform: "macos" })} onClick={() => setOpen(false)}>
+            <HugeiconsIcon icon={AppleIcon} size={18} strokeWidth={1.8} aria-hidden />
+            Download for Mac
+          </Link>
+          <Link href={downloadPath({ platform: "windows" })} onClick={() => setOpen(false)}>
+            <HugeiconsIcon icon={WindowsNewIcon} size={18} strokeWidth={1.8} aria-hidden />
+            Download for Windows
+          </Link>
+          <Link href="/download#linux" onClick={() => setOpen(false)}>
+            <svg viewBox="0 0 24 24" className={styles.mark} aria-hidden="true">
+              <path d={siLinux.path} />
+            </svg>
+            Linux · Notify me
+          </Link>
+        </div>
+        <ul className={styles.community}>
+          {community.map((item) => (
+            <li key={item.label}>
+              <a href={item.href} aria-label={item.label}>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d={item.path} />
+                </svg>
+              </a>
+            </li>
+          ))}
+        </ul>
       </nav>
     </header>
   );

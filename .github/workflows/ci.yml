@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        waitlist: [disabled, mocked-staging, actions-only]
+        waitlist: [disabled, mocked-staging, unsubscribe-only]
     env:
       NEXT_PUBLIC_LINUX_WAITLIST_ENABLED: ${{ matrix.waitlist == 'mocked-staging' && 'true' || 'false' }}
       NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN: ${{ matrix.waitlist != 'disabled' && 'https://staging-api.zephium.app' || '' }}

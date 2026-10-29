@@ -36,8 +36,7 @@ and run the script.
 ```
 app/(site)/           pages with the nav, footer and page-view counting: home, pricing, download, support, workflows, changelog, about, docs, privacy, terms
 app/billing/return/   where checkout and the billing portal send people back to; no analytics
-app/linux/confirm/    explicit Linux notification confirmation/removal; no analytics or replay
-app/linux/unsubscribe/ launch-email removal link; no analytics or replay
+app/linux/unsubscribe/ the launch email's unsubscribe link; no analytics or replay
 public/.well-known/   security.txt (RFC 9116), served as text/plain by nginx
 components/scene/     the opening: sky, headline, and the Zephium window that plays the film
 components/sections/  the home page sections after it
@@ -73,13 +72,15 @@ deploy/, Dockerfile   the production container
   other sites shown in it are simplified likenesses with made-up content.
 - **No tracking.** No cookies and no third-party scripts. Page views are
   counted by a self-hosted, cookieless Umami, only when it is configured.
-  Query strings are never recorded. `/billing/return`, `/linux/confirm` and `/linux/unsubscribe` load
-  no analytics or replay: their HTML has no script for it, and nginx sends
-  them a CSP without the Umami origin.
+  Query strings are never recorded. `/billing/return` and `/linux/unsubscribe` load no analytics or
+  replay: their HTML has no script for it, and nginx sends them a CSP without
+  the Umami origin.
 
 ## Releases and downloads
 
-Every Download button goes to `/download?start=1`. The page starts the
+Every Download button goes to `/download?start=1`; the navigation and the opening
+use a split button (`components/download-menu.tsx`) whose menu starts a specific
+build (`?start=macos`, `?start=windows`). The page starts the
 download for the visitor's desktop (or the platform named, as in
 `?start=windows`), then removes the flag from the address, so a reload, a shared
 link or a crawler never starts one. Without the flag, or without JavaScript, it
@@ -94,22 +95,32 @@ Linux release notification calls only the public waitlist API.
 
 ## Linux release notification
 
-Disabled by default. The download page shows availability copy until explicitly
-enabled at build time. Submitting the email form requests one Linux release
-notification immediately: no confirmation step, immediate email, account or
-subscription. The optional hidden `website` field is a bot trap; legitimate
-submissions send an empty string. Success is generic, including duplicates and
-suppressed submissions, and does not prove mailbox ownership or list membership.
+Disabled by default. While it is off the download page shows "Zephium for Linux
+is coming" with links to follow along, and no form. Turned on, the page asks for
+an email address and the browser sends it once to the waitlist API: no
+confirmation step, email or account follows, and a duplicate gets the same
+answer as a new address. The hidden `website` field is a bot trap (200
+characters at most); real submissions send an empty string. The API's limits
+(5 per network and 3 per address in 15 minutes, 1 per address per minute) show
+as a short "Try again in 42s" on the button. A response the browser cannot read,
+or a timeout, is never reported as success; it says it could not confirm, and
+the visitor tries again by hand. Requests carry no cookies and are never
+retried.
 
-The enable flag controls signup only. Once an API origin is configured, email-link
-actions remain available even if signup is closed, so members can still opt out.
-`/linux/unsubscribe` is ready for the future launch email. `/linux/confirm` remains
-compatible with legacy confirmation and removal links; new signups never use it.
-Both static pages sit outside the analytics layout, with no external assets,
-indexing, referrer or caching. They read a token only from the email fragment,
-remove the fragment immediately, and send only after an explicit button click.
-A reload requires reopening the email link. Tokens and addresses are never
-persisted or logged by the website. GET requests never change membership.
+After joining, the page shows a thank-you and remembers it in this browser
+(`localStorage`: a flag and a time, never the address), so a return visit shows
+the thank-you with a "Use another address" link. Every storage access is
+guarded; with storage blocked the page still works.
+
+The enable flag controls signup only. Once an API origin is configured,
+`/linux/unsubscribe` keeps working even if signup is closed, so members can
+always opt out. It is for the future launch email, whose link is
+`/linux/unsubscribe#action=unsubscribe&token=<token>`. The static page sits outside
+the analytics layout, with no external assets, indexing, referrer or caching. It
+reads the token only from the fragment, removes the fragment before anything
+else runs, keeps the token in memory, and sends only after an explicit
+Unsubscribe click. A reload requires reopening the email link. GET requests
+never change membership.
 
 | Build variable | Default | Allowed value |
 | --- | --- | --- |
@@ -135,10 +146,11 @@ pnpm test:waitlist
 
 The test script uses Brave on macOS (`CHROMIUM_PATH` overrides it). On Linux,
 install Chromium with `pnpm exec playwright-core install --with-deps chromium`.
-CI checks enabled, disabled and signup-closed variants against nginx and uploads only the disabled
-export. Tests exercise success, errors, the honeypot, unknown outcomes/timeouts,
-cooldowns, explicit clicks, duplicates, malformed links, direct loads/reloads,
-privacy and layouts. These mocked tests never reach the real API or send mail.
+CI checks the disabled, enabled (mocked staging) and unsubscribe-only variants
+against nginx and uploads only the disabled export. Tests exercise success,
+duplicates, invalid input, the rate-limit countdown, unreadable and timed-out
+responses, the honeypot, the remembered state, the unsubscribe page and its
+fragment scrubbing, privacy and layouts. These mocked tests never reach the real API or send mail.
 `pnpm start` must receive the same
 API-origin environment as the build so its preview CSP matches nginx.
 

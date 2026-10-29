@@ -1,10 +1,10 @@
 "use client";
 
-import { AppleIcon, ArrowRight01Icon, GithubIcon, WindowsNewIcon } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon, GithubIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Fragment, useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { DownloadLink } from "@/components/download-link";
-import { useDesktop } from "@/components/preferred-platform";
+import { DownloadMenu } from "@/components/download-menu";
 import { site } from "@/lib/site";
 import { Clouds } from "./clouds";
 import {
@@ -68,7 +68,6 @@ export function Scene() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const compact = useCompact();
-  const desktop = useDesktop();
   const [flags, setFlags] = useState(() => flagsAt(0));
 
   useEffect(() => {
@@ -201,17 +200,7 @@ export function Scene() {
           </h1>
           <p className={styles.lede}>Fast, private and fully featured. Free and open source.</p>
           <div className={styles.actions}>
-            <DownloadLink className={styles.primary}>
-              {desktop ? (
-                <HugeiconsIcon
-                  icon={desktop === "macos" ? AppleIcon : WindowsNewIcon}
-                  size={17}
-                  strokeWidth={1.8}
-                  aria-hidden
-                />
-              ) : null}
-              {desktop === "macos" ? "Download for Mac" : desktop === "windows" ? "Download for Windows" : "Download"}
-            </DownloadLink>
+            <DownloadMenu variant="hero" />
             <a href={site.repo} className={styles.secondary}>
               <HugeiconsIcon icon={GithubIcon} size={17} strokeWidth={1.7} aria-hidden />
               Star on GitHub

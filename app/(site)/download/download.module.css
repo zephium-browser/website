@@ -35,6 +35,36 @@
   text-wrap: pretty;
 }
 
+/* The old link target: an empty marker at the top of the Linux panel. */
+.anchor {
+  display: block;
+  height: 0;
+}
+
+/* Under the Linux panel for a Linux visitor: the builds that exist today. */
+.alt {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 0.5px solid rgb(255 255 255 / 0.1);
+}
+
+.alt p {
+  color: var(--color-faint);
+  font-size: 14.5px;
+}
+
+.alt .buttons {
+  margin-top: 0;
+}
+
+.alt .secondary {
+  height: 44px;
+  margin-top: 0;
+}
+
 .check {
   display: grid;
   place-items: center;

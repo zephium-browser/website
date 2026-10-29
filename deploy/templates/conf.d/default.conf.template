@@ -48,15 +48,16 @@ server {
     return 301 /billing/return$is_args$args;
   }
 
-  # Both clean and .html addresses (plus the slash variant) must receive the
-  # private policy. No redirect before the browser has scrubbed its fragment.
-  location ~ ^/linux/(confirm|unsubscribe)(?:\.html|/)?$ {
+  # The unsubscribe link carries a private token in its fragment. Every spelling
+  # of the address must receive the private policy, and none may redirect before
+  # the browser has scrubbed the fragment.
+  location ~ ^/linux/unsubscribe(?:\.html|/)?$ {
     include /etc/nginx/snippets/headers-base.conf;
     add_header Referrer-Policy "no-referrer" always;
     add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' ${LINUX_WAITLIST_API_ORIGIN}; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'" always;
     add_header X-Robots-Tag "noindex, nofollow" always;
     add_header Cache-Control "no-store" always;
-    try_files /linux/$1.html =404;
+    try_files /linux/unsubscribe.html =404;
   }
 
   # Hashed build files never change under the same name.

@@ -1,0 +1,242 @@
+/*
+ * A split button: the lit capsule the bar and the opening already use, with a
+ * chevron at its end. Its menu is the same vibrancy as the mobile sheet.
+ */
+.root {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  border-radius: var(--radius-capsule);
+  background: #fff;
+  color: #0b1f36;
+  font-weight: 550;
+  letter-spacing: -0.012em;
+}
+
+.root[data-variant="hero"] {
+  height: 48px;
+  font-size: 15.5px;
+}
+
+.root[data-variant="nav"] {
+  height: 34px;
+  margin-left: 6px;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.main,
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition:
+    background-color 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+
+.main {
+  gap: 9px;
+  border-radius: var(--radius-capsule) 0 0 var(--radius-capsule);
+}
+
+[data-variant="hero"] .main {
+  padding-inline: 24px 14px;
+}
+
+[data-variant="nav"] .main {
+  gap: 7px;
+  padding-inline: 15px 10px;
+}
+
+/* In the bar on a narrow screen, "Download" alone leaves room for the other controls. */
+@media (max-width: 639px) {
+  [data-variant="nav"] .for {
+    display: none;
+  }
+}
+
+.toggle {
+  position: relative;
+  justify-content: center;
+  border-radius: 0 var(--radius-capsule) var(--radius-capsule) 0;
+}
+
+[data-variant="hero"] .toggle {
+  width: 42px;
+}
+
+[data-variant="nav"] .toggle {
+  width: 30px;
+}
+
+/* A hairline between the two parts, shorter than the button. */
+.toggle::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 25%;
+  bottom: 25%;
+  width: 1px;
+  background: rgb(11 31 54 / 0.16);
+}
+
+.toggle svg {
+  transition: transform 220ms var(--ease-emphasized);
+}
+
+.root[data-menu-open] .toggle svg {
+  transform: rotate(180deg);
+}
+
+.main:hover,
+.toggle:hover,
+.root[data-menu-open] .toggle {
+  background: #eef4fb;
+}
+
+.main:active,
+.toggle:active {
+  transform: scale(0.97);
+}
+
+.main:focus-visible,
+.toggle:focus-visible {
+  outline-offset: 2px;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 10;
+  display: grid;
+  width: min(19.5rem, calc(100vw - 24px));
+  padding: 6px;
+  border-radius: 20px;
+  background: rgb(22 22 26 / 0.9);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.14);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  backdrop-filter: blur(24px) saturate(1.8);
+  color: var(--color-text);
+  font-size: 14.5px;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+  transform-origin: 50% 0;
+  visibility: hidden;
+  transition:
+    opacity 160ms var(--ease-out),
+    transform 240ms var(--ease-emphasized),
+    visibility 0s 240ms;
+}
+
+.root[data-up] .menu {
+  top: auto;
+  bottom: calc(100% + 8px);
+  transform: translateY(6px) scale(0.98);
+  transform-origin: 50% 100%;
+}
+
+.root[data-menu-open] .menu {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition:
+    opacity 160ms var(--ease-out),
+    transform 240ms var(--ease-emphasized);
+}
+
+.item,
+.plain {
+  display: grid;
+  align-items: center;
+  min-height: 44px;
+  border-radius: var(--radius-row);
+  cursor: pointer;
+  transition: background-color 140ms var(--ease-out);
+}
+
+.item {
+  grid-template-columns: 20px 1fr auto;
+  gap: 12px;
+  padding: 9px 12px;
+}
+
+.plain {
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  padding: 9px 12px;
+  color: var(--color-muted);
+}
+
+.item:hover,
+.item:focus-visible,
+.plain:hover,
+.plain:focus-visible {
+  background: rgb(255 255 255 / 0.08);
+  outline: none;
+}
+
+.plain:hover,
+.plain:focus-visible {
+  color: var(--color-text);
+}
+
+.item:focus-visible,
+.plain:focus-visible {
+  box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.5);
+}
+
+.item:active,
+.plain:active {
+  background: rgb(255 255 255 / 0.12);
+}
+
+.mark {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  padding: 1px;
+}
+
+.text {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.name {
+  font-weight: 550;
+}
+
+.detail {
+  color: var(--color-faint);
+  font-size: 13px;
+}
+
+.notify {
+  padding: 4px 11px;
+  border-radius: var(--radius-capsule);
+  background: rgb(255 255 255 / 0.1);
+  font-size: 12.5px;
+  font-weight: 550;
+}
+
+.rule {
+  height: 0;
+  margin: 6px 8px;
+  border: 0;
+  border-top: 0.5px solid rgb(255 255 255 / 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu,
+  .root[data-menu-open] .menu,
+  .toggle svg {
+    transform: none;
+    transition: none;
+  }
+}
