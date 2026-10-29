@@ -73,6 +73,11 @@
   pointer-events: none;
 }
 
+/* The download menu opens over the window below the promise. */
+.copy:has([data-menu-open]) {
+  z-index: 2;
+}
+
 .stage[data-settled="true"] .copy {
   visibility: hidden;
 }

@@ -132,6 +132,14 @@
   box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.4);
 }
 
+/* On a phone the bar has room for the logo, the download and the menu; the
+   repository is in the menu's row of community links. */
+@media (max-width: 479px) {
+  .star {
+    display: none;
+  }
+}
+
 .count {
   font-variant-numeric: tabular-nums;
 }
@@ -162,32 +170,6 @@
   .menu {
     display: none;
   }
-}
-
-.download {
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  height: 34px;
-  margin-left: 6px;
-  padding-inline: 15px;
-  border-radius: var(--radius-capsule);
-  background: #fff;
-  color: #0b1f36;
-  font-size: 14px;
-  font-weight: 550;
-  letter-spacing: -0.01em;
-  transition:
-    background-color 160ms var(--ease-out),
-    transform 160ms var(--ease-out);
-}
-
-.download:hover {
-  background: #eef4fb;
-}
-
-.download:active {
-  transform: scale(0.97);
 }
 
 /* The menu on small screens: the same vibrancy, dropped under the bar. */
@@ -231,6 +213,63 @@
 
 .sheet a:active {
   background: rgb(255 255 255 / 0.08);
+}
+
+.sheet {
+  max-height: calc(100svh - var(--nav-height) - 12px);
+  overflow-y: auto;
+}
+
+/* The builds, set apart from the pages by a hairline. */
+.downloads {
+  display: grid;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 0.5px solid rgb(255 255 255 / 0.12);
+}
+
+.downloads a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 16px;
+}
+
+.downloads svg {
+  flex: none;
+}
+
+.downloads .mark {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.sheet .community {
+  display: flex;
+  gap: 8px;
+  margin: 6px 0 0;
+  padding: 14px 14px 8px;
+  border-top: 0.5px solid rgb(255 255 255 / 0.12);
+  list-style: none;
+}
+
+.sheet .community a {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.14);
+  color: rgb(244 244 246 / 0.75);
+}
+
+.community svg {
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
 }
 
 @media (min-width: 860px) {

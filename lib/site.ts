@@ -40,6 +40,7 @@ export const site = {
     x: "https://x.com/CryntaDev",
     discord: "https://discord.gg/tyveTUyEp7",
     youtube: "https://www.youtube.com/@crynta",
+    producthunt: "https://www.producthunt.com/@crynta",
   },
   /** Where to write, by topic. */
   contact: {
