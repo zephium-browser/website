@@ -1,0 +1,146 @@
+.section {
+  padding-block: clamp(80px, 10vw, 140px);
+}
+
+.head {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.head h2 {
+  font-size: var(--text-headline);
+  font-weight: 600;
+  line-height: var(--text-headline--line-height);
+  letter-spacing: var(--text-headline--letter-spacing);
+  text-wrap: balance;
+}
+
+.head p {
+  max-width: 30rem;
+  color: var(--color-muted);
+  font-size: var(--text-lede);
+  line-height: var(--text-lede--line-height);
+  letter-spacing: var(--text-lede--letter-spacing);
+  text-wrap: balance;
+}
+
+/* One column on a phone, two on a tablet, three on a desktop. The repository
+   leads and takes the width of two. */
+.grid {
+  display: grid;
+  gap: 12px;
+  margin-top: clamp(40px, 5vw, 64px);
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .lead {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 960px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .lead {
+    grid-column: span 2;
+  }
+}
+
+.grid li {
+  display: flex;
+}
+
+/* A plate with a hairline, like the cards above it. It is one link. */
+.card {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 24px;
+  border-radius: 24px;
+  background: #111113;
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.09);
+  transition:
+    background-color 250ms var(--ease-out),
+    box-shadow 250ms var(--ease-out);
+}
+
+.card:hover {
+  background: #18181b;
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.16);
+}
+
+.mark {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
+  fill: var(--color-text);
+}
+
+.text {
+  display: grid;
+  flex: 1;
+  gap: 4px;
+  min-width: 0;
+}
+
+.name {
+  color: var(--color-faint);
+  font-size: 13px;
+  letter-spacing: -0.005em;
+}
+
+.text b {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.body {
+  color: var(--color-muted);
+  font-size: 15.5px;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.stat {
+  margin-top: 10px;
+  color: var(--color-text);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.go {
+  flex: none;
+  color: var(--color-faint);
+  transition:
+    color 250ms var(--ease-out),
+    transform 250ms var(--ease-out);
+}
+
+.card:hover .go {
+  color: var(--color-text);
+  transform: translate(2px, -2px);
+}
+
+.card:focus-visible {
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover .go {
+    transform: none;
+  }
+}

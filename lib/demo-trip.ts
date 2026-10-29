@@ -15,7 +15,7 @@ export const trip = {
   questions: [
     {
       ask: "Which two weeks in March, and do you need a proper desk where you stay?",
-      answer: "Mar 2–16. Yes, a real desk.",
+      answer: "Mar 2 to 16. Yes, a real desk.",
     },
     {
       ask: "Is nonstop worth paying more for?",
@@ -26,8 +26,8 @@ export const trip = {
     agent: "Stays",
     status: "3 places near SoMa, two with a desk",
     site: "staybook.com",
-    page: "Stays in SoMa · Mar 2–16",
-    title: "Stays near SoMa, Mar 2–16",
+    page: "Stays in SoMa · Mar 2 to 16",
+    title: "Stays near SoMa, Mar 2 to 16",
     options: [
       {
         name: "Light-filled loft with a real desk",
@@ -66,7 +66,7 @@ export const trip = {
     agent: "Flights",
     status: "4 return options, 3 nonstop",
     site: "flightfinder.com",
-    page: "London ⇄ San Francisco · Mar 2–16",
+    page: "London ⇄ San Francisco · Mar 2 to 16",
     title: "London ⇄ San Francisco, return",
     options: [
       {
@@ -89,7 +89,7 @@ export const trip = {
         duration: "11h 05m",
         stops: "Nonstop",
         pick: true,
-        why: "Nonstop for £122 more — within what you said.",
+        why: "Nonstop for £122 more, within what you said.",
       },
       {
         airline: "British Airways",
@@ -115,7 +115,7 @@ export const trip = {
   },
   plan: {
     title: "Two weeks in San Francisco",
-    dates: "Mar 2–16",
+    dates: "Mar 2 to 16",
     summary:
       "Take the SoMa loft for its desk and the walk to Caltrain, and fly United nonstop. Together they come to about $3,970 before food and transport, well under your $6k. UK passports need an approved ESTA before you board.",
     figures: [
@@ -125,14 +125,14 @@ export const trip = {
     timeline: [
       { when: "Before booking", title: "Apply for an ESTA", detail: "Usually approved within 72 hours; apply before you pay for flights." },
       { when: "Mar 2", title: "Fly London → San Francisco", detail: "United · LHR 09:45 → SFO 12:50 · nonstop", cost: "£634 rtn" },
-      { when: "Mar 2–16", title: "Stay in SoMa", detail: "Light-filled loft · desk and monitor · 8 min to Caltrain", cost: "$3,120" },
+      { when: "Mar 2 to 16", title: "Stay in SoMa", detail: "Light-filled loft · desk and monitor · 8 min to Caltrain", cost: "$3,120" },
       { when: "Mar 16", title: "Fly San Francisco → London", detail: "United · SFO 16:10 → LHR 10:25 +1 · nonstop" },
     ],
     sources: ["staybook.com", "flightfinder.com", "esta.cbp.dhs.gov"],
   },
   tasks: [
     "Apply for an ESTA",
-    "Book the SoMa loft for Mar 2–16",
+    "Book the SoMa loft for Mar 2 to 16",
     "Book United LHR → SFO",
     "Put the trip on the calendar",
     "Share the plan with Alex",

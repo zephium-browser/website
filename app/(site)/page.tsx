@@ -1,6 +1,7 @@
 import { FilmPlayer } from "@/components/film";
 import { Scene } from "@/components/scene/scene";
 import { Browser, Everyday } from "@/components/sections/browser";
+import { Community } from "@/components/sections/community";
 import { Engine } from "@/components/sections/engine";
 import { Film } from "@/components/sections/film";
 import { Faq, QUESTIONS } from "@/components/sections/faq";
@@ -21,12 +22,13 @@ export default function Home() {
   return (
     <>
       <Scene />
-      <Film />
       <Browser />
       <Privacy />
       <Work />
       <Everyday />
       <Engine />
+      <Film />
+      <Community />
       <Faq />
       <FilmPlayer />
       <script

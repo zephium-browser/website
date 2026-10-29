@@ -6,6 +6,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { useEffect, useRef, useState } from "react";
 import { ZephiumLockup } from "@/components/brand";
 import { DownloadLink } from "@/components/download-link";
+import { useStars } from "@/components/use-stars";
 import { formatStars } from "@/lib/github";
 import { site } from "@/lib/site";
 import styles from "./site-nav.module.css";
@@ -22,25 +23,6 @@ const links = [
  * The bar across the top. Over the sky it has no material at all; over the
  * page it becomes a thin layer of vibrancy with a hairline under it.
  */
-/**
- * The star count: the one read when the site was built, then the one the
- * server keeps fresh (/stars.json, deploy/stars.sh), from our own origin.
- */
-function useStars(built: number) {
-  const [count, setCount] = useState(built);
-  useEffect(() => {
-    const controller = new AbortController();
-    fetch("/stars.json", { signal: controller.signal })
-      .then((response) => (response.ok ? response.json() : null))
-      .then((data: { stars?: number } | null) => {
-        if (data?.stars && data.stars > 0) setCount(data.stars);
-      })
-      .catch(() => {});
-    return () => controller.abort();
-  }, []);
-  return count;
-}
-
 export function SiteNav({ stars = 0 }: { stars?: number }) {
   const count = useStars(stars);
   const ref = useRef<HTMLElement>(null);

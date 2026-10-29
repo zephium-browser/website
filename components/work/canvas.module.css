@@ -244,8 +244,8 @@
 
 /* Findings */
 
-.findings h3,
-.plan h3 {
+.findings .title,
+.plan .title {
   font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -466,7 +466,7 @@
   font-size: 14px;
 }
 
-.plan h3 {
+.plan .title {
   font-size: 28px;
 }
 

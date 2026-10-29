@@ -16,12 +16,13 @@ export function getStars(): Promise<number> {
   return stars;
 }
 
-async function readStars(): Promise<number> {
+/** One read of the repository's API; null when GitHub could not be reached. */
+async function readRepo(suffix = ""): Promise<unknown> {
   const path = new URL(site.repo).pathname;
   try {
     // A token, when the build has one, lifts the anonymous limit altogether.
     const token = process.env.GITHUB_TOKEN;
-    const response = await fetch(`https://api.github.com/repos${path}`, {
+    const response = await fetch(`https://api.github.com/repos${path}${suffix}`, {
       headers: {
         Accept: "application/vnd.github+json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -29,12 +30,34 @@ async function readStars(): Promise<number> {
       next: { revalidate: 3600 },
       signal: AbortSignal.timeout(8000),
     });
-    if (!response.ok) return 0;
-    const data = (await response.json()) as { stargazers_count?: number };
-    return data.stargazers_count ?? 0;
+    return response.ok ? await response.json() : null;
   } catch {
-    return 0;
+    return null;
   }
+}
+
+async function readStars(): Promise<number> {
+  const data = (await readRepo()) as { stargazers_count?: number } | null;
+  return data?.stargazers_count ?? 0;
+}
+
+/**
+ * The people who have contributed code, read at build time and shared like the
+ * stars. Bots are left out. Zero means the number is unknown, so a page shows
+ * none rather than a wrong one.
+ */
+let contributors: Promise<number> | null = null;
+
+export function getContributors(): Promise<number> {
+  contributors ??= readContributors();
+  return contributors;
+}
+
+async function readContributors(): Promise<number> {
+  const data = await readRepo("/contributors?per_page=100&anon=0");
+  if (!Array.isArray(data)) return 0;
+  return data.filter((who: { type?: string; login?: string }) => who.type !== "Bot" && !who.login?.endsWith("[bot]"))
+    .length;
 }
 
 /** A count as a star button shows it: 980, 1.2k, 12k. */

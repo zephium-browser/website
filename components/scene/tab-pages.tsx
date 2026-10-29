@@ -130,7 +130,7 @@ export function LinearPage() {
         <div className={styles.linearList}>
           {ISSUES.map((section) => (
             <section key={section.group}>
-              <h4 data-tone={section.tone}>
+              <div className={styles.group} data-tone={section.tone}>
                 {section.tone === "done" ? (
                   <Icon icon={CheckmarkCircle02Icon} />
                 ) : section.tone === "progress" ? (
@@ -140,7 +140,7 @@ export function LinearPage() {
                 )}
                 {section.group}
                 <small>{section.rows.length}</small>
-              </h4>
+              </div>
               {section.rows.map((row) => (
                 <div key={row.id} className={styles.issue}>
                   <span className={styles.priority}>
@@ -236,7 +236,7 @@ export function NotionPage() {
         <div className={styles.notionCover} />
         <article className={styles.notionDoc}>
           <span className={styles.pageIcon}>🎬</span>
-          <h3>Shot list</h3>
+          <div className={styles.docTitle}>Shot list</div>
           <dl className={styles.props}>
             <dt>Status</dt>
             <dd>
@@ -247,12 +247,12 @@ export function NotionPage() {
             <dt>Cut in</dt>
             <dd>ElevenLabs Studio</dd>
           </dl>
-          <h4>Brief</h4>
+          <div className={styles.docHead}>Brief</div>
           <p>
             Three minutes, from first light on the pad to the stage clearing the clouds. The
             narration carries the opening, and the music only rises after ignition.
           </p>
-          <h4>Shots</h4>
+          <div className={styles.docHead}>Shots</div>
           <ul className={styles.checks}>
             {SHOTS.map((item) => (
               <li key={item.text} data-done={item.done || undefined}>
@@ -354,7 +354,7 @@ export function GitHubPage() {
           </div>
         </div>
         <aside className={styles.about}>
-          <h4>About</h4>
+          <div className={styles.aboutHead}>About</div>
           <p>A browser and work environment, reimagined for you and your agents.</p>
           <span className={styles.link}>zephium.app</span>
           <ul>
@@ -405,7 +405,7 @@ export function StaybookPage() {
           </span>
           <span>
             <small>Dates</small>
-            Mar 2 – 16
+            Mar 2 to 16
           </span>
           <span>
             <small>Guests</small>1 guest
@@ -512,7 +512,7 @@ export function FlightFinderPage() {
       </div>
       <div className={styles.ffBody}>
         <aside className={styles.ffFilters}>
-          <h4>Stops</h4>
+          <div className={styles.filterHead}>Stops</div>
           <label data-on>
             <i />
             Nonstop <small>£634</small>
@@ -520,18 +520,18 @@ export function FlightFinderPage() {
           <label data-on>
             <i />1 stop <small>£512</small>
           </label>
-          <h4>Airlines</h4>
+          <div className={styles.filterHead}>Airlines</div>
           {flights.map((flight) => (
             <label key={flight.airline} data-on>
               <i />
               {flight.airline}
             </label>
           ))}
-          <h4>Departure</h4>
+          <div className={styles.filterHead}>Departure</div>
           <span className={styles.ffRange}>
             <i />
           </span>
-          <small className={styles.ffRangeText}>06:00 – 15:00</small>
+          <small className={styles.ffRangeText}>06:00 to 15:00</small>
         </aside>
         <div className={styles.ffResults}>
           <div className={styles.ffSort}>
@@ -553,14 +553,14 @@ export function FlightFinderPage() {
               <i className={styles.ffCode}>{CODES[flight.airline]}</i>
               <span className={styles.ffTimes}>
                 <b>
-                  {flight.depart} – {flight.arrive}
+                  {flight.depart} to {flight.arrive}
                 </b>
                 <span>{flight.airline}</span>
               </span>
               <span className={styles.ffLeg}>
                 <b>{flight.duration}</b>
                 <span>
-                  {flight.from} – {flight.to}
+                  {flight.from} to {flight.to}
                 </span>
               </span>
               <span className={styles.ffStops}>{flight.stops}</span>

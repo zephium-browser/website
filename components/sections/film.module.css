@@ -1,12 +1,34 @@
+/* A closing band: the night sky from the product's new tab, fading in from
+   the page above and out into the page below, with the poster in the middle. */
 .section {
-  padding-block: clamp(96px, 14vw, 180px) 0;
+  position: relative;
+  padding-block: clamp(120px, 15vw, 220px);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  -webkit-mask-image: linear-gradient(transparent, #000 28%, #000 72%, transparent);
+  mask-image: linear-gradient(transparent, #000 28%, #000 72%, transparent);
+  opacity: 0.8;
+}
+
+.sky img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
 }
 
 .head {
   display: grid;
   justify-items: center;
   gap: 16px;
-  margin-bottom: clamp(36px, 5vw, 64px);
+  margin-bottom: clamp(40px, 5vw, 72px);
   text-align: center;
 }
 
@@ -19,8 +41,8 @@
 }
 
 .head p {
-  max-width: 34rem;
-  color: var(--color-muted);
+  max-width: 30rem;
+  color: rgb(244 244 246 / 0.76);
   font-size: var(--text-lede);
   line-height: var(--text-lede--line-height);
   letter-spacing: var(--text-lede--letter-spacing);
@@ -28,6 +50,6 @@
 }
 
 .poster {
-  max-width: 1200px;
+  max-width: 1120px;
   margin-inline: auto;
 }

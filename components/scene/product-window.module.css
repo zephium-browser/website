@@ -936,7 +936,7 @@
     opacity 200ms var(--ease-out);
 }
 
-.composer[data-typing] .tools {
+.composer[data-composing] .tools {
   max-width: 0;
   opacity: 0;
 }
@@ -994,7 +994,7 @@
     opacity 300ms var(--ease-out);
 }
 
-.composer[data-typing] .plus {
+.composer[data-composing] .plus {
   width: calc(var(--u) * 32);
   opacity: 1;
 }
@@ -1005,9 +1005,8 @@
   height: calc(var(--u) * 16);
 }
 
-/* The field: its placeholder, and the request typed word by word over it,
-   both scrubbed by the film's clock. A word takes room only once typed, so
-   a long request runs off the left the way a one-line field scrolls. */
+/* The field: its placeholder, and the request, which takes its place in
+   one soft move when the film reaches it and leaves the same way. */
 .input {
   display: grid;
   flex: 1;
@@ -1023,49 +1022,36 @@
 .placeholder,
 .typed {
   grid-area: 1 / 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .placeholder {
-  overflow: hidden;
   color: var(--faint);
-  text-overflow: ellipsis;
-  opacity: calc(clamp(0, (0.44 - var(--p, 0)) * 30, 1) + clamp(0, (var(--p, 0) - 1.15) * 14, 1));
+  transition: opacity 240ms var(--ease-out);
 }
 
 .typed {
-  display: flex;
-  justify-content: flex-end;
-  min-width: 0;
-  opacity: clamp(0, (1.15 - var(--p, 0)) * 14, 1);
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 6));
+  transition:
+    opacity 360ms var(--ease-out),
+    transform 400ms var(--ease-emphasized);
 }
 
-.line {
-  display: flex;
-  flex: none;
-  min-width: 100%;
+.composer[data-composing] .placeholder {
+  opacity: 0;
 }
 
-.line > span {
-  flex: none;
-  max-width: calc(clamp(0, (var(--p, 0) - var(--at)) * 60, 1) * var(--u) * 200);
-  overflow: hidden;
-  white-space: pre;
+.composer[data-composing] .typed {
+  opacity: 1;
+  transform: none;
 }
 
-.caret {
-  flex: none;
-  width: 1.5px;
-  height: calc(var(--u) * 18);
-  align-self: center;
-  margin-left: 1px;
-  border-radius: 1px;
-  background: var(--text);
-  animation: caret 1.06s steps(1) infinite;
-}
-
-@keyframes caret {
-  50% {
-    opacity: 0;
+@media (prefers-reduced-motion: reduce) {
+  .placeholder,
+  .typed {
+    transition: none;
   }
 }
 
@@ -1090,7 +1076,7 @@
     opacity 300ms var(--ease-out) 120ms;
 }
 
-.composer[data-typing] .model {
+.composer[data-composing] .model {
   max-width: calc(var(--u) * 180);
   padding: 0 calc(var(--u) * 14) 0 calc(var(--u) * 12);
   opacity: 1;
@@ -1149,12 +1135,12 @@
   height: calc(var(--u) * 16);
 }
 
-.composer[data-typing] .mic {
+.composer[data-composing] .mic {
   opacity: 0;
   scale: 0.6;
 }
 
-.composer[data-typing] .go {
+.composer[data-composing] .go {
   opacity: 1;
   scale: 1;
 }

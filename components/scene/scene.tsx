@@ -220,6 +220,9 @@ export function Scene() {
         </div>
 
         <div className={styles.frame}>
+          <a href="#browser" className={styles.skip}>
+            Skip the demo
+          </a>
           <ProductWindow flags={flags} compact={compact} onMode={onMode} />
         </div>
 
@@ -245,6 +248,11 @@ export function Scene() {
             ))}
           </nav>
         </div>
+
+        <span className={styles.hint} aria-hidden="true">
+          Scroll
+          <i />
+        </span>
 
         <span className={styles.dusk} aria-hidden="true" />
       </div>

@@ -56,9 +56,6 @@ const LINE: Record<IslandLine, { state: IslandState; text: string; action?: stri
   done: { state: "done", text: "The plan is ready, with five tasks", action: "Next" },
 };
 
-/** The request, word by word, as the composer types it. */
-const WORDS = trip.request.split(" ");
-
 const PARTS: IslandPart[] = [
   { title: "Stays", now: `Reading ${trip.stays.site}`, helper: "browser" },
   { title: "Flights", now: `Comparing fares on ${trip.flights.site}`, helper: "browser" },
@@ -451,7 +448,7 @@ export function ProductWindow({
         </div>
 
         {/* The composer: one sheet fused to the canvas's foot, on the window's glass. */}
-        <div className={styles.composer} data-typing={flags.typing || undefined} aria-hidden={!working}>
+        <div className={styles.composer} data-composing={flags.composing || undefined} aria-hidden={!working}>
           <svg className={styles.edge} viewBox="0 0 660 44" preserveAspectRatio="none" aria-hidden="true">
             <defs>
               <linearGradient id="composer-edge" x1="0" y1="0" x2="0" y2="1">
@@ -477,17 +474,7 @@ export function ProductWindow({
           </span>
           <span className={styles.input}>
             <span className={styles.placeholder}>What do you want to do?</span>
-            <span className={styles.typed} aria-hidden="true">
-              <span className={styles.line}>
-                {WORDS.map((word, index) => (
-                  <span key={`${word}-${index}`} style={{ "--at": 0.42 + (index / WORDS.length) * 0.5 } as CSSProperties}>
-                    {index ? " " : ""}
-                    {word}
-                  </span>
-                ))}
-                <i className={styles.caret} />
-              </span>
-            </span>
+            <span className={styles.typed}>{trip.request}</span>
           </span>
           <span className={styles.model}>
             <Mark id="chatgpt" size="calc(var(--u) * 15)" />
