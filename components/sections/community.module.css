@@ -1,11 +1,35 @@
+/* The close of the home page: the night sky from the product's new tab,
+   fading in from the page above and out into the page below, with the film in
+   the middle and panes of glass over it. */
 .section {
-  padding-block: clamp(80px, 10vw, 140px);
+  position: relative;
+  padding-block: clamp(112px, 14vw, 200px) clamp(88px, 10vw, 150px);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
+  mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
+  opacity: 0.9;
+}
+
+.sky img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
 }
 
 .head {
   display: grid;
   justify-items: center;
-  gap: 14px;
+  gap: 16px;
+  margin-bottom: clamp(40px, 5vw, 72px);
   text-align: center;
 }
 
@@ -18,12 +42,17 @@
 }
 
 .head p {
-  max-width: 30rem;
-  color: var(--color-muted);
+  max-width: 32rem;
+  color: rgb(244 244 246 / 0.82);
   font-size: var(--text-lede);
   line-height: var(--text-lede--line-height);
   letter-spacing: var(--text-lede--letter-spacing);
   text-wrap: balance;
+}
+
+.poster {
+  max-width: 1120px;
+  margin-inline: auto;
 }
 
 /* One column on a phone, two on a tablet, three on a desktop. The repository
@@ -31,7 +60,8 @@
 .grid {
   display: grid;
   gap: 12px;
-  margin-top: clamp(40px, 5vw, 64px);
+  max-width: 1120px;
+  margin: clamp(40px, 5vw, 64px) auto 0;
   list-style: none;
 }
 
@@ -60,7 +90,21 @@
   display: flex;
 }
 
-/* A plate with a hairline, like the cards above it. It is one link. */
+/* Glass over the sky: the picture behind it is blurred and made richer, with
+   a faint tint and a hairline. There is no shadow. The tint is enough to keep
+   the white text readable over the brightest clouds. */
+.card,
+.linux {
+  background:
+    linear-gradient(rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.07)),
+    rgb(6 12 28 / 0.34);
+  box-shadow:
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.2),
+    inset 0 0.5px 0 rgb(255 255 255 / 0.12);
+  -webkit-backdrop-filter: blur(28px) saturate(1.7);
+  backdrop-filter: blur(28px) saturate(1.7);
+}
+
 .card {
   position: relative;
   display: flex;
@@ -69,23 +113,25 @@
   gap: 18px;
   padding: 24px;
   border-radius: 24px;
-  background: #111113;
-  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.09);
   transition:
     background-color 250ms var(--ease-out),
     box-shadow 250ms var(--ease-out);
 }
 
 .card:hover {
-  background: #18181b;
-  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.16);
+  background:
+    linear-gradient(rgb(255 255 255 / 0.12), rgb(255 255 255 / 0.12)),
+    rgb(6 12 28 / 0.34);
+  box-shadow:
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.34),
+    inset 0 0.5px 0 rgb(255 255 255 / 0.18);
 }
 
 .mark {
   flex: none;
   width: 28px;
   height: 28px;
-  margin-top: 2px;
+  margin-top: 1px;
   fill: var(--color-text);
 }
 
@@ -96,12 +142,6 @@
   min-width: 0;
 }
 
-.name {
-  color: var(--color-faint);
-  font-size: 13px;
-  letter-spacing: -0.005em;
-}
-
 .text b {
   font-size: 19px;
   font-weight: 600;
@@ -109,7 +149,7 @@
 }
 
 .body {
-  color: var(--color-muted);
+  color: rgb(244 244 246 / 0.8);
   font-size: 15.5px;
   line-height: 1.45;
   text-wrap: pretty;
@@ -124,7 +164,7 @@
 
 .go {
   flex: none;
-  color: var(--color-faint);
+  color: rgb(244 244 246 / 0.6);
   transition:
     color 250ms var(--ease-out),
     transform 250ms var(--ease-out);
@@ -137,6 +177,33 @@
 
 .card:focus-visible {
   outline-offset: 2px;
+}
+
+/* The Linux bar: the same glass, one slim row under the cards. */
+.linux {
+  max-width: 1120px;
+  margin: 12px auto 0;
+  padding: 22px 24px;
+  border-radius: 24px;
+}
+
+@media (min-width: 640px) {
+  .linux {
+    margin-top: 16px;
+    padding: 22px 28px;
+  }
+}
+
+@media (max-width: 639px) {
+  .card {
+    gap: 14px;
+    padding: 20px;
+  }
+
+  .mark {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

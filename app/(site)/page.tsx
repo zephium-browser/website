@@ -3,7 +3,6 @@ import { Scene } from "@/components/scene/scene";
 import { Browser, Everyday } from "@/components/sections/browser";
 import { Community } from "@/components/sections/community";
 import { Engine } from "@/components/sections/engine";
-import { Film } from "@/components/sections/film";
 import { Faq, QUESTIONS } from "@/components/sections/faq";
 import { Privacy } from "@/components/sections/privacy";
 import { Work } from "@/components/sections/work";
@@ -29,7 +28,6 @@ export default function Home() {
       <Work />
       <Everyday />
       <Engine />
-      <Film />
       <Community />
       <Faq />
       <FilmPlayer />

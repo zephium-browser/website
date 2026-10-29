@@ -23,7 +23,7 @@ export const QUESTIONS: Question[] = [
   },
   {
     q: "Which extensions work?",
-    a: "The major Chrome extensions, such as 1Password, Bitwarden, Grammarly, Dark Reader, SponsorBlock and Notion Web Clipper, installed from the Chrome Web Store.",
+    a: "The major Chrome extensions work today, including 1Password, Bitwarden, Grammarly, Dark Reader and SponsorBlock, installed from the Chrome Web Store. A few extensions use features Zephium does not support yet, and support for more is coming soon.",
   },
   {
     q: "What leaves my device?",

@@ -228,8 +228,8 @@ try {
       for (const linux of [false, true]) {
         const f = await fixture(accepted, { linux });
         await openDownload(f.page);
-        await f.page.getByRole("heading", { name: "Zephium for Linux is coming." }).waitFor();
-        await f.page.getByText("Follow along and you'll hear the moment it lands.").waitFor();
+        await f.page.getByRole("heading", { name: "Zephium for Linux is on the way." }).waitFor();
+        await f.page.getByText("News of the release goes out on Discord and X.").waitFor();
         assert.equal(await field(f.page).count(), 0);
         assert.equal(await f.page.getByRole("button", { name: "Notify me" }).count(), 0);
         assert.equal(await f.page.getByText(/temporarily unavailable/i).count(), 0);

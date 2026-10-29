@@ -34,9 +34,13 @@ export const site = {
   film: { youtube: "QbSarcWspvw", title: "Introducing Zephium" },
   /** The person who makes Zephium. */
   author: { name: "Crynta", url: "https://github.com/crynta" },
-  /** Community links. An empty one is left out of the footer until it exists. */
+  /**
+   * Community links. An empty one is left out of the footer until it exists.
+   * GitHub is the organisation that owns the code; the maker's own profile is
+   * `author.url`. The other accounts are the maker's.
+   */
   social: {
-    github: "https://github.com/crynta",
+    github: "https://github.com/zephium-browser",
     x: "https://x.com/CryntaDev",
     discord: "https://discord.gg/tyveTUyEp7",
     youtube: "https://www.youtube.com/@crynta",
