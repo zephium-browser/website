@@ -10,8 +10,6 @@ import { Clouds } from "./clouds";
 import {
   CHAPTERS,
   MAX_RATE,
-  PAGE,
-  PAGE_COMPACT,
   SCENE_SCREENS,
   SCROLL,
   cameraAt,
@@ -75,24 +73,42 @@ export function Scene() {
     const stage = stageRef.current;
     if (!section || !stage) return;
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const page = compact ? PAGE_COMPACT : PAGE;
+
+    // Each value is written only to the pieces that read it, and only when it
+    // changed. Set on the stage, a value would be inherited by every element
+    // of the browser window and restyle all of them on each frame.
+    const intros = stage.querySelectorAll<HTMLElement>("[data-intro]");
+    const exits = stage.querySelectorAll<HTMLElement>("[data-exit]");
+    const clock = stage.querySelector<HTMLElement>("[data-clock]");
+    const lens = stage.querySelector<HTMLElement>("[data-camera]");
+    const written = new Map<string, string>();
+    const put = (key: string, value: string, targets: Iterable<HTMLElement | null>) => {
+      if (written.get(key) === value) return;
+      written.set(key, value);
+      for (const target of targets) target?.style.setProperty(key, value);
+    };
 
     // Where scroll says the film should be, and where it is.
     const goal = { p: 0, intro: 0, exit: 0 };
     const now = { p: -1, intro: 0, exit: 0 };
     let shown = flagsAt(0);
+    let settled = "";
     let frame = 0;
     let last = 0;
 
     const write = () => {
       const camera = cameraAt(now.p, compact);
-      stage.style.setProperty("--p", now.p.toFixed(4));
-      stage.style.setProperty("--intro", now.intro.toFixed(4));
-      stage.style.setProperty("--exit", now.exit.toFixed(4));
-      stage.style.setProperty("--cx", `${(page.wide / 2 - camera.x * camera.zoom).toFixed(2)}px`);
-      stage.style.setProperty("--cy", `${(page.tall / 2 - camera.y * camera.zoom).toFixed(2)}px`);
-      stage.style.setProperty("--zoom", camera.zoom.toFixed(4));
-      stage.dataset.settled = now.intro > 0.98 ? "true" : "false";
+      put("--p", now.p.toFixed(4), [clock]);
+      put("--intro", now.intro.toFixed(4), intros);
+      put("--exit", now.exit.toFixed(4), exits);
+      put("--cx", `${(-camera.x * camera.zoom).toFixed(2)}px`, [lens]);
+      put("--cy", `${(-camera.y * camera.zoom).toFixed(2)}px`, [lens]);
+      put("--zoom", camera.zoom.toFixed(4), [lens]);
+      const ready = now.intro > 0.98 ? "true" : "false";
+      if (ready !== settled) {
+        settled = ready;
+        stage.dataset.settled = settled;
+      }
       const next = flagsAt(now.p);
       if (!sameFlags(next, shown)) {
         shown = next;
@@ -128,8 +144,8 @@ export function Scene() {
     // The navigation sits on the sky without a material of its own, and takes
     // one on as the clouds sink and night falls.
     let sky: boolean | null = null;
+    let screen = stage.clientHeight || window.innerHeight;
     const read = () => {
-      const screen = stage.clientHeight || window.innerHeight;
       const screens = Math.max(0, -section.getBoundingClientRect().top) / screen;
       goal.intro = Math.min(1, screens / SCROLL.intro);
       goal.p = clockAt(screens);
@@ -143,14 +159,33 @@ export function Scene() {
       if (!frame) frame = requestAnimationFrame(tick);
     };
 
+    // On a phone the address bar growing and shrinking resizes the window by
+    // height alone; the stage is sized in small-viewport units and does not
+    // move, so only a change of width is worth reading again.
+    let wide = window.innerWidth;
+    const resize = () => {
+      if (window.innerWidth === wide) return;
+      wide = window.innerWidth;
+      screen = stage.clientHeight || window.innerHeight;
+      read();
+    };
+
+    // Looping animations (the canvas's pulses, the helpers' breathing) rest
+    // while the stage is out of sight, so the page below pays for none of them.
+    const sight = new IntersectionObserver(([entry]) => {
+      stage.toggleAttribute("data-paused", !entry?.isIntersecting);
+    });
+    sight.observe(stage);
+
     read();
     window.addEventListener("scroll", read, { passive: true });
-    window.addEventListener("resize", read);
+    window.addEventListener("resize", resize);
     return () => {
+      sight.disconnect();
       cancelAnimationFrame(frame);
       document.documentElement.removeAttribute("data-sky");
       window.removeEventListener("scroll", read);
-      window.removeEventListener("resize", read);
+      window.removeEventListener("resize", resize);
     };
   }, [compact]);
 
@@ -178,7 +213,7 @@ export function Scene() {
       <div ref={stageRef} className={styles.stage}>
         <Clouds className={styles.sky} />
 
-        <div className={styles.copy}>
+        <div className={styles.copy} data-intro>
           <DownloadLink className={styles.chip}>
             Available now for Mac and Windows
             <HugeiconsIcon icon={ArrowRight01Icon} size={13} strokeWidth={2} aria-hidden />
@@ -208,14 +243,14 @@ export function Scene() {
           </div>
         </div>
 
-        <div className={styles.frame}>
+        <div className={styles.frame} data-intro>
           <a href="#browser" className={styles.skip}>
             Skip the demo
           </a>
           <ProductWindow flags={flags} compact={compact} onMode={onMode} />
         </div>
 
-        <div className={styles.under}>
+        <div className={styles.under} data-intro>
           <p className={styles.caption} aria-live="polite">
             {CAPTIONS.map((text, index) => (
               <span key={text} data-on={index === flags.chapter || undefined}>
@@ -238,12 +273,12 @@ export function Scene() {
           </nav>
         </div>
 
-        <span className={styles.hint} aria-hidden="true">
+        <span className={styles.hint} aria-hidden="true" data-intro>
           Scroll
           <i />
         </span>
 
-        <span className={styles.dusk} aria-hidden="true" />
+        <span className={styles.dusk} aria-hidden="true" data-exit />
       </div>
     </section>
   );

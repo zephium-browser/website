@@ -32,3 +32,71 @@
   width: 100%;
   height: 100%;
 }
+
+/* Where the shader does not run (a touch screen, or a narrow one) the picture
+   is laid under the same crop and slight enlargement the shader gives it. It
+   arrives as a fade and leaves as night rising over it; nothing is redrawn
+   while it sits. */
+.still,
+.veil {
+  display: none;
+}
+
+/* The scene's progress through the exit, written on the veil itself. */
+@property --exit {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@media (pointer: coarse), (hover: none), (max-width: 720px) {
+  .canvas {
+    display: none;
+  }
+
+  .still {
+    position: absolute;
+    inset: 0;
+    display: block;
+    background: url("/sky/day-900.jpg") 50% 66% / cover no-repeat;
+    background-image: image-set(url("/sky/day-900.avif") type("image/avif"), url("/sky/day-900.jpg") type("image/jpeg"));
+    transform: scale(1.07);
+    transform-origin: 50% 66%;
+  }
+
+  /* Night is a tall veil, clear above and the page's ground below, that
+     slides up the screen as the scene ends: the sky goes from the bottom up,
+     the way the shader's halftone takes it, through a soft front. It is three
+     screens tall: one clear, a front of 0.4, and ground beyond, and it rises
+     1.4 screens so the ground has covered everything. */
+  .veil {
+    position: absolute;
+    inset: 0 0 auto;
+    display: block;
+    height: 300%;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 33.3%,
+      rgb(9 9 11 / 0.2) 35.5%,
+      rgb(9 9 11 / 0.55) 39.5%,
+      rgb(9 9 11 / 0.9) 44%,
+      var(--color-ground) 46.7%
+    );
+    pointer-events: none;
+    translate: 0 calc(-46.667% * clamp(0, (var(--exit) - 0.08) / 0.82, 1));
+    will-change: translate;
+  }
+}
+
+@media (min-width: 721px) and ((pointer: coarse) or (hover: none)) {
+  .still {
+    background-image: image-set(url("/sky/day-1672.avif") type("image/avif"), url("/sky/day-1672.jpg") type("image/jpeg"));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and ((pointer: coarse) or (hover: none) or (max-width: 720px)) {
+  .still {
+    animation: arrive 1.1s var(--ease-out) backwards;
+  }
+}

@@ -37,6 +37,24 @@
   transition: grid-template-columns 800ms var(--ease-emphasized);
 }
 
+/* On a touch screen the glass is a firmer tint instead of a blur: a blur this
+   wide, behind a window that rises and then changes inside, is recomputed on
+   every frame, and the glass only shows at the edges. */
+@media (pointer: coarse), (hover: none), (max-width: 720px) {
+  .window {
+    background: rgb(16 34 56 / 0.8);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* The canvas's looping pulses rest while Browse is showing. */
+.window:not([data-mode="work"]) .canvas *,
+.window:not([data-mode="work"]) .canvas *::before,
+.window:not([data-mode="work"]) .canvas *::after {
+  animation-play-state: paused;
+}
+
 /* A reset with no weight of its own, so every button's class wins over it. */
 :where(.window button) {
   appearance: none;
@@ -85,9 +103,34 @@
   transition-delay: 650ms;
 }
 
+/* On a phone Work gives the canvas the whole window: the rail fades, the
+   column closes, and the page, the island, the composer and the tasks take
+   its width. */
+.window[data-bare] {
+  grid-template-columns: 0 1fr;
+}
+
+.window[data-bare] .side {
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 400ms var(--ease-out) 600ms,
+    visibility 0s 1000ms;
+}
+
+.window[data-compact][data-bare] .composer {
+  left: 50%;
+  width: calc(var(--u) * 384);
+}
+
+.window[data-compact][data-bare] .taskList {
+  width: calc(var(--u) * 296);
+}
+
 .side {
   position: relative;
   min-width: 0;
+  transition: opacity 300ms var(--ease-out);
 }
 
 .toolbar {
@@ -695,6 +738,40 @@
   mask-size: 0 0, 0 0, auto;
 }
 
+/* The page stands off the window's edge by the margin the sidebar's column
+   gave it. With the column gone the page keeps that margin itself, moving as
+   the column closes. */
+.window[data-compact] .page {
+  transition:
+    mask-size 380ms var(--ease-emphasized),
+    -webkit-mask-size 380ms var(--ease-emphasized),
+    left 800ms var(--ease-emphasized);
+}
+
+.window[data-compact][data-mode="work"] .page {
+  transition:
+    mask-size 700ms var(--ease-emphasized) 900ms,
+    -webkit-mask-size 700ms var(--ease-emphasized) 900ms,
+    left 800ms var(--ease-emphasized) 650ms;
+}
+
+.window[data-compact][data-bare] .page {
+  --hole: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 424 44' preserveAspectRatio='none'%3E%3Cpath d='M0 44C8.8 44 20 35.2 20 24V22A22 22 0 0 1 42 0H382A22 22 0 0 1 404 22V24C404 35.2 415.2 44 424 44Z'/%3E%3C/svg%3E");
+  left: calc(var(--u) * 8);
+  -webkit-mask-size:
+    0 0,
+    calc(var(--u) * 424) calc(var(--u) * 44),
+    auto;
+  mask-size:
+    0 0,
+    calc(var(--u) * 424) calc(var(--u) * 44),
+    auto;
+}
+
+.window[data-compact][data-bare] .edge {
+  width: calc(var(--u) * 424);
+}
+
 /* The field in the notch, on the window's glass. */
 .notch {
   position: absolute;
@@ -837,10 +914,32 @@
   transition-delay: 850ms;
 }
 
+/* The camera looks at a point of the canvas from the middle of the page, so
+   the page can change width (a sidebar folding away) and the view follows. The
+   scene writes where it looks onto this element alone: not inherited, so the
+   canvas's four hundred elements are not restyled each time the camera moves. */
+@property --cx {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --cy {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --zoom {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
 .camera {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
   transform-origin: 0 0;
   transform: translate(calc(var(--cx) * var(--k)), calc(var(--cy) * var(--k))) scale(calc(var(--zoom) * var(--k)));
   will-change: transform;

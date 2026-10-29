@@ -27,7 +27,7 @@ import { Mark, type MarkId } from "@/components/browser/marks";
 import { Island, type IslandPart, type IslandState } from "@/components/island/island";
 import { Canvas } from "@/components/work/canvas";
 import { trip } from "@/lib/demo-trip";
-import { PAGE, PAGE_COMPACT, type Flags, type IslandLine } from "./film";
+import { type Flags, type IslandLine } from "./film";
 import { NewTab } from "./new-tab";
 import { ProfileStack } from "./profile-stack";
 import styles from "./product-window.module.css";
@@ -125,9 +125,10 @@ export function ProductWindow({
   const [stack, setStack] = useState(false);
   const [spins, setSpins] = useState(0);
 
-  const tab = TABS.find((entry) => entry.id === (current ?? (compact ? "notion" : NEW_TAB))) ?? TABS[0];
+  const tab = TABS.find((entry) => entry.id === (current ?? NEW_TAB)) ?? TABS[0];
   const folded = foldedByHand ?? compact;
-  const narrow = !working && !folded;
+  // On a phone the run needs the whole width: the sidebar leaves with Work.
+  const bare = compact && working;
   const newTab = tab.id === NEW_TAB && !working;
 
   // Fetch the other sites' pages while nothing else is happening.
@@ -171,8 +172,6 @@ export function ProductWindow({
     };
   }, [launcher, stack]);
 
-  const page = compact ? PAGE_COMPACT : PAGE;
-  const windowStyle = { "--pw": narrow ? page.narrow : page.wide } as CSSProperties;
   const line = flags.line ? LINE[flags.line] : null;
 
   const choose = (id: string) => {
@@ -187,13 +186,13 @@ export function ProductWindow({
       role="region"
       aria-label="Zephium, an interactive preview"
       className={styles.window}
-      style={windowStyle}
       data-mode={working ? "work" : "browse"}
       data-folded={(!working && folded) || undefined}
       data-compact={compact || undefined}
+      data-bare={bare || undefined}
       data-stack={stack || undefined}
     >
-      <aside className={styles.side}>
+      <aside className={styles.side} inert={bare}>
         <div className={styles.toolbar}>
           <span className={styles.lights} aria-hidden="true">
             <i />
@@ -387,8 +386,8 @@ export function ProductWindow({
             </div>
           </div>
 
-          <div className={styles.canvas} inert={!working}>
-            <div className={styles.camera}>
+          <div className={styles.canvas} inert={!working} data-clock>
+            <div className={styles.camera} data-camera>
               <Canvas flags={flags} />
             </div>
             <span className={styles.scrim} />
