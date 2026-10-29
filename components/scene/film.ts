@@ -1,7 +1,7 @@
 /*
  * The Work run as a film. Its clock is `p`, from 0 to 7: one unit per
  * chapter, and each whole number is a chapter at rest. Everything continuous
- * (the camera, pieces arriving, lines drawing, words typing) is a function of
+ * (the camera, pieces arriving, lines drawing) is a function of
  * `p`; the few things that switch (the mode, the island's words, a mood) are
  * read from it as flags, so the page re-renders only when one of them flips.
  */
@@ -102,8 +102,8 @@ export function flagsAt(p: number) {
   return {
     /** The switch has flipped to Work. */
     work: p >= 0.15,
-    /** The composer holds the request being written. */
-    typing: p >= 0.4 && p < 1.15,
+    /** The composer holds the request, which appears whole. */
+    composing: p >= 0.4 && p < 1.15,
     line,
     /** The helpers are reading their pages. */
     reading: p >= 3.3 && p < 4.15,
@@ -119,7 +119,7 @@ export type Flags = ReturnType<typeof flagsAt>;
 
 export const sameFlags = (a: Flags, b: Flags) =>
   a.work === b.work &&
-  a.typing === b.typing &&
+  a.composing === b.composing &&
   a.line === b.line &&
   a.reading === b.reading &&
   a.found === b.found &&

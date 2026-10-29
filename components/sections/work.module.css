@@ -46,32 +46,22 @@
   background: rgb(255 255 255 / 0.06);
 }
 
+/* One short, plain move: the whole request fades and settles together. */
+:root[data-reveals] .request[data-reveal]:not([data-shown]) {
+  transform: translateY(10px);
+  filter: none;
+}
+
+.request[data-reveal] {
+  transition:
+    opacity 360ms var(--ease-out),
+    transform 400ms var(--ease-emphasized);
+}
+
 .request p {
-  min-height: 1.45em;
   font-size: clamp(15px, 0.9rem + 0.3vw, 17px);
   line-height: 1.45;
   letter-spacing: -0.01em;
-}
-
-.caret {
-  display: inline-block;
-  width: 1.5px;
-  height: 1.1em;
-  margin-left: 2px;
-  vertical-align: -0.18em;
-  background: var(--color-text);
-  animation: blink 1s steps(1) infinite;
-}
-
-.request[data-done] .caret {
-  opacity: 0;
-  animation: none;
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
 }
 
 .canvas {
