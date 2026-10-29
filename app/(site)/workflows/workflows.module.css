@@ -3,10 +3,48 @@
 .list {
   display: grid;
   gap: clamp(72px, 10vw, 140px);
-  margin-top: clamp(64px, 8vw, 112px);
+  margin-top: clamp(56px, 7vw, 96px);
+}
+
+/* A row of links to each workflow, for finding the one that is yours. */
+.jump {
+  margin-top: 36px;
+}
+
+.jump ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.jump a {
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding-inline: 14px;
+  border-radius: var(--radius-capsule);
+  background: rgb(255 255 255 / 0.06);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.12);
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+}
+
+.jump a:hover {
+  background: rgb(255 255 255 / 0.11);
+  color: var(--color-text);
 }
 
 .workflow {
+  scroll-margin-top: calc(var(--nav-height) + 24px);
   display: grid;
   gap: 28px;
   align-items: center;
