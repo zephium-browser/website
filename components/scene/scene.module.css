@@ -4,9 +4,22 @@
   height: calc(var(--screens) * 100svh);
 }
 
+/* How far the opening has risen and the scene has left. The scene writes each
+   to the pieces that read it, so neither is inherited by the browser window's
+   hundreds of elements and restyles them on every frame. */
+@property --intro {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --exit {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
 .stage {
-  --intro: 0;
-  --exit: 0;
   /* The window: as large as the screen allows, between the bar and the caption. */
   --above: 80px;
   --below: 84px;
@@ -43,8 +56,8 @@
   pointer-events: none;
 }
 
-/* The live sky leaves through its own halftone instead. */
-.stage[data-sky="live"] .dusk {
+/* The live sky leaves through its own halftone, the plain one under a veil. */
+.stage[data-sky] .dusk {
   display: none;
 }
 
@@ -80,6 +93,16 @@
 
 .stage[data-settled="true"] .copy {
   visibility: hidden;
+}
+
+/* Nothing animates unseen: not the promise once the browser has covered it,
+   and nothing at all while the opening is off the screen. */
+.stage[data-settled="true"] .copy *,
+.stage[data-settled="true"] .copy *::before,
+.stage[data-paused] *,
+.stage[data-paused] *::before,
+.stage[data-paused] *::after {
+  animation-play-state: paused !important;
 }
 
 /* A small line above the promise, and a beam that runs round its edge. The beam is one conic gradient
@@ -144,7 +167,9 @@
   transform: translateX(2px);
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* The beam turns a custom property, which the main thread repaints on every
+   frame; a touch screen keeps it still and the battery keeps its charge. */
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
   .chip::before {
     animation: beam 4.5s linear infinite;
   }
@@ -313,6 +338,16 @@
   rotate: 45deg;
 }
 
+/* On a touch screen the cue is a plain veil: a blur behind it would be
+   recomputed on every frame of the opening. */
+@media (pointer: coarse), (hover: none), (max-width: 720px) {
+  .hint {
+    background: rgb(10 28 56 / 0.5);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
 /* A short window leaves no clear room under the buttons. */
 @media (max-height: 640px) {
   .hint {
@@ -406,6 +441,19 @@
   border: 0;
   background: none;
   cursor: pointer;
+}
+
+/* A finger needs more than a dash to land on: the touch target grows, the
+   dash does not, and the rows above it close up to make room. */
+@media (pointer: coarse) {
+  .under {
+    gap: 8px;
+  }
+
+  .steps button {
+    width: 26px;
+    height: 26px;
+  }
 }
 
 /* Each step is a short dash; the current one is long and lit. */

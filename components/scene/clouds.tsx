@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import styles from "./clouds.module.css";
 
 /*
@@ -14,8 +14,27 @@ import styles from "./clouds.module.css";
  * way, from the bottom up, into the night of the page below.
  *
  * Nothing is drawn while the sky is out of sight or fully gone. Where WebGL
- * is missing, the picture is shown plainly.
+ * is missing, the picture is shown plainly. So it is on a touch screen or a
+ * narrow one: nobody hovers there, and the shader would cost more than the
+ * motion is worth. The picture then arrives as a fade and leaves under a
+ * veil of night that rises over it, both drawn by the compositor alone
+ * (clouds.module.css).
  */
+
+/** Screens that get the picture without the shader. Kept in step with clouds.module.css. */
+const PLAIN = "(pointer: coarse), (hover: none), (max-width: 720px)";
+
+function usePlain() {
+  return useSyncExternalStore(
+    (change) => {
+      const query = window.matchMedia(PLAIN);
+      query.addEventListener("change", change);
+      return () => query.removeEventListener("change", change);
+    },
+    () => window.matchMedia(PLAIN).matches,
+    () => false,
+  );
+}
 
 const VERT = `
 attribute vec2 a_pos;
@@ -193,13 +212,20 @@ const easeOut = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
 export function Clouds({ className }: { className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const plain = usePlain();
 
   useEffect(() => {
     const root = ref.current;
     const canvas = canvasRef.current;
-    // The scene writes its progress (--exit) on the stage; the sky reads it there.
     const stage = root?.parentElement;
-    if (!root || !canvas || !stage) return;
+    if (!root || !stage) return;
+    if (plain) {
+      stage.dataset.sky = "plain";
+      return () => {
+        delete stage.dataset.sky;
+      };
+    }
+    if (!canvas) return;
     const flat = () => {
       root.dataset.flat = "";
     };
@@ -277,7 +303,8 @@ export function Clouds({ className }: { className?: string }) {
     let next = 0;
     let pointer: { x: number; y: number; t: number } | null = null;
 
-    const readExit = () => Number.parseFloat(stage.style.getPropertyValue("--exit")) || 0;
+    // The scene writes its progress (--exit) on the sky itself.
+    const readExit = () => Number.parseFloat(root.style.getPropertyValue("--exit")) || 0;
 
     const draw = (time: number) => {
       frame = 0;
@@ -437,11 +464,14 @@ export function Clouds({ className }: { className?: string }) {
       gl.deleteShader(frag);
       delete stage.dataset.sky;
     };
-  }, []);
+  }, [plain]);
 
   return (
-    <div ref={ref} className={`${styles.sky} ${className ?? ""}`} aria-hidden="true">
-      <canvas ref={canvasRef} className={styles.canvas} />
+    <div ref={ref} className={`${styles.sky} ${className ?? ""}`} aria-hidden="true" data-exit>
+      <link rel="preload" as="image" href="/sky/day-900.avif" type="image/avif" media="(max-width: 720px)" fetchPriority="high" />
+      {plain ? null : <canvas ref={canvasRef} className={styles.canvas} />}
+      <div className={styles.still} />
+      <div className={styles.veil} data-exit />
     </div>
   );
 }
