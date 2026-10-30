@@ -13,13 +13,14 @@ export function Privacy() {
     <section id="privacy" className={`container-page ${styles.section}`} aria-labelledby="privacy-title">
       <div className={styles.head}>
         <h2 id="privacy-title" data-reveal>
-          Yours to shape.
+          AI is optional.
           <br />
-          AI only if you want it.
+          Disable anytime.
+          <br />
+          Customize everything.
         </h2>
         <p data-reveal style={{ "--delay": "0.08s" } as CSSProperties}>
-          Pick any model, or turn AI off entirely, and you still have a complete, private browser.
-          Work, Notes, Tasks and focus can each go too, and turning one off deletes nothing.
+          Pick any model, or none at all. Zephium is a complete, private browser either way.
         </p>
       </div>
 
