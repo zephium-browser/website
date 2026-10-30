@@ -1008,7 +1008,8 @@
 
 .window[data-mode="work"] .composer {
   opacity: 1;
-  translate: -50% 0;
+  /* One pixel past the foot, so no browser leaves a seam under the sheet. */
+  translate: -50% 1px;
   transition-delay: 1150ms;
 }
 

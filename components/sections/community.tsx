@@ -76,15 +76,26 @@ export function Film() {
 }
 
 /**
- * The people around Zephium: the faces of everyone who has sent a change,
- * the places to find them, and the Linux release email for whoever is
- * waiting on it.
+ * The people around Zephium, under the night sky that closes the page: the
+ * faces of everyone who has sent a change, the places to find them, and the
+ * Linux release email for whoever is waiting on it.
  */
 export async function Community() {
   const [stars, contributors, faces] = await Promise.all([getStars(), getContributors(), getFaces()]);
   return (
-    <section id="community" className={`container-page ${styles.section}`} aria-labelledby="community-title">
-      <div className={styles.grid}>
+    <section id="community" className={styles.section} aria-labelledby="community-title">
+      <picture className={styles.sky}>
+        <source type="image/avif" srcSet="/sky/night-1200.avif 1200w, /sky/night-2200.avif 2200w" sizes="100vw" />
+        <img
+          src="/sky/night-1200.jpg"
+          srcSet="/sky/night-1200.jpg 1200w, /sky/night-2200.jpg 2200w"
+          sizes="100vw"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
+      <div className={`container-page ${styles.grid}`}>
         <div className={styles.intro}>
           <h2 id="community-title" data-reveal>
             Built in the open.
@@ -126,8 +137,10 @@ export async function Community() {
         </ul>
       </div>
 
-      <div id="linux" className={styles.linux} data-reveal>
-        <LinuxWaitlist headingId="community-linux-title" variant="bar" />
+      <div className="container-page">
+        <div id="linux" className={styles.linux} data-reveal>
+          <LinuxWaitlist headingId="community-linux-title" variant="bar" />
+        </div>
       </div>
     </section>
   );

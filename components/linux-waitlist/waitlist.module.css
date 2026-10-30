@@ -562,3 +562,17 @@
 .page .link:hover {
   color: var(--color-text);
 }
+
+/* The Linux mark beside the heading; the joined state has its check instead. */
+.tux {
+  display: inline-block;
+  width: 0.92em;
+  height: 0.92em;
+  margin-right: 0.42em;
+  vertical-align: -0.1em;
+  fill: currentColor;
+}
+
+.thanks .tux {
+  display: none;
+}

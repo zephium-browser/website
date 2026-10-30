@@ -29,8 +29,8 @@ export default function Home() {
       <Everyday />
       <Engine />
       <Film />
-      <Community />
       <Faq />
+      <Community />
       <FilmPlayer />
       <script
         type="application/ld+json"

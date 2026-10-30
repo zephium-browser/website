@@ -11,6 +11,8 @@ import {
   rememberJoined,
   subscribeJoined,
 } from "@/lib/linux-waitlist";
+import { siLinux } from "simple-icons";
+import { site } from "@/lib/site";
 import { CommunityLinks } from "./community-links";
 import { formatWait, useCountdown } from "./use-countdown";
 import styles from "./waitlist.module.css";
@@ -22,6 +24,13 @@ const MESSAGES: Record<Problem, string> = {
   limited: "Too many attempts. Please wait a moment.",
   unknown: "We couldn't confirm that. Please try again in a moment.",
 };
+
+/**
+ * The API answers the live site alone, so a local or preview copy adds why
+ * an attempt could not go through, rather than leaving it vague.
+ */
+const OFF_SITE = ` Sign-ups only go through on ${new URL(site.url).host}.`;
+const offSite = () => window.location.origin !== site.url;
 
 /** "panel" is centred and stands alone on the download page; "bar" is one slim row, for the end of the home page. */
 type Variant = "panel" | "bar";
@@ -86,10 +95,14 @@ export function LinuxWaitlist({ headingId, variant = "panel" }: { headingId: str
 
 const rootClass = (variant: Variant) => (variant === "bar" ? `${styles.root} ${styles.bar}` : styles.root);
 
+/** The heading, with the Linux mark beside it. */
 function Heading({ variant, id, children, ...rest }: { variant: Variant; id: string } & ComponentProps<"h2">) {
   const Tag = variant === "bar" ? "h3" : "h2";
   return (
     <Tag id={id} {...rest}>
+      <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.tux}>
+        <path d={siLinux.path} />
+      </svg>
       {children}
     </Tag>
   );
@@ -199,6 +212,7 @@ function Signup({
           </div>
           <p id={noteId} role="status" aria-live="polite" className={styles.note}>
             {problem ? MESSAGES[problem] : null}
+            {problem === "unknown" && offSite() ? OFF_SITE : null}
           </p>
         </form>
         <p id={quietId} className={styles.quiet}>

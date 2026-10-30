@@ -299,35 +299,38 @@
     scale(calc(0.96 + 0.04 * var(--intro)));
 }
 
-/* A quiet cue to scroll, at the foot of the opening. It sits over the window
-   on a faint veil of deeper sky, so it reads on cloud and on page alike, and
-   it is gone within the first few lines of scroll. */
+/* A quiet cue to scroll. Scene places it in the clear space between the
+   buttons and the window and shows it only while the page rests at the top,
+   so it never covers either. */
 .hint {
   position: absolute;
-  /* Just above the window's first peek, so it never sits on the page inside. */
-  top: calc(var(--start) - 50px);
   left: 50%;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 34px;
-  padding: 0 15px 0 17px;
+  height: 32px;
+  padding: 0 14px 0 16px;
   border-radius: var(--radius-capsule);
   color: #fff;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: -0.005em;
-  background: rgb(10 28 56 / 0.36);
+  background: rgb(10 28 56 / 0.4);
   box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.3);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  opacity: calc(1 - var(--intro) * 8);
+  opacity: 0;
   pointer-events: none;
-  translate: -50% 0;
+  translate: -50% 6px;
+  transition:
+    opacity 260ms var(--ease-out),
+    translate 260ms var(--ease-out);
 }
 
-.stage[data-settled="true"] .hint {
-  display: none;
+.hint[data-show="true"] {
+  opacity: 1;
+  translate: -50% 0;
+  transition:
+    opacity 700ms var(--ease-out),
+    translate 900ms var(--ease-emphasized);
 }
 
 .hint i {
@@ -337,23 +340,6 @@
   border-right: 1.5px solid currentColor;
   border-bottom: 1.5px solid currentColor;
   rotate: 45deg;
-}
-
-/* On a touch screen the cue is a plain veil: a blur behind it would be
-   recomputed on every frame of the opening. */
-@media (pointer: coarse), (hover: none), (max-width: 720px) {
-  .hint {
-    background: rgb(10 28 56 / 0.5);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
-}
-
-/* A short or narrow window leaves no clear room under the buttons; on a phone the window peeking in is cue enough. */
-@media (max-height: 640px), (max-width: 720px) {
-  .hint {
-    display: none;
-  }
 }
 
 /* For the keyboard: the demo window holds dozens of stops, so the first one
@@ -508,12 +494,8 @@
     animation-delay: calc(0.08s + var(--i) * 0.045s);
   }
 
-  .hint {
-    animation: rise 1s var(--ease-emphasized) 1.9s backwards;
-  }
-
-  .hint i {
-    animation: drift 2.2s ease-in-out 2.9s infinite;
+  .hint[data-show="true"] i {
+    animation: drift 2.2s ease-in-out 1s infinite;
   }
 
   .frame > * {

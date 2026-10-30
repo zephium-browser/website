@@ -1,29 +1,11 @@
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import type { CSSProperties } from "react";
-import { site } from "@/lib/site";
-import { Inventory } from "./privacy-inventory";
+import { Principles } from "./principles";
 import styles from "./privacy.module.css";
 
-const PROMISES = [
-  {
-    title: "Nothing leaves without you.",
-    body: "No telemetry and no usage analytics. History, tabs, Work and notes live in your profile, on your computer.",
-  },
-  {
-    title: "Any model, or none.",
-    body: "Your own key goes straight to OpenAI, Anthropic or Gemini, and a local model never leaves your device. Zephium AI passes prompts through and never stores them.",
-  },
-  {
-    title: "An account if you want one.",
-    body: "Browsing never asks for one. An account brings Zephium AI today, and free sync across your devices soon.",
-  },
-];
-
 /**
- * Whose browser it is. The switch from the product's own settings, and what
- * is left when AI is off, which is nearly everything; then the promises
- * behind it, said once and plainly.
+ * Whose browser it is: AI that can be switched off, nothing sent about how
+ * you browse, any model or none, an account only when it adds something, and
+ * source anyone can read. One principle at a time, each with its picture.
  */
 export function Privacy() {
   return (
@@ -38,26 +20,7 @@ export function Privacy() {
         </p>
       </div>
 
-      <Inventory />
-
-      <ul className={styles.promises}>
-        {PROMISES.map((promise, index) => (
-          <li key={promise.title} data-reveal style={{ "--delay": `${index * 0.06}s` } as CSSProperties}>
-            <b>{promise.title}</b>
-            <p>{promise.body}</p>
-          </li>
-        ))}
-        <li data-reveal style={{ "--delay": "0.18s" } as CSSProperties}>
-          <b>Open to read.</b>
-          <p>
-            The browser is open source, under the Mozilla Public License.{" "}
-            <a href={site.repo}>
-              Read the source
-              <HugeiconsIcon icon={ArrowRight01Icon} size={14} strokeWidth={2} aria-hidden />
-            </a>
-          </p>
-        </li>
-      </ul>
+      <Principles />
     </section>
   );
 }

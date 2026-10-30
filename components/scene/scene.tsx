@@ -65,6 +65,7 @@ function useCompact() {
 export function Scene() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const hintRef = useRef<HTMLSpanElement>(null);
   const compact = useCompact();
   const [flags, setFlags] = useState(() => flagsAt(0));
 
@@ -189,6 +190,45 @@ export function Scene() {
     };
   }, [compact]);
 
+  // The cue to scroll: set in the clear space between the buttons and the
+  // window, measured rather than guessed, and shown only while the page rests
+  // at the top. Where the space is too small for it, it stays away.
+  useEffect(() => {
+    const hint = hintRef.current;
+    const stage = stageRef.current;
+    const actions = stage?.querySelector(`.${styles.actions}`);
+    const frame = stage?.querySelector(`.${styles.frame}`);
+    if (!hint || !stage || !actions || !frame) return;
+    let timer = 0;
+    const place = () => {
+      const top = stage.getBoundingClientRect().top;
+      const from = actions.getBoundingClientRect().bottom - top;
+      const room = frame.getBoundingClientRect().top - top - from;
+      const fits = room >= hint.offsetHeight + 32;
+      hint.style.top = `${Math.round(from + (room - hint.offsetHeight) / 2)}px`;
+      return fits;
+    };
+    const update = () => {
+      window.clearTimeout(timer);
+      if (window.scrollY > 4) {
+        hint.dataset.show = "false";
+        return;
+      }
+      // Measured once the opening has settled, so the window is where it rests.
+      timer = window.setTimeout(() => {
+        hint.dataset.show = String(window.scrollY <= 4 && place());
+      }, 1400);
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [compact]);
+
   /** Scrolls the page to where a chapter rests. */
   const go = useCallback((chapter: number) => {
     const section = sectionRef.current;
@@ -273,7 +313,7 @@ export function Scene() {
           </nav>
         </div>
 
-        <span className={styles.hint} aria-hidden="true" data-intro>
+        <span ref={hintRef} className={styles.hint} aria-hidden="true">
           Scroll
           <i />
         </span>
