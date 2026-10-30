@@ -49,17 +49,24 @@ export function LinuxWaitlist({ headingId, variant = "panel" }: { headingId: str
   const [refocus, setRefocus] = useState<"thanks" | "email" | null>(null);
 
   if (!linuxWaitlistEnabled) {
+    // The bar sits right under the places to follow along, so it points to them rather than listing them again.
     return (
       <div className={rootClass(variant)}>
         <div className={styles.copy}>
           <Heading variant={variant} id={headingId}>
             Zephium for Linux is on the way.
           </Heading>
-          <p>News of the release goes out on Discord and X.</p>
+          <p>
+            {variant === "bar"
+              ? "Follow along in any of the places above to hear the day it lands."
+              : "News of the release goes out on Discord and X."}
+          </p>
         </div>
-        <div className={styles.action}>
-          <CommunityLinks />
-        </div>
+        {variant === "panel" ? (
+          <div className={styles.action}>
+            <CommunityLinks />
+          </div>
+        ) : null}
       </div>
     );
   }
@@ -257,7 +264,10 @@ function Thanks({
         <Heading variant={variant} id={headingId} ref={heading} tabIndex={-1}>
           You&apos;re on the list.
         </Heading>
-        <p>We&apos;ll send one email when Zephium for Linux is ready.</p>
+        <p>
+          We&apos;ll send one email when Zephium for Linux is ready.
+          {variant === "bar" ? " Until then, follow along in any of the places above." : null}
+        </p>
       </div>
       <div className={styles.action}>
         {/* The bar sits under the places to follow along, so it does not list them again. */}

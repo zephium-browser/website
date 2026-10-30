@@ -1,10 +1,16 @@
 /*
  * A picker wheel, drawn the way the system draws one: names on a drum that
  * turns toward you, the chosen one level and bright in a quiet band, the rest
- * curving away into the dark. --at is where the drum points; it is a typed
- * number so the turn can be eased between names.
+ * curving away into the dark. --at is where the drum points and --hush how
+ * far the other names have faded for Off; both are typed numbers so they ease.
  */
 @property --at {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --hush {
   syntax: "<number>";
   inherits: true;
   initial-value: 0;
@@ -22,8 +28,23 @@
   position: relative;
   height: calc(var(--row) * 6);
   perspective: 1100px;
-  transition: --at var(--spin, 0ms) var(--ease-emphasized);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    --at var(--spin, 0ms) var(--ease-emphasized),
+    --hush 900ms var(--ease-out);
   mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+}
+
+.wheel[data-dragging] {
+  cursor: grabbing;
+}
+
+/* Resting on Off, the names fade away and it stands alone. */
+.root[data-off] .wheel {
+  --hush: 1;
 }
 
 .band {
@@ -35,6 +56,11 @@
   border-radius: 20px;
   background: rgb(255 255 255 / 0.055);
   box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.1);
+  transition: opacity 900ms var(--ease-out);
+}
+
+.root[data-off] .band {
+  opacity: 0.45;
 }
 
 .drum {
@@ -60,8 +86,10 @@
   letter-spacing: -0.04em;
   text-align: center;
   white-space: nowrap;
-  cursor: pointer;
-  opacity: max(0, 1 - min(1, var(--far)) * 0.62 - var(--far) * 0.075);
+  cursor: inherit;
+  opacity: calc(
+    max(0, 1 - min(1, var(--far)) * 0.62 - var(--far) * 0.075) * (1 - min(1, var(--far) * 3) * var(--hush) * 0.92)
+  );
   transform: rotateX(calc(var(--d) * 20deg)) translateZ(var(--radius));
   /* Names round the back of the drum are not there to see or click. */
   scale: clamp(0, (5.5 - var(--far)) * 1000, 1);
@@ -125,7 +153,16 @@
     height: calc(var(--row) * 5.4);
   }
 
-  .band {
+  .wheel[data-dragging] {
+  cursor: grabbing;
+}
+
+/* Resting on Off, the names fade away and it stands alone. */
+.root[data-off] .wheel {
+  --hush: 1;
+}
+
+.band {
     border-radius: 16px;
   }
 

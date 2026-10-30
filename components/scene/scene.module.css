@@ -299,49 +299,6 @@
     scale(calc(0.96 + 0.04 * var(--intro)));
 }
 
-/* A quiet cue to scroll. Scene places it in the clear space between the
-   buttons and the window and shows it only while the page rests at the top,
-   so it never covers either. */
-.hint {
-  position: absolute;
-  left: 50%;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  height: 32px;
-  padding: 0 14px 0 16px;
-  border-radius: var(--radius-capsule);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: -0.005em;
-  background: rgb(10 28 56 / 0.4);
-  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.3);
-  opacity: 0;
-  pointer-events: none;
-  translate: -50% 6px;
-  transition:
-    opacity 260ms var(--ease-out),
-    translate 260ms var(--ease-out);
-}
-
-.hint[data-show="true"] {
-  opacity: 1;
-  translate: -50% 0;
-  transition:
-    opacity 700ms var(--ease-out),
-    translate 900ms var(--ease-emphasized);
-}
-
-.hint i {
-  width: 6px;
-  height: 6px;
-  margin-top: -3px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  rotate: 45deg;
-}
-
 /* For the keyboard: the demo window holds dozens of stops, so the first one
    offers a way past it. Hidden until it is focused. */
 .skip {
@@ -494,10 +451,6 @@
     animation-delay: calc(0.08s + var(--i) * 0.045s);
   }
 
-  .hint[data-show="true"] i {
-    animation: drift 2.2s ease-in-out 1s infinite;
-  }
-
   .frame > * {
     animation: lift 1.6s var(--ease-emphasized) 0.35s backwards;
   }
@@ -507,12 +460,6 @@
   from {
     opacity: 0;
     transform: translateY(14px);
-  }
-}
-
-@keyframes drift {
-  50% {
-    translate: 0 4px;
   }
 }
 

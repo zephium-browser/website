@@ -7,6 +7,7 @@ import {
   useSyncExternalStore,
   type CSSProperties,
   type KeyboardEvent,
+  type PointerEvent,
   type ReactNode,
 } from "react";
 import styles from "./model-wheel.module.css";
@@ -48,7 +49,8 @@ const CHOICES: Choice[] = [
     name: "Off",
     detail: (
       <>
-        <strong>Off.</strong> No model runs, your keys stay saved, and the browser is all here.
+        <strong>Off.</strong> No model runs, your keys stay saved, and everything else is right where
+        it was.
       </>
     ),
   },
@@ -59,14 +61,17 @@ const OFF = COUNT - 1;
 
 /** Where the wheel stops while it turns by itself, and how long it rests there. */
 const STOPS = [0, 1, 3, 8, OFF];
-const rest = (name: number) => (name === OFF ? 3600 : name === 0 ? 2600 : 1700);
+const rest = (name: number) => (name === OFF ? 4200 : name === 0 ? 2600 : 1700);
 
 /** A longer turn takes a little longer, the way a real wheel coasts. */
 const spinFor = (distance: number) => Math.min(1500, 420 + Math.abs(distance) * 90);
 
 /** The names go round three times, so the wheel can roll on past Off and settle back into the middle lap. */
 const LAPS = [0, 1, 2];
-const nameAt = (at: number) => ((at % COUNT) + COUNT) % COUNT;
+const nameAt = (at: number) => ((Math.round(at) % COUNT) + COUNT) % COUNT;
+
+/** How far a flick carries on after the pointer lets go, in milliseconds of its last speed. */
+const COAST = 260;
 
 function useReducedMotion() {
   return useSyncExternalStore(
@@ -80,23 +85,37 @@ function useReducedMotion() {
   );
 }
 
+type Drag = { id: number; y: number; from: number; moved: boolean; trail: { t: number; y: number }[] };
+
 /**
  * The model picker as a wheel of names that goes all the way round, Off
  * leading back to Zephium AI. While it is on screen it rolls by itself and
- * rests on a few of them; pointing at it holds it, and choosing a name, by
- * click or with the arrow keys, takes it over.
+ * rests on a few of them. It can be dragged and flicked like the system's
+ * own, clicked, turned with the arrow keys, or, once it has been touched,
+ * scrolled. Resting on Off, the other names fade away and Off stands alone.
  */
 export function ModelWheel() {
   const [at, setAt] = useState(COUNT);
   const [spin, setSpin] = useState(0);
   const [taken, setTaken] = useState(false);
   const [held, setHeld] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const [visible, setVisible] = useState(false);
   const still = useReducedMotion();
   const root = useRef<HTMLDivElement>(null);
+  const wheel = useRef<HTMLDivElement>(null);
   const items = useRef<(HTMLButtonElement | null)[]>([]);
+  const drag = useRef<Drag | null>(null);
+  const swallowClick = useRef(false);
+  const engaged = useRef(false);
+  const atRef = useRef(at);
   const name = nameAt(at);
   const playing = visible && !taken && !held && !still;
+  const off = name === OFF && !dragging;
+
+  useEffect(() => {
+    atRef.current = at;
+  }, [at]);
 
   useEffect(() => {
     const element = root.current;
@@ -110,13 +129,13 @@ export function ModelWheel() {
 
   // Once a turn has carried it out of the middle lap, step back into it unseen.
   useEffect(() => {
-    if (at >= COUNT && at < COUNT * 2) return;
+    if (dragging || (at >= COUNT && at < COUNT * 2)) return;
     const timer = window.setTimeout(() => {
       setSpin(0);
       setAt(COUNT + nameAt(at));
     }, spin + 40);
     return () => window.clearTimeout(timer);
-  }, [at, spin]);
+  }, [at, spin, dragging]);
 
   useEffect(() => {
     if (!playing) return;
@@ -129,11 +148,87 @@ export function ModelWheel() {
     return () => window.clearTimeout(timer);
   }, [playing, name, spin]);
 
+  // Scrolling turns the wheel only once it has been touched and while the pointer is on it, so the page never gets stuck.
+  useEffect(() => {
+    const element = wheel.current;
+    if (!element) return;
+    let settle = 0;
+    const onWheel = (event: WheelEvent) => {
+      if (!engaged.current) return;
+      event.preventDefault();
+      const delta = event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
+      const next = atRef.current + delta / (rowHeight() * 1.4);
+      atRef.current = next;
+      setSpin(0);
+      setAt(next);
+      window.clearTimeout(settle);
+      settle = window.setTimeout(() => {
+        setSpin(320);
+        setAt(Math.round(atRef.current));
+      }, 120);
+    };
+    element.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      window.clearTimeout(settle);
+      element.removeEventListener("wheel", onWheel);
+    };
+  }, []);
+
+  function rowHeight() {
+    return parseFloat(getComputedStyle(root.current ?? document.body).getPropertyValue("--row")) || 64;
+  }
+
+  /** Where the drum is right now, partway through a turn included. */
+  function liveAt() {
+    const value = wheel.current ? parseFloat(getComputedStyle(wheel.current).getPropertyValue("--at")) : NaN;
+    return Number.isFinite(value) ? value : atRef.current;
+  }
+
   function choose(next: number, focus = false) {
     setTaken(true);
     setSpin(spinFor(next - at));
     setAt(next);
     if (focus) items.current[COUNT + nameAt(next)]?.focus({ preventScroll: true });
+  }
+
+  function onPointerDown(event: PointerEvent<HTMLDivElement>) {
+    if (event.button !== 0) return;
+    engaged.current = true;
+    drag.current = { id: event.pointerId, y: event.clientY, from: 0, moved: false, trail: [] };
+  }
+
+  function onPointerMove(event: PointerEvent<HTMLDivElement>) {
+    const current = drag.current;
+    if (!current || current.id !== event.pointerId) return;
+    if (!current.moved) {
+      if (Math.abs(event.clientY - current.y) < 5) return;
+      current.moved = true;
+      current.y = event.clientY;
+      current.from = liveAt();
+      event.currentTarget.setPointerCapture(event.pointerId);
+      setTaken(true);
+      setDragging(true);
+      setSpin(0);
+    }
+    current.trail = [...current.trail.filter((point) => event.timeStamp - point.t < 100), { t: event.timeStamp, y: event.clientY }];
+    const next = current.from - (event.clientY - current.y) / rowHeight();
+    atRef.current = next;
+    setAt(next);
+  }
+
+  function onPointerUp(event: PointerEvent<HTMLDivElement>) {
+    const current = drag.current;
+    if (!current || current.id !== event.pointerId) return;
+    drag.current = null;
+    if (!current.moved) return;
+    swallowClick.current = true;
+    const first = current.trail[0];
+    const last = current.trail[current.trail.length - 1];
+    const speed = first && last && last.t > first.t ? (last.y - first.y) / (last.t - first.t) : 0;
+    const target = Math.round(atRef.current - (speed * COAST) / rowHeight());
+    setDragging(false);
+    setSpin(spinFor(target - atRef.current));
+    setAt(target);
   }
 
   function onKeyDown(event: KeyboardEvent) {
@@ -154,15 +249,29 @@ export function ModelWheel() {
   const choice = CHOICES[name] ?? CHOICES[0]!;
 
   return (
-    <div ref={root} className={styles.root}>
+    <div ref={root} className={styles.root} data-off={off || undefined}>
       <div
+        ref={wheel}
         className={styles.wheel}
+        data-dragging={dragging || undefined}
         style={{ "--at": at, "--spin": `${still ? 0 : spin}ms` } as CSSProperties}
         onPointerEnter={(event) => event.pointerType === "mouse" && setHeld(true)}
-        onPointerLeave={() => setHeld(false)}
+        onPointerLeave={() => {
+          setHeld(false);
+          engaged.current = false;
+        }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        onClickCapture={(event) => {
+          if (!swallowClick.current) return;
+          swallowClick.current = false;
+          event.stopPropagation();
+        }}
       >
         <span className={styles.band} aria-hidden="true" />
-        <div className={styles.drum} role="radiogroup" aria-label="Model" onKeyDown={onKeyDown}>
+        <div className={styles.drum} role="radiogroup" aria-label="AI" onKeyDown={onKeyDown}>
           {LAPS.flatMap((lap) =>
             CHOICES.map((item, i) => {
               const index = lap * COUNT + i;
