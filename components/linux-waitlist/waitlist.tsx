@@ -246,10 +246,13 @@ function Thanks({
         <p>We&apos;ll send one email when Zephium for Linux is ready.</p>
       </div>
       <div className={styles.action}>
-        <div className={styles.wait}>
-          {variant === "bar" ? <h4>While you wait</h4> : <h3>While you wait</h3>}
-          <CommunityLinks />
-        </div>
+        {/* The bar sits under the places to follow along, so it does not list them again. */}
+        {variant === "panel" ? (
+          <div className={styles.wait}>
+            <h3>While you wait</h3>
+            <CommunityLinks />
+          </div>
+        ) : null}
         <button type="button" onClick={onAnother} className={styles.again}>
           Use another address
         </button>

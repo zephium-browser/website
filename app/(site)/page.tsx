@@ -1,7 +1,7 @@
 import { FilmPlayer } from "@/components/film";
 import { Scene } from "@/components/scene/scene";
 import { Browser, Everyday } from "@/components/sections/browser";
-import { Community } from "@/components/sections/community";
+import { Community, Film } from "@/components/sections/community";
 import { Engine } from "@/components/sections/engine";
 import { Faq, QUESTIONS } from "@/components/sections/faq";
 import { Privacy } from "@/components/sections/privacy";
@@ -28,6 +28,7 @@ export default function Home() {
       <Work />
       <Everyday />
       <Engine />
+      <Film />
       <Community />
       <Faq />
       <FilmPlayer />

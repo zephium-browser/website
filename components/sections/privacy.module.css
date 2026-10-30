@@ -1,86 +1,248 @@
 .section {
   padding-block: clamp(110px, 13vw, 190px);
-  text-align: center;
 }
 
-.head h2 {
-  font-size: var(--text-headline);
+/* The heading on the left, what it means on the right, like the engine. */
+.top {
+  display: grid;
+  gap: 20px 64px;
+}
+
+@media (min-width: 1000px) {
+  .top {
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+  }
+}
+
+.top h2 {
+  max-width: 10em;
+  font-size: clamp(2.4rem, 1.4rem + 3.2vw, 4.4rem);
   font-weight: 600;
-  line-height: 1.02;
-  letter-spacing: -0.045em;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
 }
 
-.head p {
-  max-width: 30rem;
-  margin: 16px auto 0;
+.top p {
+  max-width: 34rem;
   color: var(--color-muted);
   font-size: var(--text-lede);
   line-height: 1.5;
   letter-spacing: -0.012em;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
-/* Three promises in a row, divided by hairlines, nothing around them. */
-.points {
+/*
+ * The plate: the AI setting on top, and below it everything the browser
+ * does, set large, the way a spec sheet lists what is inside.
+ */
+.plate {
+  margin-top: clamp(48px, 6vw, 80px);
+  padding: clamp(24px, 4.4vw, 56px);
+  border-radius: var(--radius-panel);
+  background: var(--color-plate);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.09);
+}
+
+.setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: clamp(22px, 3vw, 32px);
+  border-bottom: 0.5px solid rgb(255 255 255 / 0.1);
+}
+
+.label {
   display: grid;
-  max-width: 1080px;
-  margin: clamp(56px, 7vw, 88px) auto 0;
-  padding: 0;
-  border-top: 0.5px solid rgb(255 255 255 / 0.12);
-  list-style: none;
-  text-align: left;
+  gap: 3px;
 }
 
-.points li {
-  padding: 28px 0 0;
-}
-
-.points li + li {
-  margin-top: 28px;
-  border-top: 0.5px solid rgb(255 255 255 / 0.12);
-}
-
-@media (min-width: 860px) {
-  .points {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .points li {
-    padding: 32px 36px 0;
-  }
-
-  .points li:first-child {
-    padding-left: 0;
-  }
-
-  .points li + li {
-    margin-top: 0;
-    border-top: 0;
-    border-left: 0.5px solid rgb(255 255 255 / 0.12);
-  }
-}
-
-.points b {
+.label b {
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.015em;
 }
 
-.points p {
-  margin-top: 8px;
+.label span {
+  color: var(--color-muted);
+  font-size: 14.5px;
+}
+
+/* The switch, drawn like the extension switches above: lit when on. */
+.switch {
+  position: relative;
+  flex: none;
+  width: 64px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-capsule);
+  background: rgb(255 255 255 / 0.14);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.16);
+  cursor: pointer;
+  transition: background-color 360ms var(--ease-out);
+}
+
+.switch[aria-checked="true"] {
+  background: var(--color-lit);
+}
+
+.switch:focus-visible {
+  outline-offset: 4px;
+}
+
+.knob {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-capsule);
+  background: var(--color-lit);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+  transition:
+    translate 420ms var(--ease-emphasized),
+    width 220ms var(--ease-out),
+    background-color 360ms var(--ease-out);
+}
+
+.switch[aria-checked="true"] .knob {
+  translate: 26px 0;
+  background: var(--color-plate);
+}
+
+/* A pressed knob stretches toward where it is going, as the system's does. */
+.switch:active .knob {
+  width: 36px;
+}
+
+.switch[aria-checked="true"]:active .knob {
+  translate: 20px 0;
+}
+
+/*
+ * Everything the browser does, as one run of large type. The AI parts carry
+ * the sheen; with AI off they dim and a rule draws through them, and the rest
+ * does not move.
+ */
+.wall {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.18em 0;
+  margin: clamp(28px, 4vw, 48px) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: clamp(1.125rem, 0.55rem + 2.4vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+
+.wall li {
+  background: linear-gradient(rgb(244 244 246 / 0.6), rgb(244 244 246 / 0.6)) 0 58% / 0% 0.06em no-repeat;
+  color: var(--color-text);
+  transition:
+    color 500ms var(--ease-out),
+    opacity 500ms var(--ease-out),
+    background-size 520ms var(--ease-emphasized);
+}
+
+.wall li::after {
+  content: "·";
+  display: inline-block;
+  width: 1em;
+  color: rgb(244 244 246 / 0.22);
+  text-align: center;
+}
+
+.wall li:last-child::after {
+  content: none;
+}
+
+.wall li[data-ai] {
+  color: var(--color-sheen);
+}
+
+.plate[data-ai="off"] .wall li[data-ai] {
+  color: rgb(244 244 246 / 0.2);
+  background-size: calc(100% - 1em) 0.06em;
+}
+
+.caption {
+  display: grid;
+  margin-top: clamp(28px, 4vw, 44px);
   color: var(--color-muted);
   font-size: 15.5px;
+}
+
+/* Both lines hold the same cell, so the plate keeps its height. */
+.caption span {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 320ms var(--ease-out),
+    visibility 0s 320ms;
+}
+
+.caption span[data-on] {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 320ms var(--ease-out) 120ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .knob,
+  .switch,
+  .wall li,
+  .caption span {
+    transition: none;
+  }
+}
+
+/* The promises behind it, in a row, each under a hairline. */
+.promises {
+  display: grid;
+  gap: 36px 24px;
+  margin: clamp(56px, 7vw, 96px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .promises {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .promises {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.promises li {
+  padding-top: 20px;
+  border-top: 0.5px solid rgb(255 255 255 / 0.14);
+}
+
+.promises b {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.promises p {
+  margin-top: 8px;
+  color: var(--color-muted);
+  font-size: 15px;
   line-height: 1.55;
   text-wrap: pretty;
 }
 
-.source {
-  margin-top: clamp(56px, 7vw, 88px);
-  color: var(--color-faint);
-  font-size: 15px;
-}
-
-.source a {
+.promises a {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -89,14 +251,14 @@
   transition: opacity 160ms var(--ease-out);
 }
 
-.source a:hover {
+.promises a:hover {
   opacity: 0.75;
 }
 
-.source a svg {
+.promises a svg {
   transition: transform 200ms var(--ease-out);
 }
 
-.source a:hover svg {
+.promises a:hover svg {
   transform: translateX(2px);
 }

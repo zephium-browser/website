@@ -1,213 +1,246 @@
-/* The close of the home page: the night sky from the product's new tab,
-   fading in from the page above and out into the page below, with the film in
-   the middle and panes of glass over it. */
-.section {
+/* ---------- The film ---------- */
+
+.film {
+  padding-block: clamp(100px, 12vw, 170px) 0;
+}
+
+.filmHead {
+  text-align: center;
+}
+
+.filmHead h2 {
+  font-size: var(--text-headline);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.filmHead p {
+  max-width: 30rem;
+  margin: 14px auto 0;
+  color: var(--color-muted);
+  font-size: var(--text-lede);
+  line-height: 1.5;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+/*
+ * The screen. Behind the poster, the same picture blurred far out of focus
+ * lights the room around it, the way a screen does in the dark.
+ */
+.screen {
   position: relative;
-  padding-block: clamp(112px, 14vw, 200px) clamp(88px, 10vw, 150px);
+  max-width: 1120px;
+  margin: clamp(40px, 5vw, 64px) auto 0;
   isolation: isolate;
-  overflow: hidden;
 }
 
-.sky {
+.spill {
   position: absolute;
-  inset: 0;
+  inset: 6% 4%;
   z-index: -1;
-  -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
-  mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
-  opacity: 0.9;
+  opacity: 0.55;
+  filter: blur(clamp(48px, 7vw, 96px)) saturate(1.35);
+  transform: translateZ(0);
+  pointer-events: none;
 }
 
-.sky img {
+.spill img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 40%;
 }
 
-.head {
-  display: grid;
-  justify-items: center;
-  gap: 16px;
-  margin-bottom: clamp(40px, 5vw, 72px);
-  text-align: center;
+/* ---------- Built in the open ---------- */
+
+.section {
+  padding-block: clamp(110px, 13vw, 190px) clamp(80px, 9vw, 130px);
 }
 
-.head h2 {
-  font-size: var(--text-headline);
-  font-weight: 600;
-  line-height: var(--text-headline--line-height);
-  letter-spacing: var(--text-headline--letter-spacing);
-  text-wrap: balance;
-}
-
-.head p {
-  max-width: 32rem;
-  color: rgb(244 244 246 / 0.82);
-  font-size: var(--text-lede);
-  line-height: var(--text-lede--line-height);
-  letter-spacing: var(--text-lede--letter-spacing);
-  text-wrap: balance;
-}
-
-.poster {
-  max-width: 1120px;
-  margin-inline: auto;
-}
-
-/* One column on a phone, two on a tablet, three on a desktop. The repository
-   leads and takes the width of two. */
 .grid {
   display: grid;
-  gap: 12px;
-  max-width: 1120px;
-  margin: clamp(40px, 5vw, 64px) auto 0;
+  gap: 40px 64px;
+}
+
+@media (min-width: 1000px) {
+  .grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+  }
+}
+
+.intro h2 {
+  font-size: clamp(2.4rem, 1.4rem + 3.2vw, 4.4rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+
+.intro > p {
+  max-width: 28rem;
+  margin-top: 20px;
+  color: var(--color-muted);
+  font-size: var(--text-lede);
+  line-height: 1.5;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+}
+
+@media (min-width: 1000px) {
+  .intro {
+    position: sticky;
+    top: calc(var(--nav-height) + 40px);
+  }
+}
+
+/* The people: everyone who has sent a change, overlapping like a crowd. */
+.people {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 18px;
+  margin-top: clamp(28px, 3.5vw, 40px);
+}
+
+.faces {
+  display: flex;
+  margin: 0;
+  padding: 0 0 0 10px;
   list-style: none;
 }
 
-@media (min-width: 640px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-
-  .lead {
-    grid-column: 1 / -1;
-  }
+.faces li {
+  margin-left: -10px;
 }
 
-@media (min-width: 960px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .lead {
-    grid-column: span 2;
-  }
-}
-
-.grid li {
-  display: flex;
-}
-
-/* Glass over the sky: the picture behind it is blurred and made richer, with
-   a faint tint and a hairline. There is no shadow. The tint is enough to keep
-   the white text readable over the brightest clouds. */
-.card,
-.linux {
-  background:
-    linear-gradient(rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.07)),
-    rgb(6 12 28 / 0.34);
-  box-shadow:
-    inset 0 0 0 0.5px rgb(255 255 255 / 0.2),
-    inset 0 0.5px 0 rgb(255 255 255 / 0.12);
-  -webkit-backdrop-filter: blur(28px) saturate(1.7);
-  backdrop-filter: blur(28px) saturate(1.7);
-}
-
-.card {
+.faces a {
   position: relative;
-  display: flex;
-  flex: 1;
-  align-items: flex-start;
-  gap: 18px;
-  padding: 24px;
-  border-radius: 24px;
-  transition:
-    background-color 250ms var(--ease-out),
-    box-shadow 250ms var(--ease-out);
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--color-ground);
+  transition: transform 260ms var(--ease-out);
 }
 
-.card:hover {
-  background:
-    linear-gradient(rgb(255 255 255 / 0.12), rgb(255 255 255 / 0.12)),
-    rgb(6 12 28 / 0.34);
-  box-shadow:
-    inset 0 0 0 0.5px rgb(255 255 255 / 0.34),
-    inset 0 0.5px 0 rgb(255 255 255 / 0.18);
+.faces a:hover,
+.faces a:focus-visible {
+  z-index: 1;
+  transform: translateY(-3px);
 }
 
-.mark {
-  flex: none;
-  width: 28px;
-  height: 28px;
-  margin-top: 1px;
+.faces img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--color-surface);
+}
+
+.faces a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.16);
+}
+
+.stat {
+  color: var(--color-muted);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The places, as rows under hairlines: the mark, the name, what it is. */
+.places {
+  margin: 0;
+  padding: 0;
+  border-top: 0.5px solid rgb(255 255 255 / 0.12);
+  list-style: none;
+}
+
+.places li {
+  border-bottom: 0.5px solid rgb(255 255 255 / 0.12);
+}
+
+.place {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) 18px;
+  grid-template-areas:
+    "mark name go"
+    ". note go";
+  align-items: center;
+  gap: 4px 18px;
+  margin-inline: -16px;
+  padding: 22px 16px;
+  border-radius: var(--radius-row);
+  transition: background-color 200ms var(--ease-out);
+}
+
+@media (min-width: 640px) {
+  .place {
+    grid-template-columns: 22px 9.5rem minmax(0, 1fr) 18px;
+    grid-template-areas: "mark name note go";
+    padding-block: 26px;
+  }
+}
+
+.place:hover {
+  background: rgb(255 255 255 / 0.035);
+}
+
+.place svg:first-child {
+  grid-area: mark;
+  width: 20px;
+  height: 20px;
   fill: var(--color-text);
 }
 
-.text {
-  display: grid;
-  flex: 1;
-  gap: 4px;
-  min-width: 0;
-}
-
-.text b {
-  font-size: 19px;
+.place b {
+  grid-area: name;
+  font-size: 17px;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
 }
 
-.body {
-  color: rgb(244 244 246 / 0.8);
-  font-size: 15.5px;
+.place span {
+  grid-area: note;
+  color: var(--color-muted);
+  font-size: 15px;
   line-height: 1.45;
   text-wrap: pretty;
 }
 
-.stat {
-  margin-top: 10px;
-  color: var(--color-text);
-  font-size: 14px;
-  font-variant-numeric: tabular-nums;
-}
-
 .go {
-  flex: none;
-  color: rgb(244 244 246 / 0.6);
+  grid-area: go;
+  color: var(--color-faint);
   transition:
-    color 250ms var(--ease-out),
-    transform 250ms var(--ease-out);
+    color 200ms var(--ease-out),
+    transform 260ms var(--ease-out);
 }
 
-.card:hover .go {
+.place:hover .go {
   color: var(--color-text);
   transform: translate(2px, -2px);
 }
 
-.card:focus-visible {
-  outline-offset: 2px;
-}
-
-/* The Linux bar: the same glass, one slim row under the cards. */
+/* Linux: the release email, on a plate of its own under everything. */
 .linux {
-  max-width: 1120px;
-  margin: 12px auto 0;
-  padding: 22px 24px;
-  border-radius: 24px;
-}
-
-@media (min-width: 640px) {
-  .linux {
-    margin-top: 16px;
-    padding: 22px 28px;
-  }
-}
-
-@media (max-width: 639px) {
-  .card {
-    gap: 14px;
-    padding: 20px;
-  }
-
-  .mark {
-    width: 24px;
-    height: 24px;
-  }
+  margin-top: clamp(56px, 7vw, 96px);
+  padding: clamp(24px, 3.6vw, 40px);
+  border-radius: var(--radius-panel);
+  background: var(--color-plate);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.09);
+  scroll-margin-top: calc(var(--nav-height) + 24px);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card:hover .go {
-    transform: none;
+  .faces a,
+  .place,
+  .go {
+    transition: none;
   }
 }

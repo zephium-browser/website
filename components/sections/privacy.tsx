@@ -2,59 +2,62 @@ import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { CSSProperties } from "react";
 import { site } from "@/lib/site";
-import { PrivacyFeatures } from "./privacy-features";
+import { Inventory } from "./privacy-inventory";
 import styles from "./privacy.module.css";
 
-const POINTS = [
+const PROMISES = [
   {
-    title: "On your device.",
-    body: "History, tabs, Work and notes stay in your profile, on your computer. There is no telemetry and no usage analytics.",
+    title: "Nothing leaves without you.",
+    body: "No telemetry and no usage analytics. History, tabs, Work and notes live in your profile, on your computer.",
   },
   {
-    title: "Your model, your call.",
-    body: "Your own key goes straight from your device to OpenAI, Anthropic or Gemini, and a local model never leaves it. Zephium AI prompts pass through to the model and are never stored.",
+    title: "Any model, or none.",
+    body: "Your own key goes straight to OpenAI, Anthropic or Gemini, and a local model never leaves your device. Zephium AI passes prompts through and never stores them.",
   },
   {
-    title: "An account when you want one.",
-    body: "It is optional. Today it brings Zephium AI, and free sync across your devices is coming. Browsing never needs one.",
+    title: "An account if you want one.",
+    body: "Browsing never asks for one. An account brings Zephium AI today, and free sync across your devices soon.",
   },
 ];
 
 /**
- * A browser first, and yours to shape: the Features switches with the window
- * they change, then three plain promises about where things live.
+ * Whose browser it is. The switch from the product's own settings, and what
+ * is left when AI is off, which is nearly everything; then the promises
+ * behind it, said once and plainly.
  */
 export function Privacy() {
   return (
     <section id="privacy" className={`container-page ${styles.section}`} aria-labelledby="privacy-title">
-      <header className={styles.head}>
+      <div className={styles.top}>
         <h2 id="privacy-title" data-reveal>
-          Yours, with or without AI.
+          A browser that answers to you.
         </h2>
         <p data-reveal style={{ "--delay": "0.08s" } as CSSProperties}>
-          Zephium is a complete browser on its own. Add AI and Work when you want them, and take
-          them away whenever you like.
+          Zephium is complete on its own. AI is there when you call on it and gone when you switch
+          it off, and what you do stays on your device.
         </p>
-      </header>
+      </div>
 
-      <PrivacyFeatures />
+      <Inventory />
 
-      <ul className={styles.points}>
-        {POINTS.map((point, index) => (
-          <li key={point.title} data-reveal style={{ "--delay": `${index * 0.08}s` } as CSSProperties}>
-            <b>{point.title}</b>
-            <p>{point.body}</p>
+      <ul className={styles.promises}>
+        {PROMISES.map((promise, index) => (
+          <li key={promise.title} data-reveal style={{ "--delay": `${index * 0.06}s` } as CSSProperties}>
+            <b>{promise.title}</b>
+            <p>{promise.body}</p>
           </li>
         ))}
+        <li data-reveal style={{ "--delay": "0.18s" } as CSSProperties}>
+          <b>Open to read.</b>
+          <p>
+            The browser is open source, under the Mozilla Public License.{" "}
+            <a href={site.repo}>
+              Read the source
+              <HugeiconsIcon icon={ArrowRight01Icon} size={14} strokeWidth={2} aria-hidden />
+            </a>
+          </p>
+        </li>
       </ul>
-
-      <p className={styles.source} data-reveal>
-        The browser is open source under the Mozilla Public License.{" "}
-        <a href={site.repo}>
-          Read the source
-          <HugeiconsIcon icon={ArrowRight01Icon} size={14} strokeWidth={2} aria-hidden />
-        </a>
-      </p>
     </section>
   );
 }

@@ -5,6 +5,7 @@ import { siDiscord, siGithub, siProducthunt, siX, siYoutube } from "simple-icons
 import { FilmPoster } from "@/components/film";
 import { LinuxWaitlist } from "@/components/linux-waitlist/waitlist";
 import { getContributors, getStars } from "@/lib/github";
+import { getFaces } from "@/lib/contributors";
 import { hasFilm, site } from "@/lib/site";
 import { RepoStats } from "./community-stats";
 import styles from "./community.module.css";
@@ -12,105 +13,121 @@ import styles from "./community.module.css";
 const PLACES = [
   {
     id: "github",
-    href: site.repo,
+    name: "GitHub",
+    note: "The browser, this website and the backend, all open source.",
+    href: site.social.github,
     path: siGithub.path,
-    title: "Star Zephium on GitHub",
-    body: "The browser, this website and the backend, all open source.",
   },
   {
     id: "discord",
+    name: "Discord",
+    note: "The community: questions, bugs and ideas.",
     href: site.social.discord,
     path: siDiscord.path,
-    title: "Join the community",
-    body: "Ask questions, report bugs, and talk with the people who make and use Zephium.",
   },
   {
     id: "x",
+    name: "X",
+    note: "Crynta, who makes Zephium, building it in public.",
     href: site.social.x,
     path: siX.path,
-    title: `Follow ${site.author.name} on X`,
-    body: "The person who makes Zephium, building it in public.",
   },
   {
     id: "youtube",
+    name: "YouTube",
+    note: "The launch film, and videos of Zephium being built.",
     href: site.social.youtube,
     path: siYoutube.path,
-    title: "Watch on YouTube",
-    body: "The launch film, and videos of Zephium being built.",
   },
   {
     id: "producthunt",
+    name: "Product Hunt",
+    note: "Each launch, the day it goes live.",
     href: site.social.producthunt,
     path: siProducthunt.path,
-    title: "Zephium on Product Hunt",
-    body: "Each launch, the day it goes live.",
   },
 ].filter((place) => place.href);
 
 /**
- * The end of the home page, on the night sky from the product's new tab: the
- * launch film in the middle, then where the people around Zephium are, as
- * panes of glass over the sky, and where to hear about Linux. The repository
- * leads, with its real numbers. Each card is one link.
+ * The launch film, near the end of the page, as a screen in a dark room: the
+ * poster in the middle and its own light spilling softly around it.
+ */
+export function Film() {
+  if (!hasFilm()) return null;
+  return (
+    <section id="film" className={`container-page ${styles.film}`} aria-labelledby="film-title">
+      <header className={styles.filmHead}>
+        <h2 id="film-title" data-reveal>
+          See it in motion.
+        </h2>
+        <p data-reveal style={{ "--delay": "0.08s" } as CSSProperties}>
+          The launch film: the browser, Work, and what your agents do with both.
+        </p>
+      </header>
+      <div className={styles.screen} data-reveal="fade">
+        <picture className={styles.spill}>
+          <source type="image/avif" srcSet="/film/poster-1280.avif" />
+          <img src="/film/poster-1280.jpg" alt="" loading="lazy" decoding="async" />
+        </picture>
+        <FilmPoster minutes="4:20" />
+      </div>
+    </section>
+  );
+}
+
+/**
+ * The people around Zephium: the faces of everyone who has sent a change,
+ * the places to find them, and the Linux release email for whoever is
+ * waiting on it.
  */
 export async function Community() {
-  const [stars, contributors] = await Promise.all([getStars(), getContributors()]);
+  const [stars, contributors, faces] = await Promise.all([getStars(), getContributors(), getFaces()]);
   return (
-    <section id="community" className={styles.section} aria-labelledby="community-title">
-      <picture className={styles.sky}>
-        <source type="image/avif" srcSet="/sky/night-1200.avif 1200w, /sky/night-2200.avif 2200w" sizes="100vw" />
-        <img
-          src="/sky/night-1200.jpg"
-          srcSet="/sky/night-1200.jpg 1200w, /sky/night-2200.jpg 2200w"
-          sizes="100vw"
-          alt=""
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
-      <div className="container-page">
-        <header className={styles.head}>
+    <section id="community" className={`container-page ${styles.section}`} aria-labelledby="community-title">
+      <div className={styles.grid}>
+        <div className={styles.intro}>
           <h2 id="community-title" data-reveal>
             Built in the open.
           </h2>
           <p data-reveal style={{ "--delay": "0.08s" } as CSSProperties}>
-            Zephium is made in public, with the people who use it.
-            {hasFilm() ? " Watch the launch film, then come and say hello." : null}
+            Zephium is made in public, with the people who use it. Read the code, send a fix, or
+            come and say hello.
           </p>
-        </header>
+          {faces.length ? (
+            <div className={styles.people} data-reveal style={{ "--delay": "0.14s" } as CSSProperties}>
+              <ul className={styles.faces} aria-label="People who have sent changes">
+                {faces.map((face, index) => (
+                  <li key={face.login} style={{ "--i": index } as CSSProperties}>
+                    <a href={face.url} title={`@${face.login}`} aria-label={`@${face.login} on GitHub`}>
+                      {/* eslint-disable-next-line @next/next/no-img-element -- a data URL made at build time */}
+                      <img src={face.avatar} alt="" width={40} height={40} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <RepoStats stars={stars} contributors={contributors} />
+            </div>
+          ) : null}
+        </div>
 
-        {hasFilm() ? (
-          <div id="film" className={styles.poster} data-reveal="fade">
-            <FilmPoster minutes="4:20" />
-          </div>
-        ) : null}
-
-        <ul className={styles.grid}>
+        <ul className={styles.places}>
           {PLACES.map((place, index) => (
-            <li
-              key={place.id}
-              className={place.id === "github" ? styles.lead : undefined}
-              data-reveal
-              style={{ "--delay": `${(index % 3) * 0.06}s` } as CSSProperties}
-            >
-              <a href={place.href} className={styles.card}>
-                <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.mark}>
+            <li key={place.id} data-reveal style={{ "--delay": `${index * 0.05}s` } as CSSProperties}>
+              <a href={place.href} className={styles.place}>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d={place.path} />
                 </svg>
-                <span className={styles.text}>
-                  <b>{place.title}</b>
-                  <span className={styles.body}>{place.body}</span>
-                  {place.id === "github" ? <RepoStats stars={stars} contributors={contributors} /> : null}
-                </span>
+                <b>{place.name}</b>
+                <span>{place.note}</span>
                 <HugeiconsIcon icon={ArrowUpRight01Icon} size={18} strokeWidth={1.6} className={styles.go} aria-hidden />
               </a>
             </li>
           ))}
         </ul>
+      </div>
 
-        <div className={styles.linux} data-reveal>
-          <LinuxWaitlist variant="bar" headingId="linux-bar-title" />
-        </div>
+      <div id="linux" className={styles.linux} data-reveal>
+        <LinuxWaitlist headingId="community-linux-title" variant="bar" />
       </div>
     </section>
   );
