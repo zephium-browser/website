@@ -1,3 +1,5 @@
+import { SourceCodeIcon, UserBlock01Icon, ViewOffSlashIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import type { CSSProperties } from "react";
 import { site } from "@/lib/site";
 import { ModelWheel } from "./model-wheel";
@@ -20,7 +22,7 @@ export function Privacy() {
           Customize everything.
         </h2>
         <p data-reveal style={{ "--delay": "0.08s" } as CSSProperties}>
-          Pick any model, or none at all. Zephium is a complete, private browser either way.
+          Pick any model, or none at all. Zephium is a full browser either way.
         </p>
       </div>
 
@@ -30,15 +32,24 @@ export function Privacy() {
 
       <dl className={styles.facts} data-reveal style={{ "--delay": "0.16s" } as CSSProperties}>
         <div>
-          <dt>No telemetry</dt>
+          <dt>
+            <HugeiconsIcon icon={ViewOffSlashIcon} size={18} strokeWidth={1.6} aria-hidden />
+            No telemetry
+          </dt>
           <dd>Nothing about how you browse is collected.</dd>
         </div>
         <div>
-          <dt>No account to browse</dt>
+          <dt>
+            <HugeiconsIcon icon={UserBlock01Icon} size={18} strokeWidth={1.6} aria-hidden />
+            No account to browse
+          </dt>
           <dd>Until you sign in, Zephium never contacts our servers.</dd>
         </div>
         <div>
-          <dt>Open source</dt>
+          <dt>
+            <HugeiconsIcon icon={SourceCodeIcon} size={18} strokeWidth={1.6} aria-hidden />
+            Open source
+          </dt>
           <dd>
             Every line is <a href={site.repo}>on GitHub</a>, under MPL-2.0.
           </dd>
