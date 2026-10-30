@@ -66,12 +66,17 @@ const rest = (name: number) => (name === OFF ? 4200 : name === 0 ? 2600 : 1700);
 /** A longer turn takes a little longer, the way a real wheel coasts. */
 const spinFor = (distance: number) => Math.min(1500, 420 + Math.abs(distance) * 90);
 
-/** The names go round three times, so the wheel can roll on past Off and settle back into the middle lap. */
-const LAPS = [0, 1, 2];
+/** The names go round five times, so the wheel can roll on past Off and settle back into the middle lap. */
+const LAPS = [0, 1, 2, 3, 4];
+const MIDDLE = 2 * COUNT;
 const nameAt = (at: number) => ((Math.round(at) % COUNT) + COUNT) % COUNT;
 
-/** How far a flick carries on after the pointer lets go, in milliseconds of its last speed. */
+/** The same place on the wheel, moved into the middle lap; while nothing is easing, the jump can't be seen. */
+const intoMiddle = (at: number) => MIDDLE + ((((at - MIDDLE) % COUNT) + COUNT) % COUNT);
+
+/** How far a flick carries on after the pointer lets go, in milliseconds of its last speed, and at most how many names. */
 const COAST = 260;
+const FLING = 8;
 
 function useReducedMotion() {
   return useSyncExternalStore(
@@ -95,7 +100,7 @@ type Drag = { id: number; y: number; from: number; moved: boolean; trail: { t: n
  * scrolled. Resting on Off, the other names fade away and Off stands alone.
  */
 export function ModelWheel() {
-  const [at, setAt] = useState(COUNT);
+  const [at, setAt] = useState(MIDDLE);
   const [spin, setSpin] = useState(0);
   const [taken, setTaken] = useState(false);
   const [held, setHeld] = useState(false);
@@ -129,10 +134,10 @@ export function ModelWheel() {
 
   // Once a turn has carried it out of the middle lap, step back into it unseen.
   useEffect(() => {
-    if (dragging || (at >= COUNT && at < COUNT * 2)) return;
+    if (dragging || (at >= MIDDLE && at < MIDDLE + COUNT)) return;
     const timer = window.setTimeout(() => {
       setSpin(0);
-      setAt(COUNT + nameAt(at));
+      setAt(MIDDLE + nameAt(at));
     }, spin + 40);
     return () => window.clearTimeout(timer);
   }, [at, spin, dragging]);
@@ -157,7 +162,8 @@ export function ModelWheel() {
       if (!engaged.current) return;
       event.preventDefault();
       const delta = event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
-      const next = atRef.current + delta / (rowHeight() * 1.4);
+      // However hard the scroll, the wheel keeps to the middle lap, so there are always names around it.
+      const next = intoMiddle(atRef.current + delta / (rowHeight() * 1.4));
       atRef.current = next;
       setSpin(0);
       setAt(next);
@@ -188,7 +194,7 @@ export function ModelWheel() {
     setTaken(true);
     setSpin(spinFor(next - at));
     setAt(next);
-    if (focus) items.current[COUNT + nameAt(next)]?.focus({ preventScroll: true });
+    if (focus) items.current[MIDDLE + nameAt(next)]?.focus({ preventScroll: true });
   }
 
   function onPointerDown(event: PointerEvent<HTMLDivElement>) {
@@ -204,14 +210,15 @@ export function ModelWheel() {
       if (Math.abs(event.clientY - current.y) < 5) return;
       current.moved = true;
       current.y = event.clientY;
-      current.from = liveAt();
+      current.from = intoMiddle(liveAt());
       event.currentTarget.setPointerCapture(event.pointerId);
       setTaken(true);
       setDragging(true);
       setSpin(0);
     }
     current.trail = [...current.trail.filter((point) => event.timeStamp - point.t < 100), { t: event.timeStamp, y: event.clientY }];
-    const next = current.from - (event.clientY - current.y) / rowHeight();
+    const next = intoMiddle(current.from - (event.clientY - current.y) / rowHeight());
+    current.from = next + (event.clientY - current.y) / rowHeight();
     atRef.current = next;
     setAt(next);
   }
@@ -225,7 +232,8 @@ export function ModelWheel() {
     const first = current.trail[0];
     const last = current.trail[current.trail.length - 1];
     const speed = first && last && last.t > first.t ? (last.y - first.y) / (last.t - first.t) : 0;
-    const target = Math.round(atRef.current - (speed * COAST) / rowHeight());
+    const fling = Math.max(-FLING, Math.min(FLING, (speed * COAST) / rowHeight()));
+    const target = Math.round(atRef.current - fling);
     setDragging(false);
     setSpin(spinFor(target - atRef.current));
     setAt(target);
@@ -276,7 +284,7 @@ export function ModelWheel() {
             CHOICES.map((item, i) => {
               const index = lap * COUNT + i;
               // The middle lap is the real control; the laps either side are only the rest of the wheel.
-              const real = lap === 1;
+              const real = lap === MIDDLE / COUNT;
               return (
                 <button
                   key={index}

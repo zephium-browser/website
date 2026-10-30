@@ -42,7 +42,7 @@ const PLACES = [
   {
     id: "producthunt",
     name: "Product Hunt",
-    note: "Upvote each launch",
+    note: "Help Zephium grow",
     href: site.social.producthunt,
     path: siProducthunt.path,
   },

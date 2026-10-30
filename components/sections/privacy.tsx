@@ -4,21 +4,22 @@ import { ModelWheel } from "./model-wheel";
 import styles from "./privacy.module.css";
 
 /**
- * Whose browser it is. AI is the user's to choose, any of it or none of it,
- * shown as the picker itself, beside the principles that hold either way.
+ * Whose browser it is. Every part answers to the user, AI most of all: any
+ * model or none, shown as the picker itself, beside the principles that hold
+ * either way.
  */
 export function Privacy() {
   return (
     <section id="privacy" className={`container-page ${styles.section}`} aria-labelledby="privacy-title">
       <div className={styles.head}>
         <h2 id="privacy-title" data-reveal>
-          Any AI you like.
+          Yours to shape.
           <br />
-          Or none at all.
+          AI only if you want it.
         </h2>
         <p data-reveal style={{ "--delay": "0.08s" } as CSSProperties}>
-          Zephium is a whole browser on its own. Bring in AI the way you like it: ours, your own key,
-          or a model on your computer. Or leave it off, and nothing else changes.
+          Pick any model, or turn AI off entirely, and you still have a complete, private browser.
+          Work, Notes, Tasks and focus can each go too, and turning one off deletes nothing.
         </p>
       </div>
 

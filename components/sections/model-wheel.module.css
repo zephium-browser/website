@@ -153,16 +153,7 @@
     height: calc(var(--row) * 5.4);
   }
 
-  .wheel[data-dragging] {
-  cursor: grabbing;
-}
-
-/* Resting on Off, the names fade away and it stands alone. */
-.root[data-off] .wheel {
-  --hush: 1;
-}
-
-.band {
+  .band {
     border-radius: 16px;
   }
 
