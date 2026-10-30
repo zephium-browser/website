@@ -12,8 +12,9 @@ COPY . .
 ARG NEXT_PUBLIC_UMAMI_SRC=""
 ARG NEXT_PUBLIC_UMAMI_ID=""
 ENV NEXT_PUBLIC_UMAMI_SRC=$NEXT_PUBLIC_UMAMI_SRC NEXT_PUBLIC_UMAMI_ID=$NEXT_PUBLIC_UMAMI_ID
-ARG NEXT_PUBLIC_LINUX_WAITLIST_ENABLED="false"
-ARG NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN=""
+# The Linux release notification is live in production; Coolify may override both.
+ARG NEXT_PUBLIC_LINUX_WAITLIST_ENABLED="true"
+ARG NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN="https://api.zephium.app"
 ENV NEXT_PUBLIC_LINUX_WAITLIST_ENABLED=$NEXT_PUBLIC_LINUX_WAITLIST_ENABLED NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN=$NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN
 # Optional: a read-only token, so reading the star count is never rate limited.
 # Used for this one step; the served image is the nginx stage below.
@@ -27,7 +28,7 @@ ENV NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx
 # Where Umami is served from, e.g. https://analytics.zephium.app, for the CSP.
 ENV UMAMI_ORIGIN=""
 # Match the browser's fixed build-time destination in the CSP.
-ARG NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN=""
+ARG NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN="https://api.zephium.app"
 ENV LINUX_WAITLIST_API_ORIGIN=$NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN
 RUN rm /etc/nginx/conf.d/default.conf && apk add --no-cache curl
 COPY deploy/templates /etc/nginx/templates

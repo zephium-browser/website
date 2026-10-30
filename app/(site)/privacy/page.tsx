@@ -16,7 +16,7 @@ export default function PrivacyPage() {
       title="Privacy"
       lede={`The short version: the browser collects nothing about how you browse, your data stays on your device, an account is optional, and this website counts page views without knowing who you are.`}
     >
-      <Prose updated="October 29, 2026">
+      <Prose updated="October 30, 2026">
         <p>
           This policy covers the {site.name} browser and the website at {host}. {site.name} is open
           source, so every statement about the browser below can be checked against{" "}
@@ -127,25 +127,28 @@ export default function PrivacyPage() {
 
         <h2>Linux release notification</h2>
         <p>
-          Submitting the Linux notification form asks us to use your email address for one
-          email when Zephium for Linux is available. There is no confirmation step or email at
-          signup. This is a separate, optional opt-in, not a general newsletter. It creates no
-          Zephium account and does not sign you up for other marketing emails.
+          The form on the download page asks us to use your email address for one email when
+          Zephium for Linux is available. It is optional, it is not a newsletter, and it creates
+          no Zephium account. There is no confirmation email. The release email will carry an
+          unsubscribe link.
         </p>
         <p>
-          We store your normalized email address, signup time and consent version until you
-          unsubscribe or we deliberately clean up the release list. Signup does not verify
-          ownership of your mailbox. The Linux release email will include an unsubscribe link.
-          This notification is managed independently of Zephium accounts. You can also contact
-          <a href={`mailto:${site.contact.support}`}> {site.contact.support}</a> about your data.
+          We store your email address, trimmed and in lowercase, and when it was added. We do not
+          store your IP address, your browser details or any link to an account. To limit abuse,
+          we keep short-lived keyed hashes of the address and the network, which expire within
+          about an hour.
         </p>
         <p>
-          We use bounded abuse-prevention records with keyed identifiers rather than raw IP
-          addresses in the waitlist. Your email address and the private token in an unsubscribe
-          link are never sent to website analytics, and the unsubscribe page loads no analytics
-          or error replay. After you sign up, this website keeps a note in your browser that you
-          did, so it can say thanks when you return. The note holds no email address and never
-          leaves your device; clearing site data removes it.
+          Unsubscribing deletes your entry at once. Otherwise it stays until you unsubscribe or
+          until the release email has gone out and the list is cleared. Encrypted backups may
+          keep a deleted entry until their retention period ends. To ask about your data, write
+          to <a href={`mailto:${site.contact.support}`}>{site.contact.support}</a>.
+        </p>
+        <p>
+          Your email address is never sent to website analytics. After you sign up, this website
+          keeps a note in your browser that you did, so it can
+          say thanks when you return. The note holds no email address and never leaves your
+          device; clearing site data removes it.
         </p>
 
         <h2>Who helps us run it</h2>
