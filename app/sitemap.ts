@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/pricing", priority: 0.8, modified: edited },
     { path: "/download", priority: 0.8, modified: edited },
     { path: "/workflows", priority: 0.7, modified: edited },
+    { path: "/roadmap", priority: 0.6, modified: edited },
     { path: "/changelog", priority: 0.6, modified: RELEASES[0].date },
     { path: "/docs", priority: 0.6, modified: edited },
     ...docPages.map((topic) => ({ path: docPath(topic.slug), priority: 0.5, modified: edited })),

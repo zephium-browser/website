@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArrowDown01Icon, ArrowUpRight01Icon, RssIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
 import type { CSSProperties } from "react";
 import { DownloadLink } from "@/components/download-link";
 import { PageShell } from "@/components/prose";
@@ -89,6 +90,7 @@ export default function ChangelogPage() {
   return (
     <PageShell title="Changelog" lede={`New in ${site.name}, release by release.`}>
       <p className={styles.feed}>
+        <Link href="/roadmap">Roadmap</Link>
         <a href={changelogFeedPath}>
           <HugeiconsIcon icon={RssIcon} size={15} strokeWidth={1.8} aria-hidden />
           RSS feed
