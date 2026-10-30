@@ -25,7 +25,7 @@ export const ROADMAP: RoadmapGroup[] = [
     items: [
       {
         title: "Linux",
-        body: "Zephium on the Linux desktop.",
+        body: "Zephium on the Linux desktop. Leave your email for one note the day it ships.",
         status: "In progress",
         href: "/download#linux",
       },
