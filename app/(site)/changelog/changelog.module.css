@@ -1,7 +1,9 @@
 /* The feed link, small and at the edge of the column. */
 .feed {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 20px;
   max-width: 60rem;
   margin: clamp(32px, 4vw, 48px) auto 0;
 }

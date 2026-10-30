@@ -17,6 +17,7 @@ const columns = [
       { href: "/workflows", label: "Workflows" },
       { href: "/pricing", label: "Pricing" },
       { href: downloadPath(), label: "Download" },
+      { href: "/roadmap", label: "Roadmap" },
       { href: "/changelog", label: "Changelog" },
       { href: "/#faq", label: "FAQ" },
     ],
