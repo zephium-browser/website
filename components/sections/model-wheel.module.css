@@ -1,0 +1,145 @@
+/*
+ * A picker wheel, drawn the way the system draws one: names on a drum that
+ * turns toward you, the chosen one level and bright in a quiet band, the rest
+ * curving away into the dark. --at is where the drum points; it is a typed
+ * number so the turn can be eased between names.
+ */
+@property --at {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.root {
+  --row: 68px;
+  --size: 46px;
+  --radius: calc(var(--row) * 2.836);
+  display: grid;
+  gap: 26px;
+}
+
+.wheel {
+  position: relative;
+  height: calc(var(--row) * 6);
+  perspective: 1100px;
+  transition: --at var(--spin, 0ms) var(--ease-emphasized);
+  mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+}
+
+.band {
+  position: absolute;
+  inset: calc(50% - var(--row) / 2) 0 auto;
+  width: min(100%, 27rem);
+  height: var(--row);
+  margin-inline: auto;
+  border-radius: 20px;
+  background: rgb(255 255 255 / 0.055);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.1);
+}
+
+.drum {
+  position: absolute;
+  inset: 0;
+  transform: translateZ(calc(var(--radius) * -1));
+  transform-style: preserve-3d;
+}
+
+/* Each name sits on the drum at its own angle; distance from the band dims it. */
+.item {
+  --d: calc(var(--at) - var(--i));
+  --far: max(var(--d), var(--d) * -1);
+  position: absolute;
+  top: calc(50% - var(--row) / 2);
+  right: 0;
+  left: 0;
+  height: var(--row);
+  color: var(--color-text);
+  font-size: var(--size);
+  font-weight: 600;
+  line-height: var(--row);
+  letter-spacing: -0.04em;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: max(0, 1 - min(1, var(--far)) * 0.62 - var(--far) * 0.075);
+  transform: rotateX(calc(var(--d) * 20deg)) translateZ(var(--radius));
+  /* Names round the back of the drum are not there to see or click. */
+  scale: clamp(0, (5.5 - var(--far)) * 1000, 1);
+  backface-visibility: hidden;
+  outline: none;
+}
+
+.item:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+
+.detail {
+  min-height: 3em;
+  max-width: 30rem;
+  margin-inline: auto;
+  color: var(--color-muted);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.008em;
+  text-align: center;
+  text-wrap: balance;
+  animation: settle 520ms var(--ease-out) both;
+}
+
+.detail strong {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .root {
+    --row: 74px;
+    --size: 50px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .root {
+    --row: 58px;
+    --size: 38px;
+  }
+}
+
+@media (max-width: 640px) {
+  .root {
+    --row: 50px;
+    --size: 32px;
+    gap: 16px;
+  }
+
+  .wheel {
+    height: calc(var(--row) * 5.4);
+  }
+
+  .band {
+    border-radius: 16px;
+  }
+
+  .detail {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel {
+    transition: none;
+  }
+
+  .detail {
+    animation: none;
+  }
+}

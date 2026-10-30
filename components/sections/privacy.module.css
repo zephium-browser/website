@@ -1,68 +1,81 @@
 .section {
+  display: grid;
+  gap: clamp(28px, 6vw, 72px);
+  align-items: center;
   padding-block: clamp(110px, 13vw, 190px);
 }
 
-/* A statement between two showcases, so it stands in the middle. */
-.top {
-  display: grid;
-  justify-items: center;
-  gap: 18px;
-  text-align: center;
+@media (min-width: 1000px) {
+  .section {
+    grid-template: "head wheel" auto "facts wheel" auto / minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: 0 clamp(56px, 7vw, 128px);
+  }
+
+  .head {
+    grid-area: head;
+    align-self: end;
+  }
+
+  .wheel {
+    grid-area: wheel;
+  }
+
+  .facts {
+    grid-area: facts;
+    align-self: start;
+  }
 }
 
-.top h2 {
-  font-size: clamp(2.4rem, 1.4rem + 3.2vw, 4.4rem);
+.head h2 {
+  font-size: var(--text-headline);
   font-weight: 600;
-  line-height: 1;
-  letter-spacing: -0.05em;
-  text-wrap: balance;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
 }
 
-.top p {
-  max-width: 32rem;
+.head p {
+  max-width: 28rem;
+  margin-top: 18px;
   color: var(--color-muted);
   font-size: var(--text-lede);
   line-height: 1.5;
   letter-spacing: -0.012em;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
-.switch {
-  margin-top: clamp(56px, 7vw, 88px);
-}
-
-/* What holds either way: four short lines on hairlines. */
+/* What holds whichever name is chosen, set small, like the fine print it is. */
 .facts {
   display: grid;
-  gap: 28px 40px;
-  margin-top: clamp(72px, 8vw, 108px);
-}
-
-@media (min-width: 640px) {
-  .facts {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  max-width: 28rem;
 }
 
 @media (min-width: 1000px) {
   .facts {
-    grid-template-columns: repeat(4, 1fr);
+    margin-top: clamp(36px, 4vw, 52px);
   }
 }
 
-.facts li {
-  padding-top: 20px;
+.facts > div {
+  display: grid;
+  gap: 3px;
+  padding-block: 15px;
   border-top: 1px solid var(--color-line);
-  color: var(--color-muted);
-  font-size: 15.5px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.45;
   letter-spacing: -0.006em;
-  text-wrap: pretty;
 }
 
-.facts strong {
+.facts > div:last-child {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.facts dt {
   color: var(--color-text);
   font-weight: 500;
+}
+
+.facts dd {
+  color: var(--color-muted);
 }
 
 .facts a {
