@@ -2,21 +2,15 @@
   padding-block: clamp(110px, 13vw, 190px);
 }
 
-/* The heading on the left, what it means on the right, like the engine. */
+/* A statement between two showcases, so it stands in the middle. */
 .top {
   display: grid;
-  gap: 20px 64px;
-}
-
-@media (min-width: 1000px) {
-  .top {
-    grid-template-columns: 1fr 1fr;
-    align-items: end;
-  }
+  justify-items: center;
+  gap: 18px;
+  text-align: center;
 }
 
 .top h2 {
-  max-width: 10em;
   font-size: clamp(2.4rem, 1.4rem + 3.2vw, 4.4rem);
   font-weight: 600;
   line-height: 1;
@@ -25,10 +19,60 @@
 }
 
 .top p {
-  max-width: 34rem;
+  max-width: 32rem;
   color: var(--color-muted);
   font-size: var(--text-lede);
   line-height: 1.5;
   letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+.switch {
+  margin-top: clamp(56px, 7vw, 88px);
+}
+
+/* What holds either way: four short lines on hairlines. */
+.facts {
+  display: grid;
+  gap: 28px 40px;
+  margin-top: clamp(72px, 8vw, 108px);
+}
+
+@media (min-width: 640px) {
+  .facts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .facts {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.facts li {
+  padding-top: 20px;
+  border-top: 1px solid var(--color-line);
+  color: var(--color-muted);
+  font-size: 15.5px;
+  line-height: 1.5;
+  letter-spacing: -0.006em;
   text-wrap: pretty;
+}
+
+.facts strong {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.facts a {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-color: rgb(244 244 246 / 0.3);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 200ms var(--ease-out);
+}
+
+.facts a:hover {
+  text-decoration-color: currentColor;
 }
