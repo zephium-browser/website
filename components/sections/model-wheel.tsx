@@ -186,7 +186,7 @@ export function ModelWheel() {
 
   /** Where the drum is right now, partway through a turn included. */
   function liveAt() {
-    const value = wheel.current ? parseFloat(getComputedStyle(wheel.current).getPropertyValue("--at")) : NaN;
+    const value = wheel.current ? parseFloat(getComputedStyle(wheel.current).getPropertyValue("--wheel-at")) : NaN;
     return Number.isFinite(value) ? value : atRef.current;
   }
 
@@ -262,7 +262,7 @@ export function ModelWheel() {
         ref={wheel}
         className={styles.wheel}
         data-dragging={dragging || undefined}
-        style={{ "--at": at, "--spin": `${still ? 0 : spin}ms` } as CSSProperties}
+        style={{ "--wheel-at": at, "--spin": `${still ? 0 : spin}ms` } as CSSProperties}
         onPointerEnter={(event) => event.pointerType === "mouse" && setHeld(true)}
         onPointerLeave={() => {
           setHeld(false);

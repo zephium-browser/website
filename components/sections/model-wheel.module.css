@@ -1,16 +1,16 @@
 /*
  * A picker wheel, drawn the way the system draws one: names on a drum that
  * turns toward you, the chosen one level and bright in a quiet band, the rest
- * curving away into the dark. --at is where the drum points and --hush how
+ * curving away into the dark. --wheel-at is where the drum points and --wheel-hush how
  * far the other names have faded for Off; both are typed numbers so they ease.
  */
-@property --at {
+@property --wheel-at {
   syntax: "<number>";
   inherits: true;
   initial-value: 0;
 }
 
-@property --hush {
+@property --wheel-hush {
   syntax: "<number>";
   inherits: true;
   initial-value: 0;
@@ -33,8 +33,8 @@
   user-select: none;
   -webkit-user-select: none;
   transition:
-    --at var(--spin, 0ms) var(--ease-emphasized),
-    --hush 900ms var(--ease-out);
+    --wheel-at var(--spin, 0ms) var(--ease-emphasized),
+    --wheel-hush 900ms var(--ease-out);
   mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
 }
 
@@ -44,7 +44,7 @@
 
 /* Resting on Off, the names fade away and it stands alone. */
 .root[data-off] .wheel {
-  --hush: 1;
+  --wheel-hush: 1;
 }
 
 .band {
@@ -72,7 +72,7 @@
 
 /* Each name sits on the drum at its own angle; distance from the band dims it. */
 .item {
-  --d: calc(var(--at) - var(--i));
+  --d: calc(var(--wheel-at) - var(--i));
   --far: max(var(--d), var(--d) * -1);
   position: absolute;
   top: calc(50% - var(--row) / 2);
@@ -88,7 +88,7 @@
   white-space: nowrap;
   cursor: inherit;
   opacity: calc(
-    max(0, 1 - min(1, var(--far)) * 0.62 - var(--far) * 0.075) * (1 - min(1, var(--far) * 3) * var(--hush) * 0.92)
+    max(0, 1 - min(1, var(--far)) * 0.62 - var(--far) * 0.075) * (1 - min(1, var(--far) * 3) * var(--wheel-hush) * 0.92)
   );
   transform: rotateX(calc(var(--d) * 20deg)) translateZ(var(--radius));
   /* Names round the back of the drum are not there to see or click. */
