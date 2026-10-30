@@ -1,0 +1,213 @@
+/* Areas, one under another: the name of the area beside its list on wide
+   screens, held in view while you read it, as on the changelog. */
+.groups {
+  display: grid;
+  max-width: 60rem;
+  margin: clamp(56px, 7vw, 88px) auto 0;
+}
+
+.group {
+  display: grid;
+  gap: 8px 48px;
+  padding-block: 40px;
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+}
+
+@media (min-width: 900px) {
+  .group {
+    grid-template-columns: 14rem 1fr;
+  }
+
+  .group h2 {
+    position: sticky;
+    top: calc(var(--nav-height) + 32px);
+    align-self: start;
+  }
+}
+
+.group h2 {
+  font-size: clamp(1.4rem, 1.2rem + 0.7vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.group ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 32px;
+  padding-block: 20px;
+}
+
+.item:first-child {
+  padding-top: 4px;
+}
+
+.item + .item {
+  box-shadow: inset 0 0.5px 0 rgb(255 255 255 / 0.1);
+}
+
+.text {
+  min-width: 0;
+}
+
+.text h3 {
+  color: var(--color-text);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.text h3 a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: var(--radius-inset);
+  transition: color 200ms var(--ease-out);
+}
+
+.text h3 a svg {
+  color: var(--color-faint);
+  transition:
+    color 200ms var(--ease-out),
+    transform 300ms var(--ease-emphasized);
+}
+
+.text h3 a:hover svg {
+  color: var(--color-text);
+  transform: translate(1px, -1px);
+}
+
+.text p {
+  max-width: 34rem;
+  margin-top: 4px;
+  color: var(--color-muted);
+  font-size: 15.5px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* Where an item stands, in small quiet text. The one in progress carries a
+   tiny dot that breathes. */
+.status {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-faint);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+}
+
+.status[data-live] {
+  color: var(--color-muted);
+}
+
+.status[data-live]::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  animation: breathe 2.8s var(--ease-in-out) infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status[data-live]::before {
+    animation: none;
+  }
+
+  .text h3 a svg {
+    transition: none;
+  }
+}
+
+/* On a phone the status goes under the sentence rather than beside it. */
+@media (max-width: 599px) {
+  .item {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* The close: more to come, and where to say what you want. */
+.close {
+  display: grid;
+  justify-items: center;
+  max-width: 60rem;
+  margin: clamp(48px, 6vw, 72px) auto 0;
+  padding-top: clamp(56px, 7vw, 88px);
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+  text-align: center;
+}
+
+.close h2 {
+  font-size: var(--text-headline);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.close p {
+  max-width: 34rem;
+  margin-top: 16px;
+  color: var(--color-muted);
+  font-size: var(--text-lede);
+  line-height: 1.5;
+  text-wrap: balance;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding-inline: 22px;
+  border-radius: var(--radius-capsule);
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.14);
+  font-size: 15.5px;
+  font-weight: 550;
+  letter-spacing: -0.012em;
+  transition:
+    background-color 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+
+.secondary:hover {
+  background: rgb(255 255 255 / 0.13);
+}
+
+.secondary:active {
+  transform: scale(0.98);
+}
