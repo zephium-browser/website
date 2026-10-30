@@ -95,9 +95,10 @@ Linux release notification calls only the public waitlist API.
 
 ## Linux release notification
 
-Disabled by default. While it is off the download page shows "Zephium for Linux
-is coming" with links to follow along, and no form. Turned on, the page asks for
-an email address and the browser sends it once to the waitlist API: no
+Live in production: the Docker build turns it on by default and points it at
+`https://api.zephium.app`. While it is off (a plain `pnpm build`, or an override
+in Coolify) the download page shows "Zephium for Linux is coming" with links to
+follow along, and no form. Turned on, the page asks for an email address and the browser sends it once to the waitlist API: no
 confirmation step, email or account follows, and a duplicate gets the same
 answer as a new address. The hidden `website` field is a bot trap (200
 characters at most); real submissions send an empty string. The API's limits
@@ -122,16 +123,16 @@ else runs, keeps the token in memory, and sends only after an explicit
 Unsubscribe click. A reload requires reopening the email link. GET requests
 never change membership.
 
-| Build variable | Default | Allowed value |
-| --- | --- | --- |
-| `NEXT_PUBLIC_LINUX_WAITLIST_ENABLED` | `false` | `true` only after operator qualification |
-| `NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN` | empty | exactly `https://api.zephium.app` or `https://staging-api.zephium.app` |
+| Build variable | Local default | Docker default | Allowed value |
+| --- | --- | --- | --- |
+| `NEXT_PUBLIC_LINUX_WAITLIST_ENABLED` | `false` | `true` | `true` or `false` |
+| `NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN` | empty | `https://api.zephium.app` | exactly `https://api.zephium.app` or `https://staging-api.zephium.app` |
 
 An enabled build requires an explicit origin; invalid settings fail the build.
 No secret, account integration, provider SDK or website API server is needed.
 Docker uses the same API-origin build argument for the browser and nginx's
 `connect-src`. Do not override the resulting `LINUX_WAITLIST_API_ORIGIN` runtime
-value. Build-time changes require a new image; restart alone cannot enable it.
+value. Build-time changes require a new image; restart alone cannot change it.
 
 Run the disabled build and tests first (`pnpm build && pnpm test:waitlist`).
 For an enabled **mock-only** qualification build, set these variables for both
@@ -162,7 +163,8 @@ Qualify single-step signup and duplicate/rate-limit handling against staging.
 The operator must verify `subscribed` reporting (not legacy `confirmed` counts)
 and independently qualify per-membership unsubscribe/re-subscribe behavior.
 There is no signup email to deliver or confirm. Do not send a campaign during
-testing. Production stays disabled until the operator confirms it is enabled.
+testing. The production API is enabled and verified for the origin `https://zephium.app`
+(no `www`). Never send test signups to it.
 
 For the currently approved origin `https://zephium.app`, the opt-in live check
 loads this export at that origin only inside an isolated Chromium browser;
@@ -198,8 +200,8 @@ Environment:
 | `NEXT_PUBLIC_UMAMI_ID` | build | the website ID from Umami |
 | `UMAMI_ORIGIN` | runtime | `https://<umami host>`, allowed by the CSP |
 | `GITHUB_TOKEN` | build | optional; a fine-grained token with no permissions, so reading the star count is never rate limited |
-| `NEXT_PUBLIC_LINUX_WAITLIST_ENABLED` | build | `false` until qualified; see above |
-| `NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN` | build | exact production or staging API origin; see above |
+| `NEXT_PUBLIC_LINUX_WAITLIST_ENABLED` | build | `true` by default in the Dockerfile; `false` closes the form |
+| `NEXT_PUBLIC_LINUX_WAITLIST_API_ORIGIN` | build | `https://api.zephium.app` by default; see above |
 
 Leave the three analytics values empty to run without analytics. Build variables must be marked
 as build-time in Coolify.
