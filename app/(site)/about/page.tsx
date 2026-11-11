@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { siDiscord, siGithub, siProducthunt, siX, siYoutube } from "simple-icons";
+import { siDiscord, siGithub, siX, siYoutube } from "simple-icons";
 import { PageShell, Prose } from "@/components/prose";
 import { releaseAnchor } from "@/lib/changelog";
 import { getContributors } from "@/lib/contributors";
@@ -27,7 +27,6 @@ const FOLLOW = [
   { label: "Discord", note: "The community", href: social.discord, path: siDiscord.path },
   { label: "GitHub", note: "zephium-browser", href: social.github, path: siGithub.path },
   { label: "X", note: `${site.author.name}, the maker`, href: social.x, path: siX.path },
-  { label: "Product Hunt", note: "Launches", href: social.producthunt, path: siProducthunt.path },
 ].filter((item): item is typeof item & { href: string } => Boolean(item.href));
 
 /** The releases so far, as plainly as they happened. */
@@ -35,6 +34,7 @@ const TIMELINE = [
   { version: "1.0.0-beta.1", date: "4 October 2026", text: "The first public beta." },
   { version: "1.0.3", date: "24 October 2026", text: "The public release." },
   { version: "1.0.4", date: "28 October 2026", text: "Fixes from the first launch week, many of them sent by contributors." },
+  { version: "1.0.5", date: "11 November 2026", text: "Stronger ad blocking, live tab previews and smoother everyday browsing." },
 ];
 
 export default async function AboutPage() {

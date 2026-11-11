@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AppleIcon, Cancel01Icon, Menu01Icon, StarIcon, WindowsNewIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useEffect, useRef, useState } from "react";
-import { siDiscord, siGithub, siLinux, siProducthunt, siX, siYoutube } from "simple-icons";
+import { siDiscord, siGithub, siLinux, siX, siYoutube } from "simple-icons";
 import { ZephiumLockup } from "@/components/brand";
 import { DownloadMenu } from "@/components/download-menu";
 import { useStars } from "@/components/use-stars";
@@ -27,7 +27,6 @@ const community = [
   { label: "X", href: site.social.x, path: siX.path },
   { label: "Discord", href: site.social.discord, path: siDiscord.path },
   { label: "YouTube", href: site.social.youtube, path: siYoutube.path },
-  { label: "Product Hunt", href: site.social.producthunt, path: siProducthunt.path },
 ].filter((item) => item.href);
 
 /**

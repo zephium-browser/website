@@ -2,7 +2,7 @@ import Link from "next/link";
 import { AppleIcon, WindowsNewIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import type { CSSProperties } from "react";
-import { siDiscord, siGithub, siProducthunt, siX, siYoutube } from "simple-icons";
+import { siDiscord, siGithub, siX, siYoutube } from "simple-icons";
 import { ZephiumLockup } from "@/components/brand";
 import { FooterCta } from "@/components/footer-cta";
 import { FooterMark } from "@/components/footer-mark";
@@ -50,7 +50,6 @@ const social = [
   { label: "X", href: site.social.x, path: siX.path },
   { label: "Discord", href: site.social.discord, path: siDiscord.path },
   { label: "YouTube", href: site.social.youtube, path: siYoutube.path },
-  { label: "Product Hunt", href: site.social.producthunt, path: siProducthunt.path },
 ].filter((item) => item.href);
 
 const ICONS: Partial<Record<PlatformId, IconSvgElement>> = {

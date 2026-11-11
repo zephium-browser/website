@@ -1,7 +1,7 @@
 import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { CSSProperties } from "react";
-import { siDiscord, siGithub, siProducthunt, siX, siYoutube } from "simple-icons";
+import { siDiscord, siGithub, siX, siYoutube } from "simple-icons";
 import { FilmPoster } from "@/components/film";
 import { LinuxWaitlist } from "@/components/linux-waitlist/waitlist";
 import { getContributors, getStars } from "@/lib/github";
@@ -38,13 +38,6 @@ const PLACES = [
     note: "Zephium in motion",
     href: site.social.youtube,
     path: siYoutube.path,
-  },
-  {
-    id: "producthunt",
-    name: "Product Hunt",
-    note: "Help Zephium grow",
-    href: site.social.producthunt,
-    path: siProducthunt.path,
   },
 ].filter((place) => place.href);
 
